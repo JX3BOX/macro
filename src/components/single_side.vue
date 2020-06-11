@@ -1,5 +1,14 @@
 <template>
-    <div class="m-single-side">
+    <div class="m-single-side" v-if="$store.state.status">
+        <!-- 云端宏 -->
+        <h2 class="m-cloud-name">云端宏</h2>
+        <div class="m-single-meta" v-if="data.length">
+            <div class="u-data" v-for="(feed, i) in data" :key="feed + i">
+                <feed class="u-feed" :author="author.name" :name="feed.name" :subtype="subtype"/>
+                <!-- <span class="u-desc">{{ feed.desc }}</span> -->
+            </div>
+        </div>
+
         <div id="directory"></div>
         <!-- v-if="$store.state.status" -->
         <!-- <Author :author="author"/>
@@ -16,6 +25,8 @@
 </template>
 
 <script>
+import _ from 'lodash'
+import feed from "@/components/feed.vue";
 export default {
     name: "single_side",
     props: [],
@@ -24,18 +35,33 @@ export default {
         };
     },
     computed: {
-        // author : function (){
-        //     return this.$store.state.author
-        // },
+        author : function (){
+            return this.$store.state.author
+        },
         // uid : function (){
         //     return this.author.uid
         // }
+        data : function (){
+            return _.get(this.$store.state.post.post_meta,'data') || [];
+        },
+        subtype : function (){
+            return _.get(this.$store.state.post,'post_subtype') || '通用'
+        }
     },
     methods: {
         
     },
     filters : {
     },
-    mounted: function() {},
+    mounted: function() {
+        
+    },
+    components : {
+        feed,
+    }
 };
 </script>
+
+<style lang="less">
+    @import "../assets/css/meta.less";
+</style>

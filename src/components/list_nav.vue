@@ -16,7 +16,7 @@
             <router-link to="/store">
                 <img svg-inline src="../assets/img/logo.svg" />
                 <span>我的宏仓库</span>
-                <i class="u-mark isnew">全新上线</i>
+                <i class="u-mark ispending">即将推出</i>
             </router-link>
         </div>
     </div>
