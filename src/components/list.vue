@@ -1,6 +1,5 @@
 <template>
     <div class="m-archive-box">
-
         <!-- 搜索 -->
         <div class="m-archive-search">
             <el-input
@@ -31,16 +30,20 @@
 
         <!-- 排序 -->
         <div class="m-archive-order">
-
             <!-- 发布按钮 -->
-            <a :href="publish_link" class="u-publish el-button el-button--primary el-button--small" >
-                + 发布副本攻略
+            <a
+                :href="publish_link"
+                class="u-publish el-button el-button--primary el-button--small"
+            >
+                + 发布云端宏
             </a>
 
             <!-- 角标过滤 -->
             <div class="u-filter" :class="{ on: filter_visible }">
                 <span class="u-label" @click="showFilter">
-                    <span class="u-current-filter">筛选 : {{ currentMark || "全部" }}</span>
+                    <span class="u-current-filter"
+                        >筛选 : {{ currentMark || "全部" }}</span
+                    >
                     <span class="u-toggle">
                         <i class="el-icon-arrow-down"></i>
                         <i class="el-icon-arrow-up"></i>
@@ -84,7 +87,9 @@
             <!-- 排序模式 -->
             <div class="u-modes" :class="{ on: order_visible }">
                 <span class="u-label" @click="showOrder">
-                    <span class="u-current-order">排序 : {{ currentOrder || "最后更新" }}</span>
+                    <span class="u-current-order"
+                        >排序 : {{ currentOrder || "最后更新" }}</span
+                    >
                     <span class="u-toggle">
                         <i class="el-icon-arrow-down"></i>
                         <i class="el-icon-arrow-up"></i>
@@ -103,7 +108,7 @@
                         @click="reorder('podate')"
                         ><i class="el-icon-sort"></i> 最早发布</span
                     >
-                    <span
+                    <!-- <span
                         class="u-mode u-likes"
                         :class="{ on: order == 'favs' }"
                         @click="reorder('favs')"
@@ -114,30 +119,22 @@
                         :class="{ on: order == 'downs' }"
                         @click="reorder('downs')"
                         ><i class="el-icon-download"></i> 下载最多</span
-                    >
+                    > -->
                 </span>
             </div>
-
         </div>
 
         <!-- 列表 -->
         <div class="m-archive-list" v-if="data.length">
             <ul class="u-list">
                 <li class="u-item" v-for="(item, i) in data" :key="i">
-
-                    <!-- Banner -->
-                    <a
-                        class="u-banner"
-                        :href="item.post.ID | postLink"
-                        :target="target"
-                        ><img :src="showBanner(item.post.post_banner)"
-                    /></a>
-
+                    <!-- 标题 -->
                     <h2 class="u-post" :class="{ isSticky: item.post.sticky }">
                         <img
                             class="u-icon"
-                            svg-inline
-                            src="../assets/img/list/post.svg"
+                            :src="item.post.post_subtype | xficon"
+                            :alt="item.post.post_subtype"
+                            :title="item.post.post_subtype"
                         />
 
                         <!-- 标题文字 -->
@@ -164,25 +161,56 @@
                     </h2>
 
                     <!-- 字段 -->
-                    <div class="u-content u-desc">
-                        字段内容区
+                    <div class="u-content">
+                        <ul
+                            class="m-macro-list-item-meta"
+                            v-if="
+                                item.post.post_meta.data &&
+                                    item.post.post_meta.data.length
+                            "
+                        >
+                            <li
+                                class="u-macro"
+                                v-for="(m, i) in item.post.post_meta.data"
+                                :key="i"
+                                @click="loadMacro(item.author.name,m,item.post.ID)"
+                            >
+                                <img
+                                    class="u-macro-icon"
+                                    :src="showIcon(m.icon)"
+                                />
+                                <el-tooltip
+                                    effect="dark"
+                                    :content="'点击快捷查看 · ' + m.name"
+                                    placement="top-start"
+                                >
+                                    <span class="u-macro-name">{{
+                                        item.author.name + "#" + m.name
+                                    }}</span>
+                                </el-tooltip>
+                            </li>
+                        </ul>
                     </div>
 
-                    <!-- 作者 -->
+                    <!-- 时间 -->
                     <div class="u-misc">
-                        <img
-                            class="u-author-avatar"
-                            :src="item.author.avatar | showAvatar"
-                            :alt="item.author.name"
-                        />
-                        <a
-                            class="u-author-name"
-                            :href="item.author.uid | authorLink"
-                            target="_blank"
-                            >{{ item.author.name }}</a
-                        >
+                        <!-- 作者 -->
+                        <!-- <div class="u-author">
+                            <img
+                                class="u-author-avatar"
+                                :src="item.author.avatar | showAvatar"
+                                :alt="item.author.name"
+                            />
+
+                            <a
+                                class="u-author-name"
+                                :href="item.author.uid | authorLink"
+                                target="_blank"
+                                >{{ item.author.name }}</a
+                            >
+                        </div> -->
                         <span class="u-date">
-                            Updated on
+                            <i class="el-icon-date"></i>
                             <time>{{
                                 item.post.post_modified | dateFormat
                             }}</time>
@@ -225,6 +253,20 @@
             :total="total"
         >
         </el-pagination>
+
+        <!-- 快捷查看宏 -->
+        <el-drawer
+            class="m-macro-drawer"
+            title="云端宏"
+            :visible.sync="drawer"
+            :append-to-body="true"
+        >
+            <div class="u-box">
+                <h2 class="u-title">{{ drawer_title }}</h2>
+                <macro :ctx="drawer_content" />
+                <a :href="drawer_link" class="u-skip el-button el-button--primary"><i class="el-icon-copy-document"></i> 查看详情</a>
+            </div>
+        </el-drawer>
     </div>
 </template>
 
@@ -232,7 +274,9 @@
 import _ from "lodash";
 import { getPosts } from "../service/post";
 import dateFormat from "../utils/dateFormat";
-import { __ossMirror } from "@jx3box/jx3box-common/js/jx3box";
+import { __ossMirror,__v2 } from "@jx3box/jx3box-common/js/jx3box";
+import xfmap from "@jx3box/jx3box-data/data/xf/xf.json";
+import macro from "@/components/macro.vue";
 import {
     showAvatar,
     authorLink,
@@ -247,12 +291,12 @@ const mark_map = {
     geek: "骨灰必备",
 };
 const order_map = {
-    update : '最后更新',
-    podate : '最早发布',
-    favs : '收藏最多',
-    likes : '点赞最多',
-    downs : '下载最多'
-}
+    update: "最后更新",
+    podate: "最早发布",
+    favs: "收藏最多",
+    likes: "点赞最多",
+    downs: "下载最多",
+};
 export default {
     name: "list",
     props: [],
@@ -260,8 +304,8 @@ export default {
         return {
             loading: false, //加载状态
 
-            search : '',
-            searchType : '',
+            search: "",
+            searchType: "authorname",
 
             data: [], //数据列表
             page: 1, //当前页数
@@ -272,12 +316,17 @@ export default {
             mark: "", //筛选模式
 
             filter_visible: false,
-            order_visible : false
+            order_visible: false,
+
+            drawer: false,
+            drawer_title: "",
+            drawer_content: "",
+            drawer_link : ''
         };
     },
     computed: {
-        subtype : function (){
-            return this.$store.state.subtype  
+        subtype: function() {
+            return this.$store.state.subtype;
         },
         params: function() {
             let params = {
@@ -298,8 +347,8 @@ export default {
         currentMark: function() {
             return mark_map[this.mark];
         },
-        currentOrder : function (){
-            return order_map[this.order]
+        currentOrder: function() {
+            return order_map[this.order];
         },
         hasNextPage: function() {
             return this.total > 1 && this.page < this.pages;
@@ -310,10 +359,10 @@ export default {
 
         // 根据栏目定义
         defaultBanner: function() {
-            return ''
+            return "";
         },
         publish_link: function(val) {
-            return publishLink("fb");
+            return publishLink("macro");
         },
     },
     methods: {
@@ -359,11 +408,20 @@ export default {
         showFilter: function() {
             this.filter_visible = !this.filter_visible;
         },
-        showOrder : function (){
+        showOrder: function() {
             this.order_visible = !this.order_visible;
         },
         showBanner: function(val) {
             return val ? showMinibanner(val) : this.defaultBanner;
+        },
+        showIcon: function(val) {
+            return __ossMirror + "icon/" + val + ".png";
+        },
+        loadMacro(author,m,id) {
+            this.drawer = true;
+            this.drawer_title = author + '#' + m.name;
+            this.drawer_content = m.macro;
+            this.drawer_link = './?pid=' + id
         },
     },
     filters: {
@@ -385,12 +443,16 @@ export default {
         showMark: function(val) {
             return mark_map[val];
         },
+        xficon: function(val) {
+            let xf_id = xfmap[val]["id"];
+            return __ossMirror + "image/xf/" + xf_id + ".png";
+        },
     },
     created: function() {
         this.loadPosts(1);
     },
     components: {
-        
+        macro,
     },
 };
 </script>

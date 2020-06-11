@@ -1,10 +1,24 @@
 <template>
     <el-tabs class="m-tabs" v-model="view" @tab-click="changeView">
-        <el-tab-pane label="副本攻略" name="index">
+        <el-tab-pane label="云端宏" name="index">
             <span slot="label">
                 <i class="el-icon-collection"></i>
-                <b>副本攻略</b>
-                <em class="u-secret">开荒首发</em>
+                <b>云端宏</b>
+                <em class="u-new">全新版本</em>
+            </span>
+        </el-tab-pane>
+        <el-tab-pane label="排行榜" name="rank">
+            <span slot="label">
+                <i class="el-icon-s-data"></i>
+                <b>排行榜</b>
+                <em class="u-pending">即将推出</em>
+            </span>
+        </el-tab-pane>
+        <el-tab-pane label="我的宏仓库" name="store">
+            <span slot="label">
+                <i class="el-icon-receiving"></i>
+                <b>私人宏仓库</b>
+                <em class="u-pending">即将推出</em>
             </span>
         </el-tab-pane>
     </el-tabs>

@@ -6,7 +6,7 @@ import failCallback from '../utils/fail'
 
 function getPosts(params,vm) {
     let query = {
-        type: "fb",
+        type: "macro",
     };
     if (params) {
         query = Object.assign(query, params);

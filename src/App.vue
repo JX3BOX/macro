@@ -18,7 +18,7 @@
         <Main :withoutRight="false">
             <single v-if="mode == 'single'" />
             <div class="m-main" v-else>
-                <tabs />
+                <!-- <tabs /> -->
                 <router-view />
             </div>
             <RightSidebar>
@@ -55,14 +55,14 @@ export default {
         this.$store.state.mode = this.$store.state.pid ? "single" : "list";
 
         // 根据情况选择subtype取值
-        // this.$store.state.subtype = getRewrite("subtype");
+        this.$store.state.subtype = getRewrite("subtype");
         // this.$store.state.subtype = this.$route.params.subtype;
     },
     components: {
         Info,
         Nav,
         Extend,
-        tabs,
+        // tabs,
         single
     },
 };

@@ -24,23 +24,32 @@ import macro from "@jx3box/jx3box-macro";
 import dict from "@jx3box/jx3box-data/data/app/dict.json";
 export default {
     name: "macro",
-    props: ["data"],
+    props: ["ctx"],
     data: function() {
         return {
+            data: "",
             code: "",
             data_tw: "",
             code_tw: "",
             status: 1, //默认简体
-            flag : false,    //是否已被转换过
+            flag: false, //是否已被转换过
         };
     },
-    computed: {
-        content : function (){
-            return this.status ? this.code : this.code_tw
+    watch: {
+        ctx: function(ctx) {
+            if (ctx) {
+                this.data = ctx;
+                this.code = this.parse(ctx);
+            }
         },
-        copytext : function (){
-            return this.status ? this.data : this.data_tw
-        }
+    },
+    computed: {
+        content: function() {
+            return this.status ? this.code : this.code_tw;
+        },
+        copytext: function() {
+            return this.status ? this.data : this.data_tw;
+        },
     },
     methods: {
         onCopy: function(val) {
@@ -59,7 +68,7 @@ export default {
         translate(data) {
             if (data && data.length) {
                 let _data = "";
-                for(let f of data){
+                for (let f of data) {
                     let i = dict.cn.indexOf(f);
                     if (i >= 0) {
                         _data += dict.tw[i];
@@ -90,17 +99,18 @@ export default {
                 return "";
             }
         },
-        run : function (){
-            if(!this.flag){
-                this.callTranslator()
-                this.flag = true
+        run: function() {
+            if (!this.flag) {
+                this.callTranslator();
+                this.flag = true;
             }
-            this.status = ~~!this.status
-        }
+            this.status = ~~!this.status;
+        },
     },
-    mounted: function() {
-        if (this.data) {
-            this.code = this.parse(this.data);
+    created: function() {
+        if (this.ctx) {
+            this.data = this.ctx;
+            this.code = this.parse(this.ctx);
         }
     },
     components: {},

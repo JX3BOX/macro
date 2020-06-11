@@ -109,7 +109,7 @@
                     <!-- 宏 -->
                     <el-divider content-position="left">宏</el-divider>
                     <div class="u-macro macro-box">
-                        <macro :data="item.macro"/>
+                        <macro :ctx="item.macro"/>
                     </div>
                     <!-- 急速 -->
                     <el-divider content-position="left">推荐急速</el-divider>
