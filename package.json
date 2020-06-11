@@ -1,5 +1,5 @@
 {
-  "name": "repo",
+  "name": "macro",
   "private": true,
   "scripts": {
     "dev": "env DEV_SERVER=true vue-cli-service serve",
@@ -13,6 +13,7 @@
     "@jx3box/jx3box-comment-ui": "^1.2.2",
     "@jx3box/jx3box-common": "^4.4.9",
     "@jx3box/jx3box-common-ui": "^1.5.5",
+    "@jx3box/jx3box-data": "^0.1.4",
     "axios": "^0.19.2",
     "core-js": "^3.4.3",
     "element-ui": "^2.13.0",

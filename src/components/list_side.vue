@@ -3,16 +3,16 @@
 
         <!-- 群号 -->
         <RightSideMsg>
-            <em>家园玩法交流群</em> :
-            <strong><a href="https://jq.qq.com/?_wv=1027&k=InbtJGcw">658035079</a></strong>
+            <em>宏作者交流群</em> :
+            <strong><a href="https://jq.qq.com/?_wv=1027&k=ZAsOkzUq">297985102</a></strong>
         </RightSideMsg>
 
         <!-- 排行榜 -->
         <div class="m-side-rank">
             <h3 class="c-sidebar-right-title">
                 <img class="u-icon" svg-inline src="../assets/img/side/rank.svg" />
-                最高花价
-                <a href="/house#/flower" class="m-flower-rec-more">查看更多<i class="el-icon-d-arrow-right"></i></a>
+                云端宏排行榜
+                <router-link class="u-more" to="/rank">完整榜单 &raquo;</router-link>
             </h3>
         </div>
 
@@ -23,7 +23,11 @@
                 相关链接
             </h3>
             <div class="c-sidebar-right-list">
-                <a class="u-item" href="https://www.jx3box.com/tool/13948/" target="_blank">如何导出家园蓝图？</a>
+                <!-- TODO:云端宏相关教程 -->
+                <a class="u-item" href="https://www.jx3box.com/tool/265" target="_blank">宏命令完整参考手册</a>
+                <a class="u-item" href="https://www.jx3box.com/tool/166" target="_blank">官方宏命令解析规则</a>
+                <a class="u-item" href="https://www.jx3box.com/tool/264" target="_blank">如何使用剑三宏？</a>
+                <a class="u-item" href="https://www.jx3box.com/tool/280" target="_blank">简易鼠标宏设置教程</a>
             </div>
         </div>
 
@@ -48,3 +52,7 @@ export default {
     components: {},
 };
 </script>
+
+<style lang="less">
+@import "../assets/css/list_side.less";
+</style>

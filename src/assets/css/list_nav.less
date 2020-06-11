@@ -1,0 +1,46 @@
+.m-macro-nav {
+    list-style: none;
+    padding: 5px 10px;
+    margin: 5px 0 0 0;
+    .clearfix;
+
+    .u-item {
+        // padding: 5px 10px;
+        .w(50%);
+        .fl;
+        box-sizing: border-box;
+        font-size: 14px;
+        line-height: 26px;
+        list-style: none;
+        margin-bottom: 6px;
+        width: 50%;
+    }
+
+    .u-pic {
+        .size(28px);
+        .dbi;
+        .mr(8px);
+        vertical-align: top;
+        border-radius: 28px;
+        padding: 3px;
+        background-color: #f9f9f9;
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: 0 0;
+        border: 1px solid #eee;
+        box-sizing: border-box;
+    }
+    .u-txt {
+        .fz(14px,28px);
+        color: @color;
+    }
+
+    .u-link{.db;}
+    .u-link:hover{
+        .u-txt{
+            color:@primary;
+            box-shadow:0 1px 0 @primary;
+        }
+    }
+}
+

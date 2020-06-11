@@ -2,14 +2,14 @@
     <div id="app" :class="{ 'p-list': mode == 'list', 'p-single': mode == 'single' }">
         <Header></Header>
         <Breadcrumb
-            name="频道名称"
-            slug="slug"
-            root="/slug"
+            name="宏库"
+            slug="macro"
+            root="/macro"
             :publishEnable="true"
             :adminEnable="true"
             :feedbackEnable="true"
         >
-            <img slot="logo" svg-inline src="./assets/img/logo.svg" />
+            <img slot="logo" svg-inline src="./assets/img/macro.svg" />
             <Info />
         </Breadcrumb>
         <LeftSidebar>
