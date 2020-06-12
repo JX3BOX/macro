@@ -1,7 +1,7 @@
 <template>
     <div class="m-info">
         <div class="m-info-notice">
-            <span class="u-item" href="/macro/#/">🌈 全新宏库上线 支持多套奇穴</span>
+            <span class="u-item" href="https://www.jx3box.com/tool/14671/" target="_blank">🌈 云端宏发布指南</span>
             <!-- <span class="u-item" href="/macro/#/">🌈 <span>即将上线</span> · 私人宏仓库</span> -->
             <!-- <span class="u-item" href="/macro/#/">✨ <span>即将上线</span> · 云端宏一键同步</span> -->
             <!-- <span class="u-item" href="/house/#/rank">⚽️ <span>即将上线</span> · 云端宏排行榜</span> -->
