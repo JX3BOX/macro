@@ -74,6 +74,14 @@
                         <img class="u-icon" :src="item.icon | iconURL" />
                         <b>{{ item.name }}</b>
                     </span>
+                    <!-- 宏 -->
+                    <el-divider content-position="left">宏</el-divider>
+                    <div class="u-usage">
+                        {{item.desc}}
+                    </div>
+                    <div class="u-macro macro-box">
+                        <macro :ctx="item.macro"/>
+                    </div>
                     <!-- 奇穴 -->
                     <el-divider content-position="left">奇穴</el-divider>
                     <div class="u-talent talent-box" :id="`talent-box-${i}`"></div>
@@ -105,14 +113,6 @@
                             v-clipboard:error="onError"
                             >复制奇穴序列</el-button
                         >
-                    </div>
-                    <!-- 宏 -->
-                    <el-divider content-position="left">宏</el-divider>
-                    <div class="u-usage">
-                        {{item.desc}}
-                    </div>
-                    <div class="u-macro macro-box">
-                        <macro :ctx="item.macro"/>
                     </div>
                     <!-- 急速 -->
                     <el-divider content-position="left">推荐急速</el-divider>
