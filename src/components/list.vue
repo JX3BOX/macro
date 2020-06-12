@@ -1,5 +1,5 @@
 <template>
-    <div class="m-archive-box">
+    <div class="m-archive-box" v-loading="loading">
 
         <!-- 排序 -->
         <div class="m-archive-order">
