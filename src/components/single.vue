@@ -76,10 +76,10 @@
                     </span>
                     <!-- 宏 -->
                     <el-divider content-position="left">宏</el-divider>
-                    <div class="u-usage">
+                    <div class="u-usage" v-if="item.desc">
                         {{item.desc}}
                     </div>
-                    <div class="u-macro macro-box">
+                    <div class="u-macro macro-box" :class="{withUsage:item.desc}">
                         <macro :ctx="item.macro"/>
                     </div>
                     <!-- 奇穴 -->
