@@ -111,15 +111,15 @@
                     <div class="u-macro macro-box">
                         <macro :ctx="item.macro"/>
                     </div>
-                    <!-- 急速 -->
-                    <el-divider content-position="left">推荐急速</el-divider>
-                    <div class="u-speed">
-                        {{item.speed}}
-                    </div>
                     <!-- 说明 -->
                     <el-divider content-position="left">特别说明</el-divider>
                     <div class="u-desc">
                         {{item.desc}}
+                    </div>
+                    <!-- 急速 -->
+                    <el-divider content-position="left">推荐急速</el-divider>
+                    <div class="u-speed">
+                        {{item.speed}}
                     </div>
                 </el-tab-pane>
             </el-tabs>
