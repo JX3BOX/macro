@@ -108,13 +108,11 @@
                     </div>
                     <!-- 宏 -->
                     <el-divider content-position="left">宏</el-divider>
+                    <div class="u-usage">
+                        {{item.desc}}
+                    </div>
                     <div class="u-macro macro-box">
                         <macro :ctx="item.macro"/>
-                    </div>
-                    <!-- 说明 -->
-                    <el-divider content-position="left">特别说明</el-divider>
-                    <div class="u-desc">
-                        {{item.desc}}
                     </div>
                     <!-- 急速 -->
                     <el-divider content-position="left">推荐急速</el-divider>
