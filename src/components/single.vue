@@ -75,17 +75,17 @@
                         <b>{{ item.name }}</b>
                     </span>
                     <!-- 宏 -->
-                    <el-divider content-position="left">宏</el-divider>
+                    <el-divider content-position="left" v-if="item.macro">宏</el-divider>
                     <div class="u-usage" v-if="item.desc">
                         {{item.desc}}
                     </div>
-                    <div class="u-macro macro-box" :class="{withUsage:item.desc}">
+                    <div class="u-macro macro-box" :class="{withUsage:item.desc}" v-if="item.macro">
                         <macro :ctx="item.macro"/>
                     </div>
                     <!-- 奇穴 -->
-                    <el-divider content-position="left">奇穴</el-divider>
+                    <el-divider content-position="left" v-if="item.talent">奇穴</el-divider>
                     <div class="u-talent talent-box" :id="`talent-box-${i}`"></div>
-                    <div class="u-panel u-talent-panel">
+                    <div class="u-panel u-talent-panel" v-if="item.talent">
                         <el-button
                             icon="el-icon-s-tools"
                             plain
@@ -115,8 +115,8 @@
                         >
                     </div>
                     <!-- 急速 -->
-                    <el-divider content-position="left">推荐急速</el-divider>
-                    <div class="u-speed">
+                    <el-divider content-position="left" v-if="item.speed">推荐急速</el-divider>
+                    <div class="u-speed" v-if="item.speed">
                         {{item.speed}}
                     </div>
                 </el-tab-pane>
