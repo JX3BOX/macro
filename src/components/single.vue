@@ -75,7 +75,7 @@
                         <b>{{ item.name }}</b>
                     </span>
                     <!-- 奇穴 -->
-                    <!-- <el-divider content-position="left">奇穴</el-divider> -->
+                    <el-divider content-position="left">奇穴</el-divider>
                     <div class="u-talent talent-box" :id="`talent-box-${i}`"></div>
                     <div class="u-panel u-talent-panel">
                         <el-button
