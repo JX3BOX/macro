@@ -2,7 +2,7 @@
 .m-archive-search{
     .mb(10px);
     .el-select .el-input {
-        width: 100px;
+        width: 80px;
     }
     .u-switch{
         .el-switch__label{
@@ -19,7 +19,7 @@
     padding-bottom: 5px;
     .clearfix;
     // background-color:@bg-light;
-    // border-bottom: 1px solid #eee;
+    border-bottom: 1px solid #eee;
 
     .u-publish {
         .fl;
@@ -79,12 +79,17 @@
         .u-publish {
             .mr(10px);
         }
+        .u-filter{
+            .w(110px);
+        }
+        .u-modes{
+            .w(140px);
+        }
         .u-filter,.u-modes {
             .pr;
             background-color: @bg-light;
             border: 1px solid #ddd;
             .r(4px);
-            .w(140px);
             user-select: none;
             padding:6px 0;
 
@@ -106,7 +111,7 @@
             .pa;
             .lt(-1px,29px);
             padding: 5px 0;
-            .w(140px);
+            .w(100%);
             background-color:#fff;
             border: 1px solid #ddd;
             .z(2);
@@ -122,6 +127,7 @@
 }
 @media screen and (max-width:@phone){
     .m-archive-order {
+        .none;
         .u-publish {.none;}
     }
 }
@@ -191,7 +197,7 @@
                 box-shadow: 0 1px 0 @primary;
             }
         }
-        .fz(16px, 2);
+        .fz(15px, 2);
         font-weight: normal;
         .lh(2);
         font-weight: 400;
@@ -353,8 +359,9 @@
         }
 
         .u-misc {
-            .ps;
+            .ps !important;
             .x(left);
+            padding-left:20px;
         }
         .u-author-name {
             color: #555;
@@ -380,4 +387,14 @@
 // 分页
 .m-archive-pages {
     overflow-x: auto;
+}
+@media screen and (max-width:@phone){
+    .m-archive-pages{
+        .none;
+    }
+}
+@media screen and (max-width:@phone){
+    .c-sidebar-right{
+        .none;
+    }
 }

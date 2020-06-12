@@ -11,14 +11,14 @@
             </li>
         </ul>
 
-        <h5 class="u-title">在线应用</h5>
+        <!-- <h5 class="u-title">在线应用</h5>
         <div class="m-nav-group">
             <router-link to="/bucket">
                 <img svg-inline src="../assets/img/logo.svg" />
                 <span>私人宏仓库</span>
                 <i class="u-mark ispending">即将推出</i>
             </router-link>
-        </div>
+        </div> -->
     </div>
 </template>
 

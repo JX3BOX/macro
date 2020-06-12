@@ -18,7 +18,7 @@
         <Main :withoutRight="false">
             <single v-if="mode == 'single'" />
             <div class="m-main" v-else>
-                <!-- <tabs /> -->
+                <tabs />
                 <router-view />
             </div>
             <RightSidebar>
@@ -62,7 +62,7 @@ export default {
         Info,
         Nav,
         Extend,
-        // tabs,
+        tabs,
         single
     },
 };

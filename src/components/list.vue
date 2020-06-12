@@ -1,32 +1,5 @@
 <template>
     <div class="m-archive-box">
-        <!-- 搜索 -->
-        <div class="m-archive-search">
-            <el-input
-                placeholder="请输入搜索条件"
-                v-model="search"
-                class="input-with-select"
-                @change="commitSearch"
-            >
-                <el-select
-                    v-model="searchType"
-                    slot="prepend"
-                    placeholder="请选择"
-                >
-                    <el-option label="作者" value="authorname"></el-option>
-                    <el-option label="标题" value="title"></el-option>
-                </el-select>
-            </el-input>
-            <!-- <el-switch
-                    class="u-switch u-hasdata"
-                    slot="append"
-                    v-model="hasData"
-                    active-color="#13ce66"
-                    inactive-text="只看有蓝图"
-                    @change="commitSearch"
-                >
-                </el-switch> -->
-        </div>
 
         <!-- 排序 -->
         <div class="m-archive-order">
@@ -124,6 +97,25 @@
             </div>
         </div>
 
+        <!-- 搜索 -->
+        <div class="m-archive-search">
+            <el-input
+                placeholder="请输入搜索条件"
+                v-model="search"
+                class="input-with-select"
+                @change="commitSearch"
+            >
+                <el-select
+                    v-model="searchType"
+                    slot="prepend"
+                    placeholder="请选择"
+                >
+                    <el-option label="作者" value="authorname"></el-option>
+                    <el-option label="标题" value="title"></el-option>
+                </el-select>
+            </el-input>
+        </div>
+
         <!-- 列表 -->
         <div class="m-archive-list" v-if="data.length">
             <ul class="u-list">
@@ -136,6 +128,8 @@
                             :alt="item.post.post_subtype"
                             :title="item.post.post_subtype"
                         />
+
+                        <!-- <Mark class="u-feed" :label="item.author.name"/> -->
 
                         <!-- 标题文字 -->
                         <a
@@ -165,7 +159,7 @@
                         <ul
                             class="m-macro-list-item-meta"
                             v-if="
-                                item.post.post_meta.data &&
+                                item.post.post_meta && item.post.post_meta.data &&
                                     item.post.post_meta.data.length
                             "
                         >
@@ -173,7 +167,6 @@
                                 class="u-macro"
                                 v-for="(m, i) in item.post.post_meta.data"
                                 :key="i"
-                                @click="loadMacro(item.author.name,m,item.post.ID)"
                             >
                                 <img
                                     class="u-macro-icon"
@@ -184,9 +177,17 @@
                                     :content="'点击快捷查看 · ' + m.name"
                                     placement="top-start"
                                 >
-                                    <span class="u-macro-name">{{
-                                        item.author.name + "#" + m.name
-                                    }}</span>
+                                    <span
+                                        class="u-macro-name"
+                                        @click="
+                                            loadMacro(
+                                                item.author.name,
+                                                m,
+                                                item.post.ID
+                                            )
+                                        "
+                                        >{{ m.name }}</span
+                                    >
                                 </el-tooltip>
                             </li>
                         </ul>
@@ -264,7 +265,11 @@
             <div class="u-box">
                 <h2 class="u-title">{{ drawer_title }}</h2>
                 <macro :ctx="drawer_content" />
-                <a :href="drawer_link" class="u-skip el-button el-button--primary"><i class="el-icon-copy-document"></i> 查看详情</a>
+                <a
+                    :href="drawer_link"
+                    class="u-skip el-button el-button--primary"
+                    ><i class="el-icon-copy-document"></i> 查看详情</a
+                >
             </div>
         </el-drawer>
     </div>
@@ -274,7 +279,7 @@
 import _ from "lodash";
 import { getPosts } from "../service/post";
 import dateFormat from "../utils/dateFormat";
-import { __ossMirror,__v2 } from "@jx3box/jx3box-common/js/jx3box";
+import { __ossMirror, __v2 } from "@jx3box/jx3box-common/js/jx3box";
 import xfmap from "@jx3box/jx3box-data/data/xf/xf.json";
 import macro from "@/components/macro.vue";
 import {
@@ -321,7 +326,7 @@ export default {
             drawer: false,
             drawer_title: "",
             drawer_content: "",
-            drawer_link : ''
+            drawer_link: "",
         };
     },
     computed: {
@@ -417,11 +422,11 @@ export default {
         showIcon: function(val) {
             return __ossMirror + "icon/" + val + ".png";
         },
-        loadMacro(author,m,id) {
+        loadMacro(author, m, id) {
             this.drawer = true;
-            this.drawer_title = author + '#' + m.name;
+            this.drawer_title = author + "#" + m.name;
             this.drawer_content = m.macro;
-            this.drawer_link = './?pid=' + id
+            this.drawer_link = "./?pid=" + id;
         },
     },
     filters: {
@@ -444,6 +449,7 @@ export default {
             return mark_map[val];
         },
         xficon: function(val) {
+            if(!val || val == '其它') val = '通用'
             let xf_id = xfmap[val]["id"];
             return __ossMirror + "image/xf/" + xf_id + ".png";
         },
