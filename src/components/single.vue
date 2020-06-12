@@ -76,9 +76,7 @@
                     </span>
                     <!-- 宏 -->
                     <el-divider content-position="left" v-if="item.macro">宏</el-divider>
-                    <div class="u-usage" v-if="item.desc">
-                        {{item.desc}}
-                    </div>
+                    <div class="u-usage" v-if="item.desc">{{item.desc}}</div>
                     <div class="u-macro macro-box" :class="{withUsage:item.desc}" v-if="item.macro">
                         <macro :ctx="item.macro"/>
                     </div>
@@ -116,9 +114,7 @@
                     </div>
                     <!-- 急速 -->
                     <el-divider content-position="left" v-if="item.speed">推荐急速</el-divider>
-                    <div class="u-speed" v-if="item.speed">
-                        {{item.speed}}
-                    </div>
+                    <div class="u-speed" v-if="item.speed">{{item.speed}}</div>
                 </el-tab-pane>
             </el-tabs>
         </div>
