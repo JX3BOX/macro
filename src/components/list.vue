@@ -137,7 +137,7 @@
                             :style="item.post.color | isHighlight"
                             :href="item.post.ID | postLink"
                             :target="target"
-                            >{{ item.post.post_title }}</a
+                            >{{ item.post.post_title || '无标题' }}</a
                         >
 
                         <!-- 角标 -->
