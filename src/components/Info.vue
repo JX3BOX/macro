@@ -8,9 +8,9 @@
         </div>
 
         <div class="m-info-router">
-            <router-link to="/"><i class="el-icon-collection"></i></router-link>
-            <router-link to="/rank"><i class="el-icon-s-data"></i></router-link>
-            <router-link to="/bucket"><i class="el-icon-receiving"></i></router-link>
+            <router-link title="云端宏" to="/"><i class="el-icon-collection"></i></router-link>
+            <router-link title="排行榜" to="/rank"><i class="el-icon-s-data"></i></router-link>
+            <router-link title="我的宏仓库" to="/bucket"><i class="el-icon-receiving"></i></router-link>
         </div>
     </div>
 </template>
