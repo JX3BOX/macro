@@ -100,7 +100,7 @@
         <!-- 搜索 -->
         <div class="m-archive-search">
             <el-input
-                placeholder="请输入搜索条件"
+                placeholder="请输入关键词"
                 v-model="search"
                 class="input-with-select"
                 @change="commitSearch"
