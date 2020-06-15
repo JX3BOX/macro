@@ -1,6 +1,6 @@
 <template>
     <div class="m-rank">
-        <el-alert title="即将推出，敬请期待" type="warning" show-icon> </el-alert>
+        <el-alert title="一周后将推出统计结果（不包括私有宏），敬请期待" type="warning" show-icon> </el-alert>
     </div>
 </template>
 
@@ -13,7 +13,7 @@ export default {
     },
     computed: {},
     methods: {},
-    mounted: function() {},
+    created: function() {},
     components: {},
 };
 </script>

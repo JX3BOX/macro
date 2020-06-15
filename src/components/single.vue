@@ -293,7 +293,7 @@ export default {
     created: function() {
         if (this.id) {
             this.loading = true;
-            getPost(this.id)
+            getPost(this.id,this)
                 .then((res) => {
                     this.post = this.$store.state.post = res.data.data.post;
                     this.meta = this.$store.state.meta =
