@@ -1,7 +1,7 @@
 <template>
     <div class="m-single-nav">
         <Author :author="author" v-if="$store.state.status"/>
-        <Authorposts :uid="uid" v-if="$store.state.status"/>
+        <Authorposts :uid="uid"/>
         <!-- <ins 
             class="adsbygoogle"
             style="display:block;max-width:100%;overflow:hidden;margin:10px;"
