@@ -113,6 +113,7 @@
                     <el-option label="作者" value="authorname"></el-option>
                     <el-option label="标题" value="title"></el-option>
                 </el-select>
+                <el-button slot="append" icon="el-icon-search"></el-button>
             </el-input>
         </div>
 
