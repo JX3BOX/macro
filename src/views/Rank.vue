@@ -70,7 +70,7 @@
             class="m-rank-tips"
             v-if="!kungfuid"
             title="可在侧边栏指定心法以查看对应心法排名"
-            type="info"
+            type="warning"
             show-icon
         >
         </el-alert>

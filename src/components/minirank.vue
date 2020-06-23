@@ -7,7 +7,7 @@
         <ul class="u-list">
             <li v-for="(item, j) in data" :key="j">
                 <a class="u-link" :href="item.pid | postLink">
-                <span class="u-order">{{ j + 1 }}</span>
+                <span class="u-order" :class="highlight(j)">{{ j + 1 }}</span>
                 <span class="u-name"
                     >{{ item.author
                     }}#{{ item.v }}</span
@@ -49,6 +49,15 @@ export default {
     methods: {
         viewRank : function (){
             this.$router.push({ name: 'rank' });
+        },
+        highlight : function (i){
+            if(i == 0){
+                return 't1'
+            }else if(i == 1){
+                return 't2'
+            }else if(i == 2) {
+                return 't3'
+            }
         }
     },
     filters : {
