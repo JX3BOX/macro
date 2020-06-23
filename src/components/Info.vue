@@ -2,7 +2,7 @@
     <div class="m-info">
         <div class="m-info-notice">
             <a class="u-item" href="https://www.jx3box.com/tool/14671/" target="_blank">🌈 云端宏发布指南</a>
-            <!-- <span class="u-item" href="/macro/#/">🌈 <span>即将上线</span> · 私人宏仓库</span> -->
+            <router-link class="u-item" title="排行榜" to="/rank">⚽️ 排行榜上线</router-link>
             <!-- <span class="u-item" href="/macro/#/">✨ <span>即将上线</span> · 云端宏一键同步</span> -->
             <!-- <span class="u-item" href="/house/#/rank">⚽️ <span>即将上线</span> · 云端宏排行榜</span> -->
         </div>

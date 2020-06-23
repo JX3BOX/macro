@@ -280,7 +280,7 @@
 import _ from "lodash";
 import { getPosts } from "../service/post";
 import dateFormat from "../utils/dateFormat";
-import { __ossMirror, __v2 } from "@jx3box/jx3box-common/js/jx3box";
+import { __ossMirror, __iconPath } from "@jx3box/jx3box-common/js/jx3box";
 import xfmap from "@jx3box/jx3box-data/data/xf/xf.json";
 import macro from "@/components/macro.vue";
 import {
@@ -421,7 +421,8 @@ export default {
             return val ? showMinibanner(val) : this.defaultBanner;
         },
         showIcon: function(val) {
-            return __ossMirror + "icon/" + val + ".png";
+            return __iconPath + "icon/" + val + ".png";
+            // return __ossMirror + "icon/" + val + ".png";
         },
         loadMacro(author, m, id) {
             this.drawer = true;
