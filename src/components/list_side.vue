@@ -28,31 +28,31 @@
                     class="u-item"
                     href="https://www.jx3box.com/tool/14671/"
                     target="_blank"
-                    >云端宏食用指南</a
+                    ><i class="el-icon-collection"></i> 云端宏食用指南</a
                 >
                 <a
                     class="u-item"
                     href="https://www.jx3box.com/tool/265"
                     target="_blank"
-                    >宏命令完整参考手册</a
+                    ><i class="el-icon-collection"></i> 宏命令完整参考手册</a
                 >
                 <a
                     class="u-item"
                     href="https://www.jx3box.com/tool/166"
                     target="_blank"
-                    >官方宏命令解析规则</a
+                    ><i class="el-icon-collection"></i> 官方宏命令解析规则</a
                 >
                 <a
                     class="u-item"
                     href="https://www.jx3box.com/tool/264"
                     target="_blank"
-                    >如何使用剑三宏？</a
+                    ><i class="el-icon-warning-outline"></i> 如何使用剑三宏？</a
                 >
                 <a
                     class="u-item"
                     href="https://www.jx3box.com/tool/280"
                     target="_blank"
-                    >简易鼠标宏设置教程</a
+                    ><i class="el-icon-warning-outline"></i> 简易鼠标宏设置教程</a
                 >
             </div>
         </div>
