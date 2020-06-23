@@ -4,6 +4,7 @@
             <el-table
                 :data="data"
                 :default-sort="{ prop: '7days', order: 'descending' }"
+                :row-class-name="highlight"
             >
                 <el-table-column type="index" label="👑" width="48">
                 </el-table-column>
@@ -11,7 +12,6 @@
                     prop="downloadStr"
                     label="云端宏"
                     sortable
-                    width="260px"
                 >
                     <template slot-scope="scope">
                         <img class="u-icon-xf" :src="scope.row.xf | xficon">
@@ -31,7 +31,6 @@
                 <el-table-column
                     prop="trending"
                     label="趋势"
-                    width="100"
                     :formatter="trending"
                 >
                     <template slot-scope="scope">

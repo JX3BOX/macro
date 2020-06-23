@@ -1,5 +1,5 @@
 .highlight(@i: 1,@n,@bgcolor:#fc3c3c) when (@i <= @n) {
-    .el-table__row:nth-child(@{i}) .el-table_1_column_1{
+    .el-table__row:nth-child(@{i}) td:first-child{
         background-color: @bgcolor;
         color: #fff;
     }
@@ -8,20 +8,28 @@
 
 .m-macro-rank-full {
 
-    .el-table__row .el-table_1_column_1{
+    .el-table__row td:first-child{
         .x;
     }
-    @t1 : #fc3c3c;
-    .highlight(1,3);
-
-    @t2 : #fba524;
-    .highlight(4,10,@t2);
-
-    @t3 : @primary;
-    .highlight(11,20,@t3);
+    .t1 td:first-child{
+        background-color: #fc3c3c !important;
+        color: #fff;
+    }
+    .t2 td:first-child{
+        background-color: #fba524 !important;
+        color: #fff;
+    }
+    .t3 td:first-child{
+        background-color: @primary !important;
+        color: #fff;
+    }
 }
 
 .m-macro-rank-full {
+
+    .u-feed{
+        color:@darkblue;
+    }
 
     .u-feed:hover{
         color:@pink;
