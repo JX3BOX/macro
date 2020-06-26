@@ -168,7 +168,7 @@ import _ from "lodash";
 import dateFormat from "../utils/dateFormat";
 import { authorLink, editLink } from "@jx3box/jx3box-common/js/utils.js";
 // 变量模块
-import { __Links, __ossMirror } from "@jx3box/jx3box-common/js/jx3box.json";
+import { __Links, __ossMirror,__iconPath,__imgPath } from "@jx3box/jx3box-common/js/jx3box.json";
 import User from "@jx3box/jx3box-common/js/user.js";
 // 子模块
 import macro from "@/components/macro.vue";
@@ -284,10 +284,10 @@ export default {
     },
     filters: {
         xficon: function(val) {
-            return __ossMirror + "image/xf/" + val + ".png";
+            return __imgPath + "image/xf/" + val + ".png";
         },
         iconURL: function(val) {
-            return __ossMirror + "icon/" + val + ".png";
+            return __iconPath + "icon/" + val + ".png";
         },
     },
     created: function() {

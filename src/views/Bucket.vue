@@ -193,7 +193,7 @@ import _ from "lodash";
 import User from "@jx3box/jx3box-common/js/user";
 import { getPosts } from "../service/post";
 import dateFormat from "../utils/dateFormat";
-import { __ossMirror,__Links } from "@jx3box/jx3box-common/js/jx3box";
+import { __ossMirror,__Links,__iconPath,__imgPath } from "@jx3box/jx3box-common/js/jx3box";
 import xfmap from "@jx3box/jx3box-data/data/xf/xf.json";
 import macro from "@/components/macro.vue";
 import {
@@ -342,7 +342,7 @@ export default {
             return val ? showMinibanner(val) : this.defaultBanner;
         },
         showIcon: function(val) {
-            return __ossMirror + "icon/" + val + ".png";
+            return __iconPath + "icon/" + val + ".png";
         },
         loadMacro(author, m, id) {
             this.drawer = true;
@@ -373,7 +373,7 @@ export default {
         xficon: function(val) {
             if (!val || val == "其它") val = "通用";
             let xf_id = xfmap[val]["id"];
-            return __ossMirror + "image/xf/" + xf_id + ".png";
+            return __imgPath + "image/xf/" + xf_id + ".png";
         },
     },
     created: function() {

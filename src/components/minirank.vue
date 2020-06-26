@@ -37,7 +37,8 @@
 </template>
 
 <script>
-import { getOverview} from "../service/rank";
+import { getOverview,getRank} from "../service/rank";
+import xfmap from "@jx3box/jx3box-data/data/xf/xf.json";
 export default {
     name: "rank",
     data: function() {
@@ -45,7 +46,14 @@ export default {
             data: [],
         };
     },
-    computed: {},
+    computed: {
+        subtype: function() {
+            return this.$store.state.subtype || "";
+        },
+        kungfuid: function() {
+            return this.subtype ? xfmap[this.subtype]["id"] : 0;
+        },
+    },
     methods: {
         viewRank : function (){
             this.$router.push({ name: 'rank' });
@@ -58,17 +66,24 @@ export default {
             }else if(i == 2) {
                 return 't3'
             }
-        }
+        },
     },
     filters : {
         postLink : function (pid){
             return '/macro?pid=' + pid
-        }
+        },
+
     },
     mounted: function() {
-        getOverview(10).then((data) => {
-            this.data = data.slice(0,10);
-        });
+        if(this.subtype){
+            getRank(this.kungfuid,10).then((data) => {
+                this.data = data.slice(0,10);
+            })
+        }else{
+            getOverview(10).then((data) => {
+                this.data = data.slice(0,10);
+            });
+        }
     },
     components: {},
 };

@@ -28,7 +28,7 @@
 
 <script>
 import xfmap from '@jx3box/jx3box-data/data/xf/xf.json'
-import {__ossMirror} from '@jx3box/jx3box-common/js/jx3box.json'
+import {__ossMirror,__imgPath} from '@jx3box/jx3box-common/js/jx3box.json'
 export default {
     name: "list_nav",
     props: [],
@@ -52,7 +52,7 @@ export default {
     },
     filters : {
         xficon : function (val){
-            return __ossMirror + 'image/xf/' + val + '.png'
+            return __imgPath + 'image/xf/' + val + '.png'
         },
     },
     mounted: function() {},
