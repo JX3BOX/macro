@@ -11,14 +11,14 @@
             <span slot="label">
                 <i class="el-icon-receiving"></i>
                 <b>私人宏仓库</b>
-                <em class="u-hot">独家重磅</em>
+                <em class="u-ready">私人专属</em>
             </span>
         </el-tab-pane>
         <el-tab-pane label="排行榜" name="rank">
             <span slot="label">
                 <i class="el-icon-s-data"></i>
                 <b>排行榜</b>
-                <em class="u-new">全新上线</em>
+                <!-- <em class="u-new">全新上线</em> -->
                 <!-- <em class="u-ready">即将推出</em> -->
             </span>
         </el-tab-pane>

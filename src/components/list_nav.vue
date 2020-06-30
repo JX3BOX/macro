@@ -11,18 +11,14 @@
             </li>
         </ul>
 
-        <!-- <h5 class="u-title">在线应用</h5> -->
-        <!-- <div class="m-nav-group">
-            <router-link to="/bucket">
-                <img svg-inline src="../assets/img/logo.svg" />
-                <span>私人宏仓库</span>
-            </router-link>
-            <router-link to="/editor">
-                <img svg-inline src="../assets/img/logo.svg" />
-                <span>在线编辑器</span>
-                <i class="u-mark ispending">即将推出</i>
-            </router-link>
-        </div> -->
+        <h5 class="u-title">在线应用</h5>
+        <div class="m-nav-group">
+            <a href="/app/macroeditor" target="_blank">
+                <img svg-inline src="../assets/img/list/macroeditor.svg" />
+                <span>智能宏编辑器</span>
+                <i class="u-mark isnew">全新上线</i>
+            </a>
+        </div>
     </div>
 </template>
 

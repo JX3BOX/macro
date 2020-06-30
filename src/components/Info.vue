@@ -11,6 +11,7 @@
             <router-link title="云端宏" to="/"><i class="el-icon-collection"></i></router-link>
             <router-link title="排行榜" to="/rank"><i class="el-icon-s-data"></i></router-link>
             <router-link title="我的宏仓库" to="/bucket"><i class="el-icon-receiving"></i></router-link>
+            <a title="宏编辑器" href="/app/macroeditor" target="_blank"><i class="el-icon-setting"></i></a>
         </div>
     </div>
 </template>
