@@ -53,7 +53,7 @@
                 </span>
 
                 <!-- 查看次数 -->
-                <span class="u-views">
+                <span class="u-views u-sub-block">
                     <i class="el-icon-view"></i>
                     {{setting.views}}
                 </span>
