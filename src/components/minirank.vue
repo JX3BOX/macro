@@ -72,7 +72,6 @@ export default {
         postLink : function (pid){
             return '/macro?pid=' + pid
         },
-
     },
     mounted: function() {
         if(this.subtype){
