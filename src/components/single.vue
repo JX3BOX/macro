@@ -52,6 +52,12 @@
                     <time>{{ update_date }}</time>
                 </span>
 
+                <!-- 查看次数 -->
+                <span class="u-views">
+                    <i class="el-icon-view"></i>
+                    {{setting.views}}
+                </span>
+
                 <!-- 编辑 -->
                 <a class="u-edit u-sub-block" :href="edit_link" v-if="canEdit">
                     <i class="u-icon-edit el-icon-edit-outline"></i>
@@ -75,14 +81,25 @@
                         <b>{{ item.name }}</b>
                     </span>
                     <!-- 宏 -->
-                    <el-divider content-position="left" v-if="item.macro">宏</el-divider>
-                    <div class="u-usage" v-if="item.desc">{{item.desc}}</div>
-                    <div class="u-macro macro-box" :class="{withUsage:item.desc}" v-if="item.macro">
-                        <macro :ctx="item.macro"/>
+                    <el-divider content-position="left" v-if="item.macro"
+                        >宏</el-divider
+                    >
+                    <div class="u-usage" v-if="item.desc">{{ item.desc }}</div>
+                    <div
+                        class="u-macro macro-box"
+                        :class="{ withUsage: item.desc }"
+                        v-if="item.macro"
+                    >
+                        <macro :ctx="item.macro" />
                     </div>
                     <!-- 奇穴 -->
-                    <el-divider content-position="left" v-if="item.talent">奇穴</el-divider>
-                    <div class="u-talent talent-box" :id="`talent-box-${i}`"></div>
+                    <el-divider content-position="left" v-if="item.talent"
+                        >奇穴</el-divider
+                    >
+                    <div
+                        class="u-talent talent-box"
+                        :id="`talent-box-${i}`"
+                    ></div>
                     <div class="u-panel u-talent-panel" v-if="item.talent">
                         <el-button
                             icon="el-icon-s-tools"
@@ -113,8 +130,12 @@
                         >
                     </div>
                     <!-- 急速 -->
-                    <el-divider content-position="left" v-if="item.speed">推荐急速</el-divider>
-                    <div class="u-speed" v-if="item.speed">{{item.speed}}</div>
+                    <el-divider content-position="left" v-if="item.speed"
+                        >推荐急速</el-divider
+                    >
+                    <div class="u-speed" v-if="item.speed">
+                        {{ item.speed }}
+                    </div>
                 </el-tab-pane>
             </el-tabs>
         </div>
@@ -168,7 +189,12 @@ import _ from "lodash";
 import dateFormat from "../utils/dateFormat";
 import { authorLink, editLink } from "@jx3box/jx3box-common/js/utils.js";
 // 变量模块
-import { __Links, __ossMirror,__iconPath,__imgPath } from "@jx3box/jx3box-common/js/jx3box.json";
+import {
+    __Links,
+    __ossMirror,
+    __iconPath,
+    __imgPath,
+} from "@jx3box/jx3box-common/js/jx3box.json";
 import User from "@jx3box/jx3box-common/js/user.js";
 // 子模块
 import macro from "@/components/macro.vue";
@@ -176,6 +202,7 @@ import xfmap from "@jx3box/jx3box-data/data/xf/xf.json";
 import talent from "@jx3box/jx3box-talent";
 // 数据服务
 import { getPost } from "../service/post.js";
+import { getStat,postStat } from "../service/stat.js";
 
 export default {
     name: "single",
@@ -192,7 +219,7 @@ export default {
             data: [],
 
             active: "0",
-            talents : []
+            talents: [],
         };
     },
     computed: {
@@ -278,9 +305,9 @@ export default {
                 return "";
             }
         },
-        getTalentTXT : function (i){
-            return this.talents[i]
-        }
+        getTalentTXT: function(i) {
+            return this.talents[i];
+        },
     },
     filters: {
         xficon: function(val) {
@@ -293,13 +320,11 @@ export default {
     created: function() {
         if (this.id) {
             this.loading = true;
-            getPost(this.id,this)
+            getPost(this.id, this)
                 .then((res) => {
                     this.post = this.$store.state.post = res.data.data.post;
                     this.meta = this.$store.state.meta =
                         res.data.data.post.post_meta;
-                    this.setting = this.$store.state.setting =
-                        res.data.data.post;
                     this.author = this.$store.state.author =
                         res.data.data.author;
                     this.data = (this.meta && this.meta.data) || [];
@@ -317,8 +342,8 @@ export default {
 
                                     let ins = new talent(schema);
                                     ins.then((t) => {
-                                        this.talents.push(t.txt.toString())
-                                    })
+                                        this.talents.push(t.txt.toString());
+                                    });
                                 } catch (e) {
                                     this.$notify.error({
                                         title: "错误",
@@ -333,10 +358,15 @@ export default {
                 .finally(() => {
                     this.loading = false;
                 });
+
+            getStat(this.id).then((data) => {
+                if(data) this.setting = this.$store.state.setting = data;
+            })
+            postStat(this.id)
         }
     },
     components: {
-        macro
+        macro,
     },
 };
 </script>

@@ -317,7 +317,7 @@ export default {
             page: 1, //当前页数
             total: 1, //总条目数
             pages: 1, //总页数
-            per: 10, //每页条目
+            per: 18, //每页条目
             order: "", //排序模式
             mark: "", //筛选模式
 
