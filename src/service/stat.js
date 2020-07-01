@@ -6,7 +6,7 @@ const stat = __next + 'api/post/'    //TODO:
 
 function getStat(id) {
     return axios
-        .get(stat + id + "/stat/")
+        .get(stat + id + "/stat")
         .then((res) => {
             return res.data;
         })
