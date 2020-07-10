@@ -161,7 +161,7 @@
             <!-- 操作 -->
             <div class="m-single-panel" v-if="!loading">
                 <div class="u-minigroup">
-                    <Print class="u-fn" :title="title"/>
+                    <Print class="u-fn" :title="title" :authorID="post.post_author"/>
                     <QRcode class="u-fn" />
                     <Sharing class="u-fn" :title="title"/>
                 </div>
@@ -201,6 +201,7 @@ import {
     __ossMirror,
     __iconPath,
     __imgPath,
+    __ossRoot
 } from "@jx3box/jx3box-common/js/jx3box.json";
 import User from "@jx3box/jx3box-common/js/user.js";
 // 子模块
@@ -318,10 +319,10 @@ export default {
     },
     filters: {
         xficon: function(val) {
-            return __imgPath + "image/xf/" + val + ".png";
+            return __ossRoot + "image/xf/" + val + ".png";
         },
         iconURL: function(val) {
-            return __iconPath + "icon/" + val + ".png";
+            return __ossRoot + "icon/" + val + ".png";
         },
     },
     created: function() {
