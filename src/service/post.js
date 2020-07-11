@@ -1,4 +1,4 @@
-import { $, axios } from "./axios";
+import { $ } from "./axios";
 import { __server } from "@jx3box/jx3box-common/js/jx3box.json";
 const API_LIST = "post/list";
 const API_SINGLE = "post/find";
