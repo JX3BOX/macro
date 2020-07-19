@@ -1,8 +1,7 @@
 <template>
     <div class="m-info">
         <div class="m-info-notice">
-            <a class="u-item" href="/tool?pid=14671" target="_blank">🌈 云端宏发布指南</a>
-            <a class="u-item" href="/app/macroeditor" target="_blank">⚽️ 智能宏编辑器上线</a>
+            <span class="u-item" href="" target="_blank">🌈 自用宏将会被设为私有状态,不影响游戏内加载</span>
         </div>
 
         <div class="m-info-router">

@@ -2,7 +2,7 @@
     <div id="app" :class="{ 'p-list': mode == 'list', 'p-single': mode == 'single' }">
         <Header></Header>
         <Breadcrumb
-            name="宏库"
+            name="云端宏"
             slug="macro"
             root="/macro"
             :publishEnable="true"
