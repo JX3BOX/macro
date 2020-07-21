@@ -19,7 +19,7 @@
                 <!-- 角标过滤 -->
                 <markBy @filter="filter"></markBy>
                 <!-- 语言过滤 -->
-                <tagBy @filter="filter" :data="langs" type="lang"></tagBy>
+                <menuBy @filter="filter" :data="langs" type="lang" placeholder="语言"></menuBy>
                 <!-- 排序过滤 -->
                 <orderBy @filter="filter"></orderBy>
             </template>
@@ -219,8 +219,8 @@ export default {
             drawer_link: "",
 
             langs: {
-                cn: "简体",
-                tr: "繁體",
+                cn: "简体中文",
+                tr: "繁體中文",
             },
         };
     },
