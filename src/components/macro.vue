@@ -11,7 +11,7 @@
                 v-clipboard:error="onError"
                 >复制宏内容</el-button
             >
-            <el-button icon="el-icon-refresh" plain size="mini" @click="run">
+            <el-button icon="el-icon-refresh" plain size="mini" @click="run" v-if="isCN">
                 <span v-if="status">轉換為繁體</span>
                 <span v-else>转换为简体</span>
             </el-button>
@@ -24,7 +24,7 @@ import macro from "@jx3box/jx3box-macro";
 import dict from "@jx3box/jx3box-data/data/app/dict.json";
 export default {
     name: "macro",
-    props: ["ctx"],
+    props: ["ctx",'lang'],
     data: function() {
         return {
             data: "",
@@ -50,6 +50,13 @@ export default {
         copytext: function() {
             return this.status ? this.data : this.data_tw;
         },
+        isCN : function (){
+            if(!this.lang){
+                return true
+            }else{
+                return this.lang == 'cn'
+            }
+        }
     },
     methods: {
         onCopy: function(val) {

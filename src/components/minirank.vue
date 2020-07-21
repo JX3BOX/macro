@@ -70,7 +70,7 @@ export default {
     },
     filters : {
         postLink : function (pid){
-            return '/macro?pid=' + pid
+            return './?pid=' + pid
         },
     },
     mounted: function() {

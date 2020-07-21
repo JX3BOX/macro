@@ -38,7 +38,7 @@
                         :class="{ withUsage: item.desc }"
                         v-if="item.macro"
                     >
-                        <macro :ctx="item.macro" />
+                        <macro :ctx="item.macro" :lang="lang"/>
                     </div>
                     <!-- 奇穴 -->
                     <el-divider content-position="left" v-if="item.talent"
@@ -111,6 +111,7 @@ export default {
             stat: {},
             meta: {},
             author: {},
+            lang : 'cn',
 
             data: [],
 
@@ -187,6 +188,7 @@ export default {
                     this.author = this.$store.state.author =
                         res.data.data.author;
                     this.data = (this.meta && this.meta.data) || [];
+                    this.lang = this.meta && this.meta.lang
                     this.$store.state.status = true;
                 })
                 .then(() => {

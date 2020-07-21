@@ -1,14 +1,23 @@
 <template>
     <div class="m-bucket">
-        <!-- 已登录 -->
-        <div class="m-archive-box" v-if="isLogin" v-loading="loading">
+
+        <div class="m-bucket-list" v-if="isLogin" v-loading="loading">
+            <listbox
+            :data="data"
+            :total="total"
+            :pages="pages"
+            :per="per"
+            :page="page"
+            @appendPage="appendPage"
+            @changePage="changePage"
+        >
             <!-- 搜索 -->
-            <div class="m-archive-search">
+            <div class="m-archive-search" slot="search-after">
                 <el-input
                     placeholder="请输入关键词"
                     v-model="search"
                     class="input-with-select"
-                    @change="commitSearch"
+                    @change="loadPosts"
                 >
                     <el-select
                         v-model="searchType"
@@ -19,7 +28,6 @@
                     </el-select>
                 </el-input>
             </div>
-
             <!-- 列表 -->
             <div class="m-archive-list" v-if="data.length">
                 <ul class="u-list">
@@ -128,41 +136,7 @@
                     </li>
                 </ul>
             </div>
-
-            <!-- 空 -->
-            <el-alert
-                v-else
-                class="m-archive-null"
-                title="没有找到私有作品,请先发布"
-                type="info"
-                center
-                show-icon
-            >
-            </el-alert>
-
-            <!-- 下一页 -->
-            <el-button
-                class="m-archive-more"
-                :class="{ show: hasNextPage }"
-                type="primary"
-                :loading="loading"
-                @click="appendPage(++page)"
-                >加载更多</el-button
-            >
-
-            <!-- 分页 -->
-            <el-pagination
-                class="m-archive-pages"
-                :page-size="per"
-                background
-                :hide-on-single-page="true"
-                @current-change="changePage"
-                :current-page.sync="page"
-                layout="total, prev, pager, next, jumper"
-                :total="total"
-            >
-            </el-pagination>
-
+            </listbox>
             <!-- 快捷查看宏 -->
             <el-drawer
                 class="m-macro-drawer"
@@ -180,6 +154,7 @@
                     >
                 </div>
             </el-drawer>
+
         </div>
         <!-- 未登录 -->
         <div class="m-archive-noright" v-else>
@@ -189,6 +164,8 @@
 </template>
 
 <script>
+import listbox from "@jx3box/jx3box-page/src/cms-list.vue";
+import { cms as mark_map } from "@jx3box/jx3box-common/js/mark.json";
 import _ from "lodash";
 import User from "@jx3box/jx3box-common/js/user";
 import { getPosts } from "../service/post";
@@ -203,19 +180,6 @@ import {
     publishLink,
     buildTarget,
 } from "@jx3box/jx3box-common/js/utils";
-const mark_map = {
-    newbie: "新手易用",
-    advanced: "进阶推荐",
-    recommended: "编辑精选",
-    geek: "骨灰必备",
-};
-const order_map = {
-    update: "最后更新",
-    podate: "最早发布",
-    favs: "收藏最多",
-    likes: "点赞最多",
-    downs: "下载最多",
-};
 export default {
     name: "Bucket",
     props: [],
@@ -234,8 +198,8 @@ export default {
             total: 1, //总条目数
             pages: 1, //总页数
             per: 10, //每页条目
-            order: "", //排序模式
-            mark: "", //筛选模式
+            // order: "", //排序模式
+            // mark: "", //筛选模式
 
             filter_visible: false,
             order_visible: false,
@@ -258,22 +222,13 @@ export default {
             if (this.search) {
                 params[this.searchType] = this.search;
             }
-            if (this.order) {
-                params.order = this.order;
-            }
-            if (this.mark) {
-                params.mark = this.mark;
-            }
+            // if (this.order) {
+            //     params.order = this.order;
+            // }
+            // if (this.mark) {
+            //     params.mark = this.mark;
+            // }
             return params;
-        },
-        currentMark: function() {
-            return mark_map[this.mark];
-        },
-        currentOrder: function() {
-            return order_map[this.order];
-        },
-        hasNextPage: function() {
-            return this.total > 1 && this.page < this.pages;
         },
         target: function() {
             return buildTarget();
@@ -281,7 +236,6 @@ export default {
         login_url: function() {
             return __Links.account.login + "?redirect=" + location.href;
         },
-
         // 根据栏目定义
         defaultBanner: function() {
             return "";
@@ -319,24 +273,9 @@ export default {
         appendPage: function(i) {
             this.loadPosts(i, true);
         },
-        commitSearch: function() {
+        filter : function (o){
+            this[o['type']] = o['val']
             this.loadPosts();
-        },
-        filterMark: function(val) {
-            this.mark = val;
-            this.filter_visible = false;
-            this.loadPosts();
-        },
-        reorder: function(val) {
-            this.order = val;
-            this.order_visible = false;
-            this.loadPosts();
-        },
-        showFilter: function() {
-            this.filter_visible = !this.filter_visible;
-        },
-        showOrder: function() {
-            this.order_visible = !this.order_visible;
         },
         showBanner: function(val) {
             return val ? showMinibanner(val) : this.defaultBanner;
@@ -381,6 +320,7 @@ export default {
     },
     components: {
         macro,
+        listbox
     },
 };
 </script>
