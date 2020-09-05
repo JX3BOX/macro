@@ -1,7 +1,7 @@
 <template>
     <div class="m-info">
         <div class="m-info-notice">
-            <span class="u-item" href="" target="_blank">🌈 自用宏将会被设为私有状态,不影响游戏内加载</span>
+            <!-- <span class="u-item" href="" target="_blank">🌈 自用宏将会被设为私有状态,不影响游戏内加载</span> -->
         </div>
 
         <div class="m-info-router">

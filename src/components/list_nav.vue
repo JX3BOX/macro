@@ -16,7 +16,7 @@
             <a href="/app/macroeditor" target="_blank">
                 <img svg-inline src="../assets/img/list/macroeditor.svg" />
                 <span>智能宏编辑器</span>
-                <i class="u-mark isnew">全新上线</i>
+                <!-- <i class="u-mark isnew">全新上线</i> -->
             </a>
         </div>
     </div>

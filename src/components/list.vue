@@ -117,7 +117,7 @@
                                                     item.post.ID
                                                 )
                                             "
-                                            >{{ m.name }}</span
+                                            >{{ m.name || '无名称'}}</span
                                         >
                                     </el-tooltip>
                                 </li>

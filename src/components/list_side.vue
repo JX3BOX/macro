@@ -28,19 +28,13 @@
                     class="u-item"
                     href="/tool/?pid=14671"
                     target="_blank"
-                    ><i class="el-icon-collection"></i> 云端宏食用指南</a
+                    ><i class="el-icon-collection"></i> 云端宏指南</a
                 >
                 <a
                     class="u-item"
                     href="/tool/?pid=265"
                     target="_blank"
                     ><i class="el-icon-collection"></i> 宏命令完整参考手册</a
-                >
-                <a
-                    class="u-item"
-                    href="/tool/?pid=166"
-                    target="_blank"
-                    ><i class="el-icon-collection"></i> 官方宏命令解析规则</a
                 >
                 <a
                     class="u-item"
