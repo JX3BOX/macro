@@ -48,7 +48,7 @@ export default {
     },
     filters : {
         xficon : function (val){
-            return __ossRoot + 'image/xf/' + val + '.png'
+            return __imgPath + 'image/xf/' + val + '.png'
         },
     },
     mounted: function() {},

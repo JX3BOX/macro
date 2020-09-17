@@ -281,7 +281,7 @@ export default {
             return val ? showMinibanner(val) : this.defaultBanner;
         },
         showIcon: function(val) {
-            return __ossRoot + "icon/" + val + ".png";
+            return __iconPath + "icon/" + val + ".png";
         },
         loadMacro(author, m, id) {
             this.drawer = true;
@@ -312,7 +312,7 @@ export default {
         xficon: function(val) {
             if (!val || val == "其它") val = "通用";
             let xf_id = xfmap[val]["id"];
-            return __ossRoot + "image/xf/" + xf_id + ".png";
+            return __imgPath + "image/xf/" + xf_id + ".png";
         },
     },
     created: function() {

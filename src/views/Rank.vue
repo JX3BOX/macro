@@ -156,7 +156,7 @@ export default {
     },
     filters : {
         xficon : function (id){
-            return __ossRoot + 'image/xf/' + id + '.png'
+            return __imgPath + 'image/xf/' + id + '.png'
         }
     },
     created: function() {

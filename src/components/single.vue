@@ -91,7 +91,7 @@
 </template>
 
 <script>
-import {__ossRoot,__ossMirror,__iconPath} from '@jx3box/jx3box-common/js/jx3box.json'
+import {__ossRoot,__ossMirror,__iconPath,__imgPath} from '@jx3box/jx3box-common/js/jx3box.json'
 import singlebox from "@jx3box/jx3box-page/src/cms-single";
 import { getPost } from "../service/post.js";
 import { getStat, postStat } from "../service/stat.js";
@@ -171,10 +171,10 @@ export default {
     },
     filters: {
         xficon: function(val) {
-            return __ossRoot + "image/xf/" + val + ".png";
+            return __imgPath + "image/xf/" + val + ".png";
         },
         iconURL: function(val) {
-            return __ossRoot + "icon/" + val + ".png";
+            return __iconPath + "icon/" + val + ".png";
         },
     },
     created: function() {
