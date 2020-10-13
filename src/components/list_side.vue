@@ -28,7 +28,7 @@
                     class="u-item"
                     href="/tool/?pid=14671"
                     target="_blank"
-                    ><i class="el-icon-collection"></i> 云端宏指南</a
+                    ><i class="el-icon-collection"></i> 云端宏发布指南</a
                 >
                 <a
                     class="u-item"

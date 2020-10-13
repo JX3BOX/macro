@@ -13,9 +13,18 @@
                 <a
                     :href="publish_link"
                     class="u-publish el-button el-button--primary el-button--small"
+                    target="_blank"
                 >
                     + 发布云端宏
                 </a>
+                <a
+                    href="/tool/?pid=18152#/"
+                    class="u-sync u-publish el-button el-button--warning el-button--small"
+                    target="_blank"
+                >
+                    <i class="el-icon-download"></i> 游戏内加载同步
+                </a>
+                
                 <!-- 角标过滤 -->
                 <markBy @filter="filter"></markBy>
                 <!-- 语言过滤 -->

@@ -1,7 +1,10 @@
 <template>
     <div class="m-single-side" v-if="$store.state.status">
         <!-- 云端宏 -->
-        <h2 class="m-cloud-name">云端宏</h2>
+        <h2 class="m-cloud-name">
+            云端宏
+            <a class="u-help" href="/tool/?pid=18152#/" target="_blank"><i class="el-icon-question"></i>如何使用?</a>
+        </h2>
         <div class="m-single-meta" v-if="data.length">
             <div class="u-data" v-for="(feed, i) in data" :key="feed + i">
                 <feed class="u-feed" :author="author.name" :name="feed.name" :subtype="subtype"/>

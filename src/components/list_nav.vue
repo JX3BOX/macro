@@ -14,7 +14,7 @@
         <h5 class="u-title">在线应用</h5>
         <div class="m-nav-group">
             <a href="/app/macroeditor" target="_blank">
-                <img svg-inline src="../assets/img/list/macroeditor.svg" />
+                <img class="u-icon" svg-inline src="../assets/img/list/macroeditor.svg" />
                 <span>智能宏编辑器</span>
                 <!-- <i class="u-mark isnew">全新上线</i> -->
             </a>
