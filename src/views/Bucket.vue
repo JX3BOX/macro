@@ -14,18 +14,19 @@
             <!-- 搜索 -->
             <div class="m-archive-search" slot="search-after">
                 <el-input
-                    placeholder="请输入关键词"
+                    placeholder="请输入搜索内容"
                     v-model="search"
                     class="input-with-select"
                     @change="loadPosts"
                 >
-                    <el-select
+                    <span slot="prepend">关键词</span>
+                    <!-- <el-select
                         v-model="searchType"
                         slot="prepend"
                         placeholder="请选择"
                     >
                         <el-option label="标题" value="title"></el-option>
-                    </el-select>
+                    </el-select> -->
                 </el-input>
             </div>
             <!-- 列表 -->
@@ -220,7 +221,7 @@ export default {
                 subtype: this.subtype,
             };
             if (this.search) {
-                params[this.searchType] = this.search;
+                params.search = this.search;
             }
             // if (this.order) {
             //     params.order = this.order;

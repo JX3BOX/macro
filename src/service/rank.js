@@ -1,15 +1,8 @@
-import axios from "axios";
-import { __next } from "@jx3box/jx3box-common/js/jx3box.json";
-
-const rank = __next + 'api/macro/tops' //TODO:
-// const rank = "/api/macro/tops";
-
-const overview =  __next + 'api/macro/overview'  //TODO:
-// const overview = "/api/macro/overview";
+import { $next } from "@jx3box/jx3box-common/js/axios";
 
 function getRank(kungfuid, limit = 50) {
-    return axios
-        .get(rank, {
+    return $next
+        .get("api/macro/tops", {
             params: {
                 kungfu: kungfuid,
                 size: limit,
@@ -25,8 +18,8 @@ function getRank(kungfuid, limit = 50) {
 }
 
 function getOverview(limit = 50) {
-    return axios
-        .get(overview, {
+    return $next
+        .get("api/macro/overview", {
             params: {
                 size: limit,
                 // _no_cache:1,

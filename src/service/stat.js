@@ -1,11 +1,8 @@
-import axios from "axios";
-import { __next } from "@jx3box/jx3box-common/js/jx3box.json";
-
-const stat = __next + 'api/post/'    //TODO:
-// const stat = "api/post/";
+import { $next } from "@jx3box/jx3box-common/js/axios";
+const stat = "api/post/";
 
 function getStat(id) {
-    return axios
+    return $next
         .get(stat + id + "/stat")
         .then((res) => {
             return res.data;
@@ -16,8 +13,8 @@ function getStat(id) {
 }
 
 function postStat(id) {
-    let type = location.pathname.split('/')[1]
-    return axios.get(stat + id + "/summary", {
+    let type = location.pathname.split("/")[1];
+    return $next.get(stat + id + "/summary", {
         params: {
             type: type,
             actions: "views",
