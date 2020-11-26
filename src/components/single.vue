@@ -38,7 +38,7 @@
                         :class="{ withUsage: item.desc }"
                         v-if="item.macro"
                     >
-                        <macro :ctx="item.macro" :lang="lang"/>
+                        <macro :ctx="item.macro" :lang="lang" :name="author.name + '#' + item.name"/>
                     </div>
                     <!-- 奇穴 -->
                     <el-divider content-position="left" v-if="item.talent"
@@ -77,6 +77,11 @@
                             >复制奇穴序列</el-button
                         >
                     </div>
+                    <!-- 配装 -->
+                    <el-divider content-position="left" v-if="item.equip && item.equip_type">配装方案</el-divider>
+                    <div class="u-equipbox">
+                        <Equip :id="item.equip" v-if="item.equip_type == 'jx3box'"/>
+                    </div>
                     <!-- 急速 -->
                     <el-divider content-position="left" v-if="item.speed"
                         >推荐急速</el-divider
@@ -99,6 +104,7 @@ import { getStat, postStat } from "../service/stat.js";
 import macro from "@/components/macro.vue";
 import xfmap from "@jx3box/jx3box-data/data/xf/xf.json";
 import talent from "@jx3box/jx3box-talent";
+import Equip from '@jx3box/jx3box-editor/src/Equip.vue'
 
 export default {
     name: "single",
@@ -229,6 +235,7 @@ export default {
     components: {
         macro,
         singlebox,
+        Equip
     },
 };
 </script>

@@ -108,7 +108,7 @@ export default {
         fixnull : function (data){
             let _data = [];
             data.forEach((item) => {
-                if (item["7days"]) {
+                if (item["7days"] && item.pid) {
                     _data.push(item);
                 }
             });

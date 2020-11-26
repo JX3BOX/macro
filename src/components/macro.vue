@@ -15,6 +15,16 @@
                 <span v-if="status">轉換為繁體</span>
                 <span v-else>转换为简体</span>
             </el-button>
+            <el-button
+                icon="el-icon-cloudy"
+                plain
+                type="primary"
+                size="mini"
+                v-clipboard:copy="copyname"
+                v-clipboard:success="onCopy"
+                v-clipboard:error="onError"
+                >复制云端宏</el-button
+            >
         </div>
     </div>
 </template>
@@ -24,7 +34,7 @@ import macro from "@jx3box/jx3box-macro";
 import dict from "@jx3box/jx3box-data/data/app/dict.json";
 export default {
     name: "macro",
-    props: ["ctx",'lang'],
+    props: ["ctx",'lang','name'],
     data: function() {
         return {
             data: "",
@@ -49,6 +59,9 @@ export default {
         },
         copytext: function() {
             return this.status ? this.data : this.data_tw;
+        },
+        copyname : function (){
+            return this.name || ''
         },
         isCN : function (){
             if(!this.lang){
