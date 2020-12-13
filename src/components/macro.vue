@@ -31,7 +31,7 @@
 
 <script>
 import macro from "@jx3box/jx3box-macro";
-import dict from "@jx3box/jx3box-data/data/app/dict.json";
+import dict from "@jx3box/jx3box-dict/dict.json";
 export default {
     name: "macro",
     props: ["ctx",'lang','name'],
@@ -43,6 +43,7 @@ export default {
             code_tw: "",
             status: 1, //默认简体
             flag: false, //是否已被转换过
+            dict,
         };
     },
     watch: {
@@ -91,7 +92,7 @@ export default {
                 for (let f of data) {
                     let i = dict.cn.indexOf(f);
                     if (i >= 0) {
-                        _data += dict.tw[i];
+                        _data += dict.tr[i];
                     } else {
                         _data += f;
                     }
