@@ -24,11 +24,16 @@
                 >
                     <i class="el-icon-download"></i> 游戏内加载同步
                 </a>
-                
+
                 <!-- 角标过滤 -->
                 <markBy @filter="filter"></markBy>
                 <!-- 语言过滤 -->
-                <menuBy @filter="filter" :data="langs" type="lang" placeholder="语言"></menuBy>
+                <menuBy
+                    @filter="filter"
+                    :data="langs"
+                    type="lang"
+                    placeholder="语言"
+                ></menuBy>
                 <!-- 排序过滤 -->
                 <orderBy @filter="filter"></orderBy>
             </template>
@@ -127,7 +132,7 @@
                                                     item.post.ID
                                                 )
                                             "
-                                            >{{ m.name || '无名称'}}</span
+                                            >{{ m.name || "无名称" }}</span
                                         >
                                     </el-tooltip>
                                 </li>
@@ -137,20 +142,19 @@
                         <!-- 时间 -->
                         <div class="u-misc">
                             <!-- 作者 -->
-                            <!-- <div class="u-author">
-                            <img
-                                class="u-author-avatar"
-                                :src="item.author.avatar | showAvatar"
-                                :alt="item.author.name"
-                            />
-
-                            <a
-                                class="u-author-name"
-                                :href="item.author.uid | authorLink"
-                                target="_blank"
-                                >{{ item.author.name }}</a
-                            >
-                        </div> -->
+                            <div class="u-author">
+                                <!-- <img
+                                    class="u-author-avatar"
+                                    :src="item.author.avatar | showAvatar"
+                                    :alt="item.author.name"
+                                /> -->
+                                <a
+                                    class="u-author-name"
+                                    :href="item.author.uid | authorLink"
+                                    target="_blank"
+                                    >{{ item.author.name }}</a
+                                >
+                            </div>
                             <span class="u-date">
                                 <i class="el-icon-date"></i>
                                 <time>{{
@@ -219,9 +223,9 @@ export default {
             pages: 1, //总页数
             per: 18, //每页条目
 
-            order: "",  //排序
-            mark: "",   //角标
-            lang : '',  //语言
+            order: "", //排序
+            mark: "", //角标
+            lang: "", //语言
 
             drawer: false,
             drawer_title: "",
@@ -295,8 +299,8 @@ export default {
         appendPage: function(i) {
             this.loadPosts(i, true);
         },
-        filter : function (o){
-            this[o['type']] = o['val']
+        filter: function(o) {
+            this[o["type"]] = o["val"];
             this.loadPosts();
         },
         showBanner: function(val) {

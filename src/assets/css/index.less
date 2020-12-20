@@ -94,13 +94,35 @@
         color:#777;
     }
     .u-author{
-        .fr;
+        // .fl;
+        // .dbi;
+        // .mr(10px);
     }
     .u-date{
+        // .dbi;
         // .fr;
         .mt(0);
         // .mr(10px);
         i{.mr(5px);}
+    }
+}
+
+@media screen and (max-width:@ipad){
+    .m-archive-list{
+        .u-misc{
+            .ps !important;
+            .ml(20px);
+        }
+    }
+}
+
+.m-macro-list{
+    .u-sync {
+        background-color: #49c10f;
+        border-color: #3cb700;
+        &:hover{
+            background-color:lighten(#49c10f,3%);
+        }
     }
 }
 

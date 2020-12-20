@@ -29,6 +29,12 @@ module.exports = {
                 "onProxyReq": function (request) {
                     request.setHeader("origin", "");
                 }
+            },
+            "/team": {
+                "target": "https://next.jx3box.com",
+                "onProxyReq": function (request) {
+                    request.setHeader("origin", "");
+                }
             }
         }
     },

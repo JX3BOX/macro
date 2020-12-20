@@ -21,32 +21,15 @@
                     svg-inline
                     src="../assets/img/side/puzzle.svg"
                 />
-                相关链接
+                帮助文档
             </h3>
-            <div class="c-sidebar-right-list">
+            <div class="c-sidebar-right-list" v-if="links && links.length">
                 <a
+                    v-for="(item, i) in links"
+                    :key="i"
                     class="u-item"
-                    href="/tool/?pid=14671"
-                    target="_blank"
-                    ><i class="el-icon-collection"></i> 云端宏发布指南</a
-                >
-                <a
-                    class="u-item"
-                    href="/tool/?pid=265"
-                    target="_blank"
-                    ><i class="el-icon-collection"></i> 宏命令完整参考手册</a
-                >
-                <a
-                    class="u-item"
-                    href="/tool/?pid=264"
-                    target="_blank"
-                    ><i class="el-icon-warning-outline"></i> 如何使用剑三宏？</a
-                >
-                <a
-                    class="u-item"
-                    href="/tool/?pid=280"
-                    target="_blank"
-                    ><i class="el-icon-warning-outline"></i> 简易鼠标宏设置教程</a
+                    :href="item.link"
+                    ><i class="el-icon-collection"></i>{{ item.label }}</a
                 >
             </div>
         </div>
@@ -56,18 +39,25 @@
 </template>
 
 <script>
-import minirank from '@/components/minirank.vue'
+import minirank from "@/components/minirank.vue";
+import { getLinks } from "@/service/helper.js";
 export default {
     name: "list_side",
     props: [],
     data: function() {
-        return {};
+        return {
+            links: [],
+        };
     },
     computed: {},
     methods: {},
-    mounted: function() {},
+    mounted: function() {
+        getLinks().then((res) => {
+            this.links = res.data.data.menu_group.menus
+        })
+    },
     components: {
-        minirank
+        minirank,
     },
 };
 </script>
