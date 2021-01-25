@@ -1,56 +1,131 @@
 <template>
     <div class="m-single-side" v-if="$store.state.status">
-        <!-- 云端宏 -->
-        <h2 class="m-cloud-name">
-            云端宏
-            <a class="u-help" href="/tool/?pid=18152#/" target="_blank"><i class="el-icon-question"></i>如何使用?</a>
-        </h2>
-        <div class="m-single-meta" v-if="data.length">
-            <div class="u-data" v-for="(feed, i) in data" :key="feed + i">
-                <feed class="u-feed" :author="author.name" :name="feed.name" :subtype="subtype"/>
-                <!-- <span class="u-desc">{{ feed.desc }}</span> -->
+        <div class="m-single-macroindex">
+            <!-- 云端宏 -->
+            <h2 class="m-cloud-name">
+                云端宏
+                <a class="u-help" href="/tool/?pid=18152#/" target="_blank"
+                    ><i class="el-icon-question"></i>如何使用?</a
+                >
+            </h2>
+            <div class="m-single-meta" v-if="data.length">
+                <div class="u-data" v-for="(feed, i) in data" :key="feed + i">
+                    <feed
+                        class="u-feed"
+                        :author="author.name"
+                        :name="feed.name"
+                        :subtype="subtype"
+                    />
+                    <!-- <span class="u-desc">{{ feed.desc }}</span> -->
+                </div>
             </div>
         </div>
 
         <div id="directory"></div>
+
+        <div class="m-single-collection" v-if="collection_id && data">
+            <div class="u-title"><i class="el-icon-connection"></i> 关联</div>
+            <ul class="u-list" v-if="list && list.length">
+                <li v-for="(item, i) in list" :key="i">
+                    <el-tooltip
+                        class="item"
+                        effect="dark"
+                        :content="item.title"
+                        placement="left"
+                    >
+                        <a :href="item | showLink" target="_blank"
+                            ><i class="el-icon-link"></i> {{ item.title }}</a
+                        >
+                    </el-tooltip>
+                </li>
+            </ul>
+        </div>
     </div>
 </template>
 
 <script>
-import _ from 'lodash'
 import feed from "@/components/feed.vue";
+import { getCollection } from "@/service/helper.js";
+import { getLink } from "@jx3box/jx3box-common/js/utils";
 export default {
     name: "single_side",
     props: [],
     data: function() {
-        return {
-        };
+        return {};
     },
     computed: {
-        author : function (){
-            return this.$store.state.author
+        author: function() {
+            return this.$store.state.author;
         },
-        data : function (){
-            return _.get(this.$store.state.post.post_meta,'data') || [];
+        data: function() {
+            return _.get(this.$store.state.post.post_meta, "data") || [];
         },
-        subtype : function (){
-            return _.get(this.$store.state.post,'post_subtype') || '通用'
-        }
+        subtype: function() {
+            return _.get(this.$store.state.post, "post_subtype") || "通用";
+        },
+        collection_id: function() {
+            return this.$store.state.post.post_collection;
+        },
+        list: function() {
+            return this.data.posts || [];
+        },
+        collection_title: function() {
+            return this.data.title || "-";
+        },
     },
-    methods: {
-        
+    watch: {
+        collection_id: function(val) {
+            if (!val || isNaN(val)) return;
+            getCollection(this.collection_id).then((res) => {
+                this.data = res.data.data.collection;
+            });
+        },
     },
-    filters : {
+    methods: {},
+    filters: {
+        showLink: function(item) {
+            if (item.type == "custom") {
+                return item.url;
+            } else {
+                return getLink(item.type, item.id);
+            }
+        },
     },
-    mounted: function() {
-        
-    },
-    components : {
+    mounted: function() {},
+    components: {
         feed,
-    }
+    },
 };
 </script>
 
 <style lang="less">
-    @import "../assets/css/meta.less";
+@import "../assets/css/meta.less";
+.m-single-side {
+    padding: 20px;
+}
+.m-single-director {
+    .mb(20px);
+}
+.m-single-collection {
+    .u-title {
+        font-weight: 300;
+        font-size: 20px;
+    }
+    .u-list {
+        list-style: none;
+        padding: 10px 20px;
+        margin: 0;
+        li {
+            .fz(13px, 36px);
+        }
+        a {
+            .db;
+            transition: 0.15s ease-in-out;
+            .nobreak;
+            &:hover {
+                background-color: #e6f0fb;
+            }
+        }
+    }
+}
 </style>
