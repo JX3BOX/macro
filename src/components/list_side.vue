@@ -29,6 +29,7 @@
                     :key="i"
                     class="u-item"
                     :href="item.link"
+                    target="_blank"
                     ><i class="el-icon-collection"></i>{{ item.label }}</a
                 >
             </div>
