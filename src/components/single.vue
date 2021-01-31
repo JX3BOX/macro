@@ -99,7 +99,7 @@
 import {__ossRoot,__ossMirror,__iconPath,__imgPath} from '@jx3box/jx3box-common/js/jx3box.json'
 import singlebox from "@jx3box/jx3box-page/src/cms-single";
 import { getPost } from "../service/post.js";
-import { getStat, postStat } from "../service/stat.js";
+import { getStat, postStat } from "@jx3box/jx3box-common/js/stat";
 // 子模块
 import macro from "@/components/macro.vue";
 import xfmap from "@jx3box/jx3box-data/data/xf/xf.json";
@@ -226,10 +226,10 @@ export default {
                     this.loading = false;
                 });
 
-            getStat(this.id).then((data) => {
-                if (data) this.stat = this.$store.state.stat = data;
+            getStat('macro',this.id).then((res) => {
+                this.stat = this.$store.state.stat = res.data;
             });
-            postStat(this.id);
+            postStat('macro',this.id);
         }
     },
     components: {
