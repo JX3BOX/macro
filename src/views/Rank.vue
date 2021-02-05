@@ -1,32 +1,43 @@
 <template>
     <div class="v-rank" v-loading="loading">
-        <div class="m-macro-rank-full m-macro-rank">
+        <div class="m-macro-rank-full m-macro-rank" v-if="kungfuid">
             <el-table
-                :data="data"
-                :default-sort="{ prop: '7days', order: 'descending' }"
+                :data="mount_data"
+                :default-sort="{ prop: 'value.7days', order: 'descending' }"
                 :row-class-name="highlight"
             >
                 <el-table-column type="index" label="👑" width="48">
                 </el-table-column>
-                <el-table-column
-                    prop="downloadStr"
-                    label="云端宏"
-                    sortable
-                >
+                <el-table-column prop="downloadStr" label="云端宏" sortable>
                     <template slot-scope="scope">
-                        <img class="u-icon-xf" :src="scope.row.xf | xficon">
-                        <a class="u-feed"
-                            :href="postLink(scope.row.pid)" target="_blank"
-                            >{{scope.row.downloadStr}}</a>
+                        <img class="u-icon-xf" :src="kungfuid | xficon" />
+                        <a
+                            class="u-feed"
+                            :href="postLink(scope.row.pid)"
+                            target="_blank"
+                            >{{ scope.row.author }}#{{scope.row.item_version}}</a
+                        >
                     </template>
                 </el-table-column>
-                <el-table-column prop="7days" label="7天" sortable>
+                <el-table-column prop="value.7days" label="7天" sortable>
+                    <template slot-scope="scope">
+                        {{scope.row.value['7days']}}
+                    </template>
                 </el-table-column>
-                <el-table-column prop="30days" label="30天" sortable >
+                <el-table-column prop="value.30days" label="30天" sortable>
+                    <template slot-scope="scope">
+                        {{scope.row.value['30days']}}
+                    </template>
                 </el-table-column>
-                <el-table-column prop="yesterday" label="昨日" sortable >
+                <el-table-column prop="value.yesterday" label="昨日" sortable>
+                    <template slot-scope="scope">
+                        {{scope.row.value['yesterday']}}
+                    </template>
                 </el-table-column>
-                <el-table-column prop="before2" label="前日" sortable >
+                <el-table-column prop="value.before2" label="前日" sortable>
+                    <template slot-scope="scope">
+                        {{scope.row.value['before2']}}
+                    </template>
                 </el-table-column>
                 <el-table-column
                     prop="trending"
@@ -55,38 +66,90 @@
                         >
                     </template>
                 </el-table-column>
-                <!-- <el-table-column prop="view" label="详情" width="120">
-                    <template slot-scope="scope">
-                        <a
-                            :href="postLink(scope.row.pid)"
-                            class="el-button el-button--default is-plain el-button--mini"
-                            >查看详情<i class="el-icon-arrow-right"></i
-                        ></a>
-                    </template>
-                </el-table-column> -->
             </el-table>
         </div>
-        <el-alert
-            class="m-rank-tips"
-            v-if="!kungfuid"
-            title="可在侧边栏指定心法以查看对应心法排名"
-            type="warning"
-            show-icon
-        >
-        </el-alert>
+        <div class="m-macro-rank-full m-macro-rank" v-else>
+            <el-table
+                :data="data"
+                :default-sort="{ prop: '7days', order: 'descending' }"
+                :row-class-name="highlight"
+            >
+                <el-table-column type="index" label="👑" width="48">
+                </el-table-column>
+                <el-table-column prop="downloadStr" label="云端宏" sortable>
+                    <template slot-scope="scope">
+                        <img class="u-icon-xf" :src="scope.row.xf | xficon" />
+                        <a
+                            class="u-feed"
+                            :href="postLink(scope.row.pid)"
+                            target="_blank"
+                            >{{ scope.row.downloadStr }}</a
+                        >
+                    </template>
+                </el-table-column>
+                <el-table-column prop="7days" label="7天" sortable>
+                </el-table-column>
+                <el-table-column prop="30days" label="30天" sortable>
+                </el-table-column>
+                <el-table-column prop="yesterday" label="昨日" sortable>
+                </el-table-column>
+                <el-table-column prop="before2" label="前日" sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="trending"
+                    label="趋势"
+                    :formatter="trending"
+                >
+                    <template slot-scope="scope">
+                        <i
+                            class="el-icon-top u-trending"
+                            v-if="trending(scope.row) > 0"
+                            >{{
+                                (trending(scope.row) * 100).toFixed(2) + "%"
+                            }}</i
+                        >
+                        <i
+                            class="el-icon-bottom u-trending"
+                            v-if="trending(scope.row) < 0"
+                            >{{
+                                (trending(scope.row) * 100).toFixed(2) + "%"
+                            }}</i
+                        >
+                        <span
+                            class="u-trending u-trending-keep"
+                            v-if="trending(scope.row) == 0"
+                            >-</span
+                        >
+                    </template>
+                </el-table-column>
+            </el-table>
+            <el-alert
+                class="m-rank-tips"
+                title="可在侧边栏指定心法以查看对应心法排名"
+                type="warning"
+                show-icon
+            >
+            </el-alert>
+        </div>
     </div>
 </template>
 
 <script>
 import { getRank, getOverview } from "../service/rank";
 import xfmap from "@jx3box/jx3box-data/data/xf/xf.json";
-import {__ossMirror,__imgPath,__ossRoot} from '@jx3box/jx3box-common/js/jx3box.json'
+import {
+    __ossMirror,
+    __imgPath,
+    __ossRoot,
+} from "@jx3box/jx3box-common/js/jx3box.json";
+import {getLink} from '@jx3box/jx3box-common/js/utils'
 export default {
     name: "Rank",
     props: [],
     data: function() {
         return {
             data: [],
+            mount_data: [],
             loading: false,
         };
     },
@@ -100,12 +163,16 @@ export default {
     },
     methods: {
         trending: function(row, column) {
-            // let trending_1 = (row.before3 - row.before2) / row.before2;
-            let trending = (row.before2 - row.yesterday) / row.yesterday;
-            // let average = (trending_1 + trending_2) / 2;
+            let trending = ""
+            if(this.kungfuid){
+                trending = (row.value.before2 - row.value.yesterday) / row.value.yesterday;
+            }else{
+                trending = (row.before2 - row.yesterday) / row.yesterday;
+            }
+            if(!isFinite(trending)) trending = 0
             return isNaN(trending) ? "N/A" : trending.toFixed(4);
         },
-        fixnull : function (data){
+        fixnull: function(data) {
             let _data = [];
             data.forEach((item) => {
                 if (item["7days"] && item.pid) {
@@ -115,13 +182,13 @@ export default {
             return _data;
         },
         postLink: function(val) {
-            return "./?pid=" + val;
+            return getLink('macro',val)
         },
         loadRank: function() {
             this.loading = true;
             getRank(this.kungfuid)
                 .then((data) => {
-                    this.data = this.fixnull(data);
+                    this.mount_data = data
                 })
                 .catch((err) => {
                     console.log(err);
@@ -154,12 +221,12 @@ export default {
             return "";
         },
     },
-    filters : {
-        xficon : function (id){
-            return __imgPath + 'image/xf/' + id + '.png'
-        }
+    filters: {
+        xficon: function(id) {
+            return __imgPath + "image/xf/" + id + ".png";
+        },
     },
-    created: function() {
+    mounted: function() {
         this.kungfuid ? this.loadRank() : this.loadOverview();
     },
     components: {},
