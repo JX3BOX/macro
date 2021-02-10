@@ -25,6 +25,7 @@
                 v-clipboard:error="onError"
                 >复制云端宏</el-button
             >
+            <a class="u-test el-button el-button--mini is-plain" v-if="isSuperAdmin" :href="'https://pull.j3cx.com/api/macro/query?name=' + testname + '&_no_cache'" target="_blank"><i class="el-icon-video-play"></i> 测试云端同步</a>
         </div>
     </div>
 </template>
@@ -32,6 +33,7 @@
 <script>
 import macro from "@jx3box/jx3box-macro";
 import dict from "@jx3box/jx3box-dict/dict.json";
+import User from '@jx3box/jx3box-common/js/user'
 export default {
     name: "macro",
     props: ["ctx",'lang','name'],
@@ -44,6 +46,7 @@ export default {
             status: 1, //默认简体
             flag: false, //是否已被转换过
             dict,
+            isSuperAdmin : User.isSuperAdmin()
         };
     },
     watch: {
@@ -63,6 +66,9 @@ export default {
         },
         copyname : function (){
             return this.name || ''
+        },
+        testname : function (){
+            return this.name.replace('#','-')  
         },
         isCN : function (){
             if(!this.lang){
