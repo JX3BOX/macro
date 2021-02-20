@@ -68,7 +68,7 @@ export default {
             return this.name || ''
         },
         testname : function (){
-            return this.name.replace('#','-')  
+            return this.name && this.name.replace('#','-')  
         },
         isCN : function (){
             if(!this.lang){
