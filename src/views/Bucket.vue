@@ -17,16 +17,8 @@
                     placeholder="请输入搜索内容"
                     v-model="search"
                     class="input-with-select"
-                    @change="loadPosts"
                 >
                     <span slot="prepend">关键词</span>
-                    <!-- <el-select
-                        v-model="searchType"
-                        slot="prepend"
-                        placeholder="请选择"
-                    >
-                        <el-option label="标题" value="title"></el-option>
-                    </el-select> -->
                 </el-input>
             </div>
             <!-- 列表 -->
@@ -112,21 +104,6 @@
 
                         <!-- 时间 -->
                         <div class="u-misc">
-                            <!-- 作者 -->
-                            <!-- <div class="u-author">
-                            <img
-                                class="u-author-avatar"
-                                :src="item.author.avatar | showAvatar"
-                                :alt="item.author.name"
-                            />
-
-                            <a
-                                class="u-author-name"
-                                :href="item.author.uid | authorLink"
-                                target="_blank"
-                                >{{ item.author.name }}</a
-                            >
-                        </div> -->
                             <span class="u-date">
                                 <i class="el-icon-date"></i>
                                 <time>{{
@@ -201,6 +178,7 @@ export default {
             per: 10, //每页条目
             // order: "", //排序模式
             // mark: "", //筛选模式
+            appendMode : false, //追加模式
 
             filter_visible: false,
             order_visible: false,
@@ -219,16 +197,13 @@ export default {
             let params = {
                 per: this.per,
                 // subtype: this.subtype,
+                page : ~~this.page || 1,
+                status: "draft",
+                author: this.uid,
             };
             if (this.search) {
                 params.search = this.search;
             }
-            // if (this.order) {
-            //     params.order = this.order;
-            // }
-            // if (this.mark) {
-            //     params.mark = this.mark;
-            // }
             return params;
         },
         target: function() {
@@ -246,19 +221,13 @@ export default {
         },
     },
     methods: {
-        loadPosts: function(i = 1, append = false) {
-            let query = Object.assign(this.params, {
-                page: i,
-                author: this.uid,
-                status: "draft",
-            });
+        loadPosts: function() {
             this.loading = true;
-            getPosts(query, this)
+            getPosts(this.params, this)
                 .then((res) => {
-                    if (append) {
+                    if (this.appendMode) {
                         this.data = this.data.concat(res.data.data.list);
                     } else {
-                        window.scrollTo(0, 0);
                         this.data = res.data.data.list;
                     }
                     this.total = res.data.data.total;
@@ -269,14 +238,17 @@ export default {
                 });
         },
         changePage: function(i) {
-            this.loadPosts(i);
+            this.appendMode = false
+            this.page = i
+            window.scrollTo(0, 0);
         },
         appendPage: function(i) {
-            this.loadPosts(i, true);
+            this.appendMode = true
+            this.page = i
         },
         filter : function (o){
-            this[o['type']] = o['val']
-            this.loadPosts();
+            this.appendMode = false
+            this[o["type"]] = o["val"];
         },
         showBanner: function(val) {
             return val ? showMinibanner(val) : this.defaultBanner;
@@ -288,7 +260,7 @@ export default {
             this.drawer = true;
             this.drawer_title = author + "#" + m.name;
             this.drawer_content = m.macro;
-            this.drawer_link = "./?pid=" + id;
+            this.drawer_link = "./" + id;
         },
     },
     filters: {
@@ -302,7 +274,7 @@ export default {
             return authorLink(val);
         },
         postLink: function(val) {
-            return "./?pid=" + val;
+            return "./" + val;
         },
         isHighlight: function(val) {
             return val ? `color:${val};font-weight:600;` : "";
@@ -316,8 +288,20 @@ export default {
             return __imgPath + "image/xf/" + xf_id + ".png";
         },
     },
+    watch : {
+        params : {
+            deep : true,
+            handler : function (){
+                this.loadPosts()
+            }
+        },
+        '$route.query.page' : function (val){
+            this.page = ~~val
+        }
+    },
     created: function() {
-        this.loadPosts(1);
+        this.page = ~~this.$route.query.page || 1
+        this.loadPosts()
     },
     components: {
         macro,
