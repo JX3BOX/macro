@@ -1,66 +1,64 @@
-.m-single-macro{
-    margin:30px 0;
-
-    .el-tabs__item{
-        background-color:@bg-light;
-        border-bottom: 1px solid #E4E7ED !important;
+.m-single-macro {
+    .el-tabs__item {
+        background-color: @bg-light;
+        border-bottom: 1px solid #e4e7ed !important;
         user-select: none;
 
-        &.is-active{
-            border-bottom:none !important;
+        &.is-active {
+            border-bottom: none !important;
             // background-color:#fff;
-            background-color:#e6f0fb;
+            background-color: #e6f0fb;
             .bold;
         }
     }
-    .el-tabs__content{
+    .el-tabs__content {
         overflow: visible;
     }
 
-    .u-icon{
+    .u-icon {
         .size(24px);
         .r(3px);
         .y;
         .mr(5px);
     }
 
-    .u-panel{
+    .u-panel {
         .mt(10px);
         .mb(30px);
         white-space: nowrap;
         overflow-x: auto;
     }
-    .u-speed{
+    .u-speed {
         // .mb(40px);
     }
 
-    .u-usage{
+    .u-usage {
         white-space: pre-wrap;
-        background-color:#fafbfc;
-        .fz(14px,2);
-        border:1px solid #eee;
-        border-bottom:none;
+        background-color: #fafbfc;
+        .fz(14px, 2);
+        border: 1px solid #eee;
+        border-bottom: none;
         // .mb(40px);
-        padding:5px 10px;
+        padding: 5px 10px;
         border-top-left-radius: 4px;
         border-top-right-radius: 4px;
     }
 
-    .u-macro.withUsage{
-        .w-jx3macro ol{
-            margin:0;
+    .u-macro.withUsage {
+        .w-jx3macro ol {
+            margin: 0;
             border-top-left-radius: 0;
             border-top-right-radius: 0;
         }
     }
-
 }
 
-
-// .talent-box{
-//     min-width:880px;
-// }
-// .m-single-box{
-//     // hack for talent
-//     overflow-x: auto;
-// }
+@media screen and (max-width: @phone) {
+    .m-single-macro,.m-macro-drawer{
+        .u-macro-panel-copyname,
+        .u-macro-panel-test,
+        .u-talent-panel-copysq {
+            .none;
+        }
+    }
+}

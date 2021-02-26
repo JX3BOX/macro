@@ -50,6 +50,7 @@
                     ></div>
                     <div class="u-panel u-talent-panel" v-if="item.talent">
                         <el-button
+                            class="u-talent-panel-copycode"
                             icon="el-icon-s-tools"
                             plain
                             size="mini"
@@ -59,6 +60,7 @@
                             >复制奇穴编码</el-button
                         >
                         <el-button
+                            class="u-talent-panel-copytxt"
                             icon="el-icon-document-copy"
                             plain
                             size="mini"
@@ -68,6 +70,7 @@
                             >复制奇穴文字</el-button
                         >
                         <el-button
+                        class="u-talent-panel-copysq"
                             icon="el-icon-scissors"
                             plain
                             size="mini"

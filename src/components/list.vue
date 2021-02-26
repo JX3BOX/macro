@@ -18,7 +18,7 @@
                     + 发布云端宏
                 </a>
                 <a
-                    href="/tool/?pid=18152#/"
+                    href="/tool/18152/"
                     class="u-sync u-publish el-button el-button--warning el-button--small"
                     target="_blank"
                 >
@@ -247,6 +247,7 @@ export default {
             let params = {
                 per: this.per,
                 subtype: this.subtype,
+                page : this.page
             };
             if (this.search) {
                 params.search = this.search;
@@ -344,6 +345,7 @@ export default {
         },
     },
     created: function() {
+        this.page = this.$route.query.page
         this.loadPosts(1);
     },
     components: {

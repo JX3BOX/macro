@@ -218,7 +218,7 @@ export default {
         params: function() {
             let params = {
                 per: this.per,
-                subtype: this.subtype,
+                // subtype: this.subtype,
             };
             if (this.search) {
                 params.search = this.search;

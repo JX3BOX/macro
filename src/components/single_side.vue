@@ -4,7 +4,7 @@
             <!-- 云端宏 -->
             <h2 class="m-cloud-name">
                 云端宏
-                <a class="u-help" href="/tool/?pid=18152#/" target="_blank"
+                <a class="u-help" href="/tool/18152/" target="_blank"
                     ><i class="el-icon-question"></i>如何使用?</a
                 >
             </h2>

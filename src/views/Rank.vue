@@ -5,44 +5,50 @@
                 :data="mount_data"
                 :default-sort="{ prop: 'value.7days', order: 'descending' }"
                 :row-class-name="highlight"
+                :fit="true"
             >
                 <el-table-column type="index" label="👑" width="48">
                 </el-table-column>
                 <el-table-column prop="downloadStr" label="云端宏" sortable>
                     <template slot-scope="scope">
-                        <img class="u-icon-xf" :src="kungfuid | xficon" />
-                        <a
-                            class="u-feed"
-                            :href="postLink(scope.row.pid)"
-                            target="_blank"
-                            >{{ scope.row.author }}#{{scope.row.item_version}}</a
-                        >
+                        <div class="u-cell-feed">
+                            <img class="u-icon-xf" :src="kungfuid | xficon" />
+                            <a
+                                class="u-feed"
+                                :href="postLink(scope.row.pid)"
+                                target="_blank"
+                                >{{ scope.row.author }}#{{
+                                    scope.row.item_version
+                                }}</a
+                            >
+                        </div>
                     </template>
                 </el-table-column>
-                <el-table-column prop="value.7days" label="7天" sortable>
+                <el-table-column prop="value.7days" label="7天" sortable width="100">
                     <template slot-scope="scope">
-                        {{scope.row.value['7days']}}
+                        {{ scope.row.value["7days"] }}
                     </template>
                 </el-table-column>
-                <el-table-column prop="value.30days" label="30天" sortable>
+                <el-table-column prop="value.30days" label="30天" sortable width="100">
                     <template slot-scope="scope">
-                        {{scope.row.value['30days']}}
+                        {{ scope.row.value["30days"] }}
                     </template>
                 </el-table-column>
-                <el-table-column prop="value.yesterday" label="昨日" sortable>
+                <el-table-column prop="value.yesterday" label="昨日" sortable width="100">
                     <template slot-scope="scope">
-                        {{scope.row.value['yesterday']}}
+                        {{ scope.row.value["yesterday"] }}
                     </template>
                 </el-table-column>
-                <el-table-column prop="value.before2" label="前日" sortable>
+                <el-table-column prop="value.before2" label="前日" sortable width="100">
                     <template slot-scope="scope">
-                        {{scope.row.value['before2']}}
+                        {{ scope.row.value["before2"] }}
                     </template>
                 </el-table-column>
                 <el-table-column
                     prop="trending"
                     label="趋势"
                     :formatter="trending"
+                    width="100"
                 >
                     <template slot-scope="scope">
                         <i
@@ -87,18 +93,19 @@
                         >
                     </template>
                 </el-table-column>
-                <el-table-column prop="7days" label="7天" sortable>
+                <el-table-column prop="7days" label="7天" sortable width="100">
                 </el-table-column>
-                <el-table-column prop="30days" label="30天" sortable>
+                <el-table-column prop="30days" label="30天" sortable width="100">
                 </el-table-column>
-                <el-table-column prop="yesterday" label="昨日" sortable>
+                <el-table-column prop="yesterday" label="昨日" sortable width="100">
                 </el-table-column>
-                <el-table-column prop="before2" label="前日" sortable>
+                <el-table-column prop="before2" label="前日" sortable width="100">
                 </el-table-column>
                 <el-table-column
                     prop="trending"
                     label="趋势"
                     :formatter="trending"
+                    width="100"
                 >
                     <template slot-scope="scope">
                         <i
@@ -142,7 +149,7 @@ import {
     __imgPath,
     __ossRoot,
 } from "@jx3box/jx3box-common/js/jx3box.json";
-import {getLink} from '@jx3box/jx3box-common/js/utils'
+import { getLink } from "@jx3box/jx3box-common/js/utils";
 export default {
     name: "Rank",
     props: [],
@@ -163,13 +170,15 @@ export default {
     },
     methods: {
         trending: function(row, column) {
-            let trending = ""
-            if(this.kungfuid){
-                trending = (row.value.before2 - row.value.yesterday) / row.value.yesterday;
-            }else{
+            let trending = "";
+            if (this.kungfuid) {
+                trending =
+                    (row.value.before2 - row.value.yesterday) /
+                    row.value.yesterday;
+            } else {
                 trending = (row.before2 - row.yesterday) / row.yesterday;
             }
-            if(!isFinite(trending)) trending = 0
+            if (!isFinite(trending)) trending = 0;
             return isNaN(trending) ? "N/A" : trending.toFixed(4);
         },
         fixnull: function(data) {
@@ -182,13 +191,13 @@ export default {
             return _data;
         },
         postLink: function(val) {
-            return getLink('macro',val)
+            return getLink("macro", val);
         },
         loadRank: function() {
             this.loading = true;
             getRank(this.kungfuid)
                 .then((data) => {
-                    this.mount_data = data
+                    this.mount_data = data;
                 })
                 .catch((err) => {
                     console.log(err);

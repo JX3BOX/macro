@@ -3,6 +3,7 @@
         <div class="w-jx3macro" v-html="content"></div>
         <div class="u-panel u-macro-panel">
             <el-button
+                class="u-macro-panel-copy"
                 icon="el-icon-document-copy"
                 plain
                 size="mini"
@@ -11,11 +12,12 @@
                 v-clipboard:error="onError"
                 >复制宏内容</el-button
             >
-            <el-button icon="el-icon-refresh" plain size="mini" @click="run" v-if="isCN">
+            <el-button icon="el-icon-refresh" plain size="mini" @click="run" v-if="isCN" class="u-macro-panel-translate">
                 <span v-if="status">轉換為繁體</span>
                 <span v-else>转换为简体</span>
             </el-button>
             <el-button
+                class="u-macro-panel-copyname"
                 icon="el-icon-cloudy"
                 plain
                 type="primary"
@@ -25,7 +27,7 @@
                 v-clipboard:error="onError"
                 >复制云端宏</el-button
             >
-            <a class="u-test el-button el-button--mini is-plain" v-if="isSuperAdmin" :href="'https://pull.j3cx.com/api/macro/query?name=' + testname + '&_no_cache'" target="_blank"><i class="el-icon-video-play"></i> 测试云端同步</a>
+            <a class="u-macro-panel-test el-button el-button--mini is-plain" v-if="isSuperAdmin" :href="'https://pull.j3cx.com/api/macro/query?name=' + testname + '&_no_cache'" target="_blank"><i class="el-icon-video-play"></i> 测试云端同步</a>
         </div>
     </div>
 </template>
