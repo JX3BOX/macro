@@ -172,7 +172,7 @@
         >
             <div class="u-box">
                 <h2 class="u-title">{{ drawer_title }}</h2>
-                <macro :ctx="drawer_content" />
+                <macro :ctx="drawer_content" :name="drawer_title"/>
                 <a
                     :href="drawer_link"
                     class="u-skip el-button el-button--primary"
