@@ -27,6 +27,13 @@
 
                 <!-- 角标过滤 -->
                 <markBy @filter="filter"></markBy>
+                <!-- 资料片 -->
+                <menuBy
+                    @filter="filter"
+                    :data="zlps"
+                    type="zlp"
+                    placeholder="资料片"
+                ></menuBy>
                 <!-- 语言过滤 -->
                 <menuBy
                     @filter="filter"
@@ -198,6 +205,11 @@ import {
     buildTarget,
     getAppType
 } from "@jx3box/jx3box-common/js/utils";
+import zlps from '@jx3box/jx3box-common/data/zlps.json'
+const _zlps = {}
+zlps.forEach((item) => {
+    _zlps[item] = item
+})
 export default {
     name: "list",
     props: [],
@@ -218,6 +230,7 @@ export default {
             order: "", //排序
             mark: "", //角标
             lang: "", //语言
+            zlp: "", //资料片
 
             drawer: false,
             drawer_title: "",
@@ -228,6 +241,7 @@ export default {
                 cn: "简体中文",
                 tr: "繁體中文",
             },
+            zlps: _zlps,
         };
     },
     computed: {
@@ -251,6 +265,9 @@ export default {
             }
             if (this.lang) {
                 params.meta_4 = this.lang;
+            }
+            if (this.zlp) {
+                params.meta_1 = this.zlp;
             }
             return params;
         },
