@@ -16,7 +16,7 @@
     "@jx3box/jx3box-dict": "^1.0.8",
     "@jx3box/jx3box-editor": "^0.5.1",
     "@jx3box/jx3box-macro": "^1.0.1",
-    "@jx3box/jx3box-page": "^0.3.0",
+    "@jx3box/jx3box-page": "^0.3.1",
     "@jx3box/jx3box-talent": "^1.0.7",
     "axios": "^0.21.1",
     "core-js": "^3.4.3",
