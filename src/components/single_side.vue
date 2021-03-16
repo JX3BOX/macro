@@ -23,10 +23,10 @@
 
         <div id="directory"></div>
 
-        <div class="m-single-collection" v-if="collection_id && data">
+        <div class="m-single-collection" v-if="collection_id && collection">
             <div class="u-title"><i class="el-icon-connection"></i> 关联</div>
-            <ul class="u-list" v-if="list && list.length">
-                <li v-for="(item, i) in list" :key="i">
+            <ul class="u-list" v-if="collection_posts.length">
+                <li v-for="(item, i) in collection_posts" :key="i">
                     <el-tooltip
                         class="item"
                         effect="dark"
@@ -34,7 +34,7 @@
                         placement="left"
                     >
                         <a :href="item | showLink" target="_blank"
-                            ><i class="el-icon-link"></i> {{ item.title }}</a
+                            ><i class="el-icon-link"></i> {{ item.title || '-' }}</a
                         >
                     </el-tooltip>
                 </li>
@@ -51,7 +51,9 @@ export default {
     name: "single_side",
     props: [],
     data: function() {
-        return {};
+        return {
+            collection : ''
+        };
     },
     computed: {
         author: function() {
@@ -64,24 +66,29 @@ export default {
             return _.get(this.$store.state.post, "post_subtype") || "通用";
         },
         collection_id: function() {
-            return this.$store.state.post.post_collection;
+            let id = ~~this.$store.state.post.post_collection
+            if(!id || isNaN(id)) id = 0
+            return id
         },
-        list: function() {
-            return this.data.posts || [];
-        },
-        collection_title: function() {
-            return this.data.title || "-";
-        },
+        collection_posts : function (){
+            return this.collection && this.collection.posts || []
+        }
     },
     watch: {
-        collection_id: function(val) {
-            if (!val || isNaN(val)) return;
-            getCollection(this.collection_id).then((res) => {
-                this.data = res.data.data.collection;
-            });
-        },
+        collection_id: {
+            immediate : true,
+            handler : function (){
+            this.loadCollection()
+        }
+        }
     },
-    methods: {},
+    methods: {
+        loadCollection : function (){
+            getCollection(this.collection_id).then((res) => {
+                this.collection = res.data.data.collection || [];
+            });
+        }
+    },
     filters: {
         showLink: function(item) {
             if (item.type == "custom") {
@@ -91,7 +98,8 @@ export default {
             }
         },
     },
-    mounted: function() {},
+    mounted: function() {
+    },
     components: {
         feed,
     },

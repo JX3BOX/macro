@@ -148,7 +148,7 @@ import {
     __ossMirror,
     __imgPath,
     __ossRoot,
-} from "@jx3box/jx3box-common/js/jx3box.json";
+} from "@jx3box/jx3box-common/data/jx3box.json";
 import { getLink } from "@jx3box/jx3box-common/js/utils";
 export default {
     name: "Rank",

@@ -45,7 +45,7 @@ import {
     getQuery,
     getAppType,
 } from "@jx3box/jx3box-common/js/utils";
-import { __Root } from "@jx3box/jx3box-common/js/jx3box.json";
+import { __Root } from "@jx3box/jx3box-common/data/jx3box.json";
 
 export default {
     name: "App",

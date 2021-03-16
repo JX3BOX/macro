@@ -24,7 +24,7 @@
 
 <script>
 import xfmap from '@jx3box/jx3box-data/data/xf/xf.json'
-import {__ossMirror,__imgPath,__ossRoot} from '@jx3box/jx3box-common/js/jx3box.json'
+import {__ossMirror,__imgPath,__ossRoot} from '@jx3box/jx3box-common/data/jx3box.json'
 export default {
     name: "list_nav",
     props: [],

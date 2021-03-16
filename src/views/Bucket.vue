@@ -143,12 +143,12 @@
 
 <script>
 import listbox from "@jx3box/jx3box-page/src/cms-list.vue";
-import { cms as mark_map } from "@jx3box/jx3box-common/js/mark.json";
+import { cms as mark_map } from "@jx3box/jx3box-common/data/mark.json";
 import _ from "lodash";
 import User from "@jx3box/jx3box-common/js/user";
 import { getPosts } from "../service/post";
 import dateFormat from "../utils/dateFormat";
-import { __ossMirror,__Links,__iconPath,__imgPath,__ossRoot } from "@jx3box/jx3box-common/js/jx3box";
+import { __ossMirror,__Links,__iconPath,__imgPath,__ossRoot } from "@jx3box/jx3box-common/data/jx3box";
 import xfmap from "@jx3box/jx3box-data/data/xf/xf.json";
 import macro from "@/components/macro.vue";
 import {

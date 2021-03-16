@@ -99,7 +99,7 @@
 </template>
 
 <script>
-import {__ossRoot,__ossMirror,__iconPath,__imgPath} from '@jx3box/jx3box-common/js/jx3box.json'
+import {__ossRoot,__ossMirror,__iconPath,__imgPath} from '@jx3box/jx3box-common/data/jx3box.json'
 import singlebox from "@jx3box/jx3box-page/src/cms-single";
 import { getPost } from "../service/post.js";
 import { getStat, postStat } from "@jx3box/jx3box-common/js/stat";

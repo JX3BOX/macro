@@ -1,8 +1,11 @@
-import { $next } from "@jx3box/jx3box-common/js/axios";
-
+import { $https } from "@jx3box/jx3box-common/js/https.js";
 function getRank(kungfuid, limit = 50) {
-    return $next
-        .get("api/macro/tops", {
+    return $https("next", {
+        mute: true,
+        proxy: true,
+        interceptor: "next",
+    })
+        .get("/api/macro/tops", {
             params: {
                 kungfu: kungfuid,
                 size: limit,
@@ -11,15 +14,16 @@ function getRank(kungfuid, limit = 50) {
         })
         .then((res) => {
             return res.data;
-        })
-        .catch((err) => {
-            console.log(err);
         });
 }
 
 function getOverview(limit = 50) {
-    return $next
-        .get("api/macro/overview", {
+    return $https("next", {
+        mute: true,
+        proxy: true,
+        interceptor: "next",
+    })
+        .get("/api/macro/overview", {
             params: {
                 size: limit,
                 // _no_cache:1,
@@ -27,9 +31,6 @@ function getOverview(limit = 50) {
         })
         .then((res) => {
             return res.data;
-        })
-        .catch((err) => {
-            console.log(err);
         });
 }
 
