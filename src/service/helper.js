@@ -25,4 +25,9 @@ function getLinks() {
     return axios.get(__helperUrl + "api/menu_group/macro-links");
 }
 
-export { $http, getCollection,getLinks };
+const dict_url = `https://cdn.jsdelivr.net/gh/JX3BOX/jx3box-dict@master/dict.json?v=${Date.now()}`;
+function getNewDict() {
+    return axios.get(dict_url);
+}
+
+export { $http, getCollection, getLinks, getNewDict };

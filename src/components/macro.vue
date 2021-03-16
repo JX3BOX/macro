@@ -36,6 +36,7 @@
 import macro from "@jx3box/jx3box-macro";
 import dict from "@jx3box/jx3box-dict/dict.json";
 import User from '@jx3box/jx3box-common/js/user'
+import {getNewDict} from '@/service/helper.js'
 export default {
     name: "macro",
     props: ["ctx",'lang','name'],
@@ -137,6 +138,9 @@ export default {
         },
     },
     created: function() {
+        getNewDict().then((res) => {
+            this.dict = res.data
+        })
         if (this.ctx) {
             this.data = this.ctx;
             this.code = this.parse(this.ctx);
