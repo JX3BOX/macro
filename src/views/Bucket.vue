@@ -1,119 +1,129 @@
 <template>
     <div class="m-bucket">
-
         <div class="m-bucket-list" v-if="isLogin" v-loading="loading">
             <listbox
-            :data="data"
-            :total="total"
-            :pages="pages"
-            :per="per"
-            :page="page"
-            @appendPage="appendPage"
-            @changePage="changePage"
-        >
-            <!-- 搜索 -->
-            <div class="m-archive-search" slot="search-after">
-                <el-input
-                    placeholder="请输入搜索内容"
-                    v-model="search"
-                    class="input-with-select"
-                >
-                    <span slot="prepend">关键词</span>
-                </el-input>
-            </div>
-            <!-- 列表 -->
-            <div class="m-archive-list" v-if="data.length">
-                <ul class="u-list">
-                    <li class="u-item" v-for="(item, i) in data" :key="i">
-                        <!-- 标题 -->
-                        <h2
-                            class="u-post"
-                            :class="{ isSticky: item.post.sticky }"
-                        >
-                            <img
-                                class="u-icon"
-                                :src="item.post.post_subtype | xficon"
-                                :alt="item.post.post_subtype"
-                                :title="item.post.post_subtype"
-                            />
-
-                            <!-- <Mark class="u-feed" :label="item.author.name"/> -->
-
-                            <!-- 标题文字 -->
-                            <a
-                                class="u-title"
-                                :style="item.post.color | isHighlight"
-                                :href="item.post.ID | postLink"
-                                :target="target"
-                                >{{ item.post.post_title || "无标题" }}</a
+                :data="data"
+                :total="total"
+                :pages="pages"
+                :per="per"
+                :page="page"
+                @appendPage="appendPage"
+                @changePage="changePage"
+            >
+                <!-- 搜索 -->
+                <div class="m-archive-search" slot="search-after">
+                    <a
+                        :href="publish_link"
+                        class="u-publish el-button el-button--primary"
+                    >
+                        + 发布作品
+                    </a>
+                    <el-input
+                        placeholder="请输入搜索内容"
+                        v-model="search"
+                        class="input-with-select"
+                    >
+                        <span slot="prepend">关键词</span>
+                    </el-input>
+                </div>
+                <!-- 列表 -->
+                <div class="m-archive-list" v-if="data.length">
+                    <ul class="u-list">
+                        <li class="u-item" v-for="(item, i) in data" :key="i">
+                            <!-- 标题 -->
+                            <h2
+                                class="u-post"
+                                :class="{ isSticky: item.post.sticky }"
                             >
+                                <img
+                                    class="u-icon"
+                                    :src="item.post.post_subtype | xficon"
+                                    :alt="item.post.post_subtype"
+                                    :title="item.post.post_subtype"
+                                />
 
-                            <!-- 角标 -->
-                            <span
-                                class="u-marks"
-                                v-if="item.post.mark && item.post.mark.length"
-                            >
-                                <i
-                                    v-for="mark in item.post.mark"
-                                    class="u-mark"
-                                    :key="mark"
-                                    >{{ mark | showMark }}</i
+                                <!-- <Mark class="u-feed" :label="item.author.name"/> -->
+
+                                <!-- 标题文字 -->
+                                <a
+                                    class="u-title"
+                                    :style="item.post.color | isHighlight"
+                                    :href="item.post.ID | postLink"
+                                    :target="target"
+                                    >{{ item.post.post_title || "无标题" }}</a
                                 >
-                            </span>
-                        </h2>
 
-                        <!-- 字段 -->
-                        <div class="u-content">
-                            <ul
-                                class="m-macro-list-item-meta"
-                                v-if="
-                                    item.post.post_meta &&
-                                        item.post.post_meta.data &&
-                                        item.post.post_meta.data.length
-                                "
-                            >
-                                <li
-                                    class="u-macro"
-                                    v-for="(m, i) in item.post.post_meta.data"
-                                    :key="i"
+                                <!-- 角标 -->
+                                <span
+                                    class="u-marks"
+                                    v-if="
+                                        item.post.mark && item.post.mark.length
+                                    "
                                 >
-                                    <img
-                                        class="u-macro-icon"
-                                        :src="showIcon(m.icon)"
-                                    />
-                                    <el-tooltip
-                                        effect="dark"
-                                        :content="'点击快捷查看 · ' + m.name"
-                                        placement="top-start"
+                                    <i
+                                        v-for="mark in item.post.mark"
+                                        class="u-mark"
+                                        :key="mark"
+                                        >{{ mark | showMark }}</i
                                     >
-                                        <span
-                                            class="u-macro-name"
-                                            @click="
-                                                loadMacro(
-                                                    item.author.name,
-                                                    m,
-                                                    item.post.ID
-                                                )
-                                            "
-                                            >{{ m.name }}</span
-                                        >
-                                    </el-tooltip>
-                                </li>
-                            </ul>
-                        </div>
+                                </span>
+                            </h2>
 
-                        <!-- 时间 -->
-                        <div class="u-misc">
-                            <span class="u-date">
-                                <i class="el-icon-date"></i>
-                                <time>{{
-                                    item.post.post_modified | dateFormat
-                                }}</time>
-                            </span>
-                        </div>
-                    </li>
-                </ul>
-            </div>
+                            <!-- 字段 -->
+                            <div class="u-content">
+                                <ul
+                                    class="m-macro-list-item-meta"
+                                    v-if="
+                                        item.post.post_meta &&
+                                            item.post.post_meta.data &&
+                                            item.post.post_meta.data.length
+                                    "
+                                >
+                                    <li
+                                        class="u-macro"
+                                        v-for="(m, i) in item.post.post_meta
+                                            .data"
+                                        :key="i"
+                                    >
+                                        <img
+                                            class="u-macro-icon"
+                                            :src="showIcon(m.icon)"
+                                        />
+                                        <el-tooltip
+                                            effect="dark"
+                                            :content="
+                                                '点击快捷查看 · ' + m.name
+                                            "
+                                            placement="top-start"
+                                        >
+                                            <span
+                                                class="u-macro-name"
+                                                @click="
+                                                    loadMacro(
+                                                        item.author.name,
+                                                        m,
+                                                        item.post.ID
+                                                    )
+                                                "
+                                                >{{ m.name }}</span
+                                            >
+                                        </el-tooltip>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <!-- 时间 -->
+                            <div class="u-misc">
+                                <span class="u-date">
+                                    <i class="el-icon-date"></i>
+                                    <time>{{
+                                        item.post.post_modified | dateFormat
+                                    }}</time>
+                                </span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
             </listbox>
             <!-- 快捷查看宏 -->
             <el-drawer
@@ -132,11 +142,13 @@
                     >
                 </div>
             </el-drawer>
-
         </div>
         <!-- 未登录 -->
         <div class="m-archive-noright" v-else>
-            <div class="u-tip-login el-alert el-alert--warning is-light"><i class="el-alert__icon el-icon-warning"></i><span>使用私有宏仓库，请先<a :href="login_url">登录</a></span></div>
+            <div class="u-tip-login el-alert el-alert--warning is-light">
+                <i class="el-alert__icon el-icon-warning"></i
+                ><span>使用私有宏仓库，请先<a :href="login_url">登录</a></span>
+            </div>
         </div>
     </div>
 </template>
@@ -148,7 +160,13 @@ import _ from "lodash";
 import User from "@jx3box/jx3box-common/js/user";
 import { getPosts } from "../service/post";
 import dateFormat from "../utils/dateFormat";
-import { __ossMirror,__Links,__iconPath,__imgPath,__ossRoot } from "@jx3box/jx3box-common/data/jx3box";
+import {
+    __ossMirror,
+    __Links,
+    __iconPath,
+    __imgPath,
+    __ossRoot,
+} from "@jx3box/jx3box-common/data/jx3box";
 import xfmap from "@jx3box/jx3box-data/data/xf/xf.json";
 import macro from "@/components/macro.vue";
 import {
@@ -178,7 +196,7 @@ export default {
             per: 10, //每页条目
             // order: "", //排序模式
             // mark: "", //筛选模式
-            appendMode : false, //追加模式
+            appendMode: false, //追加模式
 
             filter_visible: false,
             order_visible: false,
@@ -197,7 +215,7 @@ export default {
             let params = {
                 per: this.per,
                 // subtype: this.subtype,
-                page : ~~this.page || 1,
+                page: ~~this.page || 1,
                 status: "draft",
                 author: this.uid,
             };
@@ -238,16 +256,16 @@ export default {
                 });
         },
         changePage: function(i) {
-            this.appendMode = false
-            this.page = i
+            this.appendMode = false;
+            this.page = i;
             window.scrollTo(0, 0);
         },
         appendPage: function(i) {
-            this.appendMode = true
-            this.page = i
+            this.appendMode = true;
+            this.page = i;
         },
-        filter : function (o){
-            this.appendMode = false
+        filter: function(o) {
+            this.appendMode = false;
             this[o["type"]] = o["val"];
         },
         showBanner: function(val) {
@@ -288,24 +306,24 @@ export default {
             return __imgPath + "image/xf/" + xf_id + ".png";
         },
     },
-    watch : {
-        params : {
-            deep : true,
-            handler : function (){
-                this.loadPosts()
-            }
+    watch: {
+        params: {
+            deep: true,
+            handler: function() {
+                this.loadPosts();
+            },
         },
-        '$route.query.page' : function (val){
-            this.page = ~~val
-        }
+        "$route.query.page": function(val) {
+            this.page = ~~val;
+        },
     },
     created: function() {
-        this.page = ~~this.$route.query.page || 1
-        this.loadPosts()
+        this.page = ~~this.$route.query.page || 1;
+        this.loadPosts();
     },
     components: {
         macro,
-        listbox
+        listbox,
     },
 };
 </script>

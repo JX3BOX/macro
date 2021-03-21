@@ -9,22 +9,27 @@
             @appendPage="appendPage"
             @changePage="changePage"
         >
-            <template slot="filter">
+            <!-- 搜索 -->
+            <div class="m-archive-search" slot="search-before">
                 <a
                     :href="publish_link"
-                    class="u-publish el-button el-button--primary el-button--small"
-                    target="_blank"
+                    class="u-publish el-button el-button--primary"
                 >
-                    + 发布云端宏
+                    + 发布作品
                 </a>
-                <a
-                    href="/tool/18152/"
-                    class="u-sync u-publish el-button el-button--warning el-button--small"
-                    target="_blank"
+                <el-input
+                    placeholder="请输入搜索内容"
+                    v-model="search"
+                    class="input-with-select"
                 >
-                    <i class="el-icon-download"></i> 游戏内加载同步
-                </a>
-
+                    <span slot="prepend">关键词</span>
+                    <el-button slot="append" icon="el-icon-search"></el-button>
+                </el-input>
+            </div>
+            <!-- 过滤 -->
+            <template slot="filter">
+                <!-- 版本过滤 -->
+                <clientBy @filter="filter" type="std"></clientBy>
                 <!-- 角标过滤 -->
                 <markBy @filter="filter"></markBy>
                 <!-- 资料片 -->
@@ -44,17 +49,6 @@
                 <!-- 排序过滤 -->
                 <orderBy @filter="filter"></orderBy>
             </template>
-            <!-- 搜索 -->
-            <div class="m-archive-search" slot="search-after">
-                <el-input
-                    placeholder="请输入搜索内容"
-                    v-model="search"
-                    class="input-with-select"
-                >
-                    <span slot="prepend">关键词</span>
-                    <el-button slot="append" icon="el-icon-search"></el-button>
-                </el-input>
-            </div>
             <!-- 列表 -->
             <div class="m-archive-list" v-if="data.length">
                 <ul class="u-list">
@@ -200,7 +194,7 @@ import macro from "@/components/macro.vue";
 import {
     showAvatar,
     authorLink,
-    showMinibanner,
+    showBanner,
     publishLink,
     buildTarget,
     getAppType
@@ -231,6 +225,7 @@ export default {
             mark: "", //角标
             lang: "", //语言
             zlp: "", //资料片
+            client:"",  //版本选择
 
             drawer: false,
             drawer_title: "",
@@ -268,6 +263,9 @@ export default {
             }
             if (this.zlp) {
                 params.meta_1 = this.zlp;
+            }
+            if(this.client){
+                params.client = this.client
             }
             return params;
         },
@@ -313,7 +311,7 @@ export default {
             this[o["type"]] = o["val"];
         },
         showBanner: function(val) {
-            return val ? showMinibanner(val) : this.defaultBanner;
+            return val ? showBanner(val) : this.defaultBanner;
         },
         showIcon: function(val) {
             return __iconPath + "icon/" + val + ".png";
