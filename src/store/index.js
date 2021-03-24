@@ -18,6 +18,8 @@ let store = {
         stat : {},
         author : {},
         status : false,
+
+        my_macro_count : 0
     },
     mutations: {
     },

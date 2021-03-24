@@ -24,8 +24,14 @@
                         class="input-with-select"
                     >
                         <span slot="prepend">关键词</span>
+                        <el-button
+                            slot="append"
+                            icon="el-icon-search"
+                        ></el-button>
                     </el-input>
                 </div>
+                <el-alert title="自用宏将会被设置为仅自己可见，但游戏内一样可以云端加载哦！" type="info" show-icon>
+                </el-alert>
                 <!-- 列表 -->
                 <div class="m-archive-list" v-if="data.length">
                     <ul class="u-list">

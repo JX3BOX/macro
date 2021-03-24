@@ -4,14 +4,15 @@
             <span slot="label">
                 <i class="el-icon-collection"></i>
                 <b>云端宏</b>
-                <em class="u-hot">全新版本</em>
+                <em class="u-new">轻松同步</em>
             </span>
         </el-tab-pane>
         <el-tab-pane label="我的宏仓库" name="bucket">
             <span slot="label">
                 <i class="el-icon-receiving"></i>
                 <b>私人宏仓库</b>
-                <em class="u-ready">私人专属</em>
+                <em class="u-pop" v-if="isLogin">{{count}}</em>
+                <em class="u-ready" v-else>私人专属</em>
             </span>
         </el-tab-pane>
         <el-tab-pane label="排行榜" name="rank">
@@ -26,12 +27,14 @@
 </template>
 
 <script>
+import User from '@jx3box/jx3box-common/js/user'
 export default {
     name: "tabs",
     props: [],
     data: function() {
         return {
             view: "index",
+            isLogin : User.isLogin(),
         };
     },
     watch : {
@@ -39,7 +42,11 @@ export default {
             this.view = _route.name
         }
     },
-    computed: {},
+    computed: {
+        count : function (){
+            return this.$store.state.my_macro_count
+        }
+    },
     methods: {
         changeView: function() {
             this.$router.push({ name: this.view });
