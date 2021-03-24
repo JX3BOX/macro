@@ -8,7 +8,7 @@
             </span>
         </el-tab-pane>
         <el-tab-pane label="我的宏仓库" name="bucket">
-            <span slot="label">
+            <span slot="label" class="u-label">
                 <i class="el-icon-receiving"></i>
                 <b>私人宏仓库</b>
                 <em class="u-pop" v-if="isLogin">{{ count }}</em>

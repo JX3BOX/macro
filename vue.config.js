@@ -48,6 +48,9 @@ module.exports = {
                     request.setHeader("origin", "");
                 }
             },
+            "/cms/my":{
+                "target": "https://server.jx3box.com",
+            }
         }
     },
 

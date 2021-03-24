@@ -39,37 +39,37 @@
                             <!-- 标题 -->
                             <h2
                                 class="u-post"
-                                :class="{ isSticky: item.post.sticky }"
+                                :class="{ isSticky: item.sticky }"
                             >
                                 <img
                                     class="u-icon"
-                                    :src="item.post.post_subtype | xficon"
-                                    :alt="item.post.post_subtype"
-                                    :title="item.post.post_subtype"
+                                    :src="item.post_subtype | xficon"
+                                    :alt="item.post_subtype"
+                                    :title="item.post_subtype"
                                 />
 
                                 <!-- <Mark class="u-feed" :label="item.author.name"/> -->
-                                <span class="u-private" v-if="item.post.post_status == 'draft'"><i class="el-icon-lock"></i> 私有</span>
-                                <span class="u-private" v-if="item.post.post_status == 'pending'"><i class="el-icon-lock"></i> 请修改</span>
+                                <span class="u-private" v-if="item.post_status == 'draft'"><i class="el-icon-lock"></i> 私有</span>
+                                <span class="u-private" v-if="item.post_status == 'pending'"><i class="el-icon-lock"></i> 请修改</span>
 
                                 <!-- 标题文字 -->
                                 <a
                                     class="u-title"
-                                    :style="item.post.color | isHighlight"
-                                    :href="item.post.ID | postLink"
+                                    :style="item.color | isHighlight"
+                                    :href="item.ID | postLink"
                                     :target="target"
-                                    >{{ item.post.post_title || "无标题" }}</a
+                                    >{{ item.post_title || "无标题" }}</a
                                 >
 
                                 <!-- 角标 -->
                                 <span
                                     class="u-marks"
                                     v-if="
-                                        item.post.mark && item.post.mark.length
+                                        item.mark && item.mark.length
                                     "
                                 >
                                     <i
-                                        v-for="mark in item.post.mark"
+                                        v-for="mark in item.mark"
                                         class="u-mark"
                                         :key="mark"
                                         >{{ mark | showMark }}</i
@@ -82,14 +82,14 @@
                                 <ul
                                     class="m-macro-list-item-meta"
                                     v-if="
-                                        item.post.post_meta &&
-                                            item.post.post_meta.data &&
-                                            item.post.post_meta.data.length
+                                        item.post_meta &&
+                                            item.post_meta.data &&
+                                            item.post_meta.data.length
                                     "
                                 >
                                     <li
                                         class="u-macro"
-                                        v-for="(m, i) in item.post.post_meta
+                                        v-for="(m, i) in item.post_meta
                                             .data"
                                         :key="i"
                                     >
@@ -110,7 +110,7 @@
                                                     loadMacro(
                                                         item.author.name,
                                                         m,
-                                                        item.post.ID
+                                                        item.ID
                                                     )
                                                 "
                                                 >{{ m.name }}</span
@@ -125,7 +125,7 @@
                                 <span class="u-date">
                                     <i class="el-icon-date"></i>
                                     <time>{{
-                                        item.post.post_modified | dateFormat
+                                        item.post_modified | dateFormat
                                     }}</time>
                                 </span>
                             </div>
