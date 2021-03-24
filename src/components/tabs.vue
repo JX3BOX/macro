@@ -11,7 +11,7 @@
             <span slot="label">
                 <i class="el-icon-receiving"></i>
                 <b>私人宏仓库</b>
-                <em class="u-pop" v-if="isLogin">{{count}}</em>
+                <em class="u-pop" v-if="isLogin">{{ count }}</em>
                 <em class="u-ready" v-else>私人专属</em>
             </span>
         </el-tab-pane>
@@ -27,30 +27,36 @@
 </template>
 
 <script>
-import User from '@jx3box/jx3box-common/js/user'
+import User from "@jx3box/jx3box-common/js/user";
+import { getMyPostCount } from "@/service/post.js";
 export default {
     name: "tabs",
     props: [],
     data: function() {
         return {
             view: "index",
-            isLogin : User.isLogin(),
+            isLogin: User.isLogin(),
         };
     },
-    watch : {
-        $route : function (_route){
-            this.view = _route.name
-        }
+    watch: {
+        $route: function(_route) {
+            this.view = _route.name;
+        },
     },
     computed: {
-        count : function (){
-            return this.$store.state.my_macro_count
-        }
+        count: function() {
+            return this.$store.state.my_macro_count;
+        },
     },
     methods: {
         changeView: function() {
             this.$router.push({ name: this.view });
         },
+    },
+    created: function() {
+        getMyPostCount().then((res) => {
+            this.$store.state.my_macro_count = res.data.data.total
+        })
     },
 };
 </script>

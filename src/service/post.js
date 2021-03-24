@@ -4,6 +4,18 @@ const API_LIST = "post/list";
 const API_SINGLE = "post/find";
 import failCallback from "../utils/fail";
 
+function getMyPostCount(params) {
+    return $.get(__server + "cms/my/post/count", {
+        params: params,
+    });
+}
+
+function getMyPost(params) {
+    return $.get(__server + "cms/my/post", {
+        params: params,
+    });
+}
+
 function getPosts(params, vm) {
     let query = {
         type: "macro",
@@ -28,4 +40,4 @@ function getPost(pid, vm) {
     });
 }
 
-export { getPosts, getPost };
+export { getPosts, getPost, getMyPostCount, getMyPost };

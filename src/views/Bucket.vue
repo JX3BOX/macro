@@ -30,7 +30,7 @@
                         ></el-button>
                     </el-input>
                 </div>
-                <el-alert title="自用宏将会被设置为仅自己可见，但游戏内一样可以云端加载哦！" type="info" show-icon>
+                <el-alert title="自用宏将会被设置为仅私有，不论私有或公开游戏内均可以云端加载。" type="info" show-icon>
                 </el-alert>
                 <!-- 列表 -->
                 <div class="m-archive-list" v-if="data.length">
@@ -49,6 +49,8 @@
                                 />
 
                                 <!-- <Mark class="u-feed" :label="item.author.name"/> -->
+                                <span class="u-private" v-if="item.post.post_status == 'draft'"><i class="el-icon-lock"></i> 私有</span>
+                                <span class="u-private" v-if="item.post.post_status == 'pending'"><i class="el-icon-lock"></i> 请修改</span>
 
                                 <!-- 标题文字 -->
                                 <a
@@ -164,7 +166,7 @@ import listbox from "@jx3box/jx3box-page/src/cms-list.vue";
 import { cms as mark_map } from "@jx3box/jx3box-common/data/mark.json";
 import _ from "lodash";
 import User from "@jx3box/jx3box-common/js/user";
-import { getPosts } from "../service/post";
+import { getPostsm,getMyPost } from "../service/post";
 import dateFormat from "../utils/dateFormat";
 import {
     __ossMirror,
@@ -222,8 +224,9 @@ export default {
                 per: this.per,
                 // subtype: this.subtype,
                 page: ~~this.page || 1,
-                status: "draft",
-                author: this.uid,
+                // status: "draft",
+                // author: this.uid,
+                type : 'macro'
             };
             if (this.search) {
                 params.search = this.search;
@@ -247,7 +250,7 @@ export default {
     methods: {
         loadPosts: function() {
             this.loading = true;
-            getPosts(this.params, this)
+            getMyPost(this.params, this)
                 .then((res) => {
                     if (this.appendMode) {
                         this.data = this.data.concat(res.data.data.list);
@@ -325,7 +328,7 @@ export default {
     },
     created: function() {
         this.page = ~~this.$route.query.page || 1;
-        this.loadPosts();
+        this.isLogin && this.loadPosts();
     },
     components: {
         macro,
