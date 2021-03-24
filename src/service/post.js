@@ -29,7 +29,7 @@ function getPosts(params, vm) {
     });
 }
 function getPost(pid, vm) {
-    return $.get(__server + "/post/find", {
+    return $.get(__server + "post/find", {
         params: {
             id: pid,
         },
