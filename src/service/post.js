@@ -2,9 +2,11 @@ import { $ } from "./axios";
 import { __server } from "@jx3box/jx3box-common/data/jx3box.json";
 import failCallback from "../utils/fail";
 
-function getMyPostCount(params) {
+function getMyPostCount() {
     return $.get("/cms/my/post/count", {
-        params: params,
+        params: {
+            type : 'macro'
+        },
     });
 }
 
