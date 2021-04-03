@@ -1,10 +1,6 @@
-import { $https } from "@jx3box/jx3box-common/js/https.js";
+import { $next } from "@jx3box/jx3box-common/js/https.js";
 function getRank(kungfuid, limit = 50) {
-    return $https("next", {
-        mute: true,
-        proxy: true,
-        interceptor: "next",
-    })
+    return $next({ mute: true })
         .get("/api/macro/tops", {
             params: {
                 kungfu: kungfuid,
@@ -18,11 +14,7 @@ function getRank(kungfuid, limit = 50) {
 }
 
 function getOverview(limit = 50) {
-    return $https("next", {
-        mute: true,
-        proxy: true,
-        interceptor: "next",
-    })
+    return $next({ mute: true })
         .get("/api/macro/overview", {
             params: {
                 size: limit,

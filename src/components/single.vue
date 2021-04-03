@@ -1,5 +1,5 @@
 <template>
-    <singlebox :post="post" :author="author" :stat="stat" v-loading="loading">
+    <singlebox :post="post" :stat="stat" v-loading="loading">
         <template slot="single-header">
             <div class="u-meta u-sub-block">
                 <em class="u-label">心法</em>
@@ -15,13 +15,13 @@
             <div class="u-meta u-sub-block">
                 <em class="u-label">资料片</em>
                 <span class="u-value">
-                    {{ formatMeta("zlp") }}
+                    {{ post.zlp || post.meta_1 || '未知'}}
                 </span>
             </div>
         </template>
         <!-- 宏内容 -->
         <div class="m-single-macro">
-            <el-tabs v-model="active" type="card" @tab-click="changeTab">
+            <el-tabs v-model="active" type="card">
                 <el-tab-pane v-for="(item, i) in data" :key="i" :name="i + ''">
                     <!-- tab -->
                     <span class="u-label" slot="label">
@@ -38,7 +38,7 @@
                         :class="{ withUsage: item.desc }"
                         v-if="item.macro"
                     >
-                        <macro :ctx="item.macro" :lang="lang" :name="author.name + '#' + item.name"/>
+                        <macro :ctx="item.macro" :lang="lang" :name="post.author.name + '#' + item.name"/>
                     </div>
                     <!-- 奇穴 -->
                     <el-divider content-position="left" v-if="item.talent"
@@ -118,8 +118,6 @@ export default {
 
             post: {},
             stat: {},
-            meta: {},
-            author: {},
             lang : 'cn',
 
             data: [],
@@ -130,7 +128,7 @@ export default {
     },
     computed: {
         id: function() {
-            return this.$store.state.pid;
+            return this.$store.state.id;
         },
         xf: function() {
             return _.get(this.post, "post_subtype");
@@ -140,15 +138,6 @@ export default {
         },
     },
     methods: {
-        formatMeta: function(key) {
-            let val = _.get(this.meta, key);
-            if (Array.isArray(val)) {
-                return val.toString();
-            } else {
-                return val;
-            }
-        },
-        changeTab: function() {},
         onCopy: function(val) {
             this.$notify({
                 title: "复制成功",
@@ -189,16 +178,11 @@ export default {
     created: function() {
         if (this.id) {
             this.loading = true;
-            getPost(this.id, this)
+            getPost(this.id)
                 .then((res) => {
-                    this.post = this.$store.state.post = res.data.data.post;
-                    this.meta = this.$store.state.meta =
-                        res.data.data.post.post_meta;
-                    this.author = this.$store.state.author =
-                        res.data.data.author;
-                    this.data = (this.meta && this.meta.data) || [];
-                    this.lang = this.meta && this.meta.lang
-                    this.$store.state.status = true;
+                    this.post = this.$store.state.post = res.data.data;
+                    this.data = this.post.post_meta.data
+                    this.$store.state.user_id = this.post.post_author
                 })
                 .then(() => {
                     if (this.data.length) {
@@ -230,7 +214,7 @@ export default {
                 });
 
             getStat('macro',this.id).then((res) => {
-                this.stat = this.$store.state.stat = res.data;
+                this.stat = res.data;
             });
             postStat('macro',this.id);
         }

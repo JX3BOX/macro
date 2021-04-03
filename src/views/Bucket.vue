@@ -166,7 +166,7 @@ import listbox from "@jx3box/jx3box-page/src/cms-list.vue";
 import { cms as mark_map } from "@jx3box/jx3box-common/data/mark.json";
 import _ from "lodash";
 import User from "@jx3box/jx3box-common/js/user";
-import { getPostsm,getMyPost } from "../service/post";
+import { getMyPost } from "../service/post";
 import dateFormat from "../utils/dateFormat";
 import {
     __ossMirror,
@@ -217,7 +217,7 @@ export default {
     },
     computed: {
         subtype: function() {
-            return this.$store.state.subtype;
+            return this.$route.query.subtype;
         },
         params: function() {
             let params = {

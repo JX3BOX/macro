@@ -11,17 +11,8 @@
         >
             <!-- 搜索 -->
             <div class="m-archive-search" slot="search-before">
-                <a
-                    :href="publish_link"
-                    class="u-publish el-button el-button--primary"
-                >
-                    + 发布作品
-                </a>
-                <el-input
-                    placeholder="请输入搜索内容"
-                    v-model="search"
-                    class="input-with-select"
-                >
+                <a :href="publish_link" class="u-publish el-button el-button--primary">+ 发布作品</a>
+                <el-input placeholder="请输入搜索内容" v-model="search" class="input-with-select">
                     <span slot="prepend">关键词</span>
                     <el-button slot="append" icon="el-icon-search"></el-button>
                 </el-input>
@@ -33,19 +24,9 @@
                 <!-- 角标过滤 -->
                 <markBy @filter="filter"></markBy>
                 <!-- 资料片 -->
-                <menuBy
-                    @filter="filter"
-                    :data="zlps"
-                    type="zlp"
-                    placeholder="资料片"
-                ></menuBy>
+                <zlpBy @filter="filter" :client="client"></zlpBy>
                 <!-- 语言过滤 -->
-                <menuBy
-                    @filter="filter"
-                    :data="langs"
-                    type="lang"
-                    placeholder="语言"
-                ></menuBy>
+                <menuBy @filter="filter" :data="langs" type="lang" placeholder="语言"></menuBy>
                 <!-- 排序过滤 -->
                 <orderBy @filter="filter"></orderBy>
             </template>
@@ -54,39 +35,31 @@
                 <ul class="u-list">
                     <li class="u-item" v-for="(item, i) in data" :key="i">
                         <!-- 标题 -->
-                        <h2
-                            class="u-post"
-                            :class="{ isSticky: item.post.sticky }"
-                        >
+                        <h2 class="u-post" :class="{ isSticky: item.sticky }">
                             <img
                                 class="u-icon"
-                                :src="item.post.post_subtype | xficon"
-                                :alt="item.post.post_subtype"
-                                :title="item.post.post_subtype"
+                                :src="item.post_subtype | xficon"
+                                :alt="item.post_subtype"
+                                :title="item.post_subtype"
                             />
 
-                            <!-- <Mark class="u-feed" :label="item.author.name"/> -->
+                            <!-- <Mark class="u-feed" :label="item.author"/> -->
 
                             <!-- 标题文字 -->
                             <a
                                 class="u-title"
-                                :style="item.post.color | isHighlight"
-                                :href="item.post.ID | postLink"
+                                :style="item.color | isHighlight"
+                                :href="item.ID | postLink"
                                 :target="target"
-                                >{{ item.post.post_title || "无标题" }}</a
-                            >
+                            >{{ item.post_title || "无标题" }}</a>
 
                             <!-- 角标 -->
-                            <span
-                                class="u-marks"
-                                v-if="item.post.mark && item.post.mark.length"
-                            >
+                            <span class="u-marks" v-if="item.mark && item.mark.length">
                                 <i
-                                    v-for="mark in item.post.mark"
+                                    v-for="mark in item.mark"
                                     class="u-mark"
                                     :key="mark"
-                                    >{{ mark | showMark }}</i
-                                >
+                                >{{ mark | showMark }}</i>
                             </span>
                         </h2>
 
@@ -95,20 +68,13 @@
                             <ul
                                 class="m-macro-list-item-meta"
                                 v-if="
-                                    item.post.post_meta &&
-                                        item.post.post_meta.data &&
-                                        item.post.post_meta.data.length
+                                    item.post_meta &&
+                                        item.post_meta.data &&
+                                        item.post_meta.data.length
                                 "
                             >
-                                <li
-                                    class="u-macro"
-                                    v-for="(m, i) in item.post.post_meta.data"
-                                    :key="i"
-                                >
-                                    <img
-                                        class="u-macro-icon"
-                                        :src="showIcon(m.icon)"
-                                    />
+                                <li class="u-macro" v-for="(m, i) in item.post_meta.data" :key="i">
+                                    <img class="u-macro-icon" :src="showIcon(m.icon)" />
                                     <el-tooltip
                                         effect="dark"
                                         :content="'点击快捷查看 · ' + m.name"
@@ -116,15 +82,8 @@
                                     >
                                         <span
                                             class="u-macro-name"
-                                            @click="
-                                                loadMacro(
-                                                    item.author.name,
-                                                    m,
-                                                    item.post.ID
-                                                )
-                                            "
-                                            >{{ m.name || "无名称" }}</span
-                                        >
+                                            @click="loadMacro(item.author,m,item.ID) "
+                                        >{{ m.name || "无名称" }}</span>
                                     </el-tooltip>
                                 </li>
                             </ul>
@@ -138,19 +97,16 @@
                                     class="u-author-avatar"
                                     :src="item.author.avatar | showAvatar"
                                     :alt="item.author.name"
-                                /> -->
+                                />-->
                                 <a
                                     class="u-author-name"
-                                    :href="item.author.uid | authorLink"
+                                    :href="item.post_author | authorLink"
                                     target="_blank"
-                                    >{{ item.author.name }}</a
-                                >
+                                >{{ item.author }}</a>
                             </div>
                             <span class="u-date">
                                 <i class="el-icon-date"></i>
-                                <time>{{
-                                    item.post.post_modified | dateFormat
-                                }}</time>
+                                <time>{{item.post_modified | dateFormat}}</time>
                             </span>
                         </div>
                     </li>
@@ -158,20 +114,13 @@
             </div>
         </listbox>
         <!-- 快捷查看宏 -->
-        <el-drawer
-            class="m-macro-drawer"
-            title="云端宏"
-            :visible.sync="drawer"
-            :append-to-body="true"
-        >
+        <el-drawer class="m-macro-drawer" title="云端宏" :visible.sync="drawer" :append-to-body="true">
             <div class="u-box">
                 <h2 class="u-title">{{ drawer_title }}</h2>
-                <macro :ctx="drawer_content" :name="drawer_title"/>
-                <a
-                    :href="drawer_link"
-                    class="u-skip el-button el-button--primary"
-                    ><i class="el-icon-copy-document"></i> 查看详情</a
-                >
+                <macro :ctx="drawer_content" :name="drawer_title" />
+                <a :href="drawer_link" class="u-skip el-button el-button--primary">
+                    <i class="el-icon-copy-document"></i> 查看详情
+                </a>
             </div>
         </el-drawer>
     </div>
@@ -197,17 +146,12 @@ import {
     showBanner,
     publishLink,
     buildTarget,
-    getAppType
+    getAppType,
 } from "@jx3box/jx3box-common/js/utils";
-import zlps from '@jx3box/jx3box-common/data/zlps.json'
-const _zlps = {}
-zlps.forEach((item) => {
-    _zlps[item] = item
-})
 export default {
     name: "list",
     props: [],
-    data: function() {
+    data: function () {
         return {
             loading: false, //加载状态
 
@@ -219,13 +163,13 @@ export default {
             total: 1, //总条目数
             pages: 1, //总页数
             per: 18, //每页条目
-            appendMode : false, //追加模式
+            appendMode: false, //追加模式
 
             order: "", //排序
             mark: "", //角标
             lang: "", //语言
             zlp: "", //资料片
-            client:"",  //版本选择
+            client: this.$store.state.client, //版本选择
 
             drawer: false,
             drawer_title: "",
@@ -236,52 +180,41 @@ export default {
                 cn: "简体中文",
                 tr: "繁體中文",
             },
-            zlps: _zlps,
         };
     },
     computed: {
-        subtype: function() {
-            return this.$store.state.subtype;
+        subtype: function () {
+            return this.$route.query.subtype;
         },
-        params: function() {
+        params: function () {
             let params = {
                 per: this.per,
-                subtype: this.subtype,
-                page : ~~this.page || 1
+                page: ~~this.page || 1,
             };
-            if (this.search) {
-                params.search = this.search;
-            }
-            if (this.order) {
-                params.order = this.order;
-            }
-            if (this.mark) {
-                params.mark = this.mark;
-            }
-            if (this.lang) {
-                params.meta_4 = this.lang;
-            }
-            if (this.zlp) {
-                params.meta_1 = this.zlp;
-            }
-            if(this.client){
-                params.client = this.client
+            let optionalParams = ['subtype','search','order','mark','lang','zlp','client']
+            optionalParams.forEach((item) => {
+                if(this[item]){
+                    params[item] = this[item]
+                }
+            })
+            if(this.subtype){
+                params.sticky = 1
             }
             return params;
         },
-        target: function() {
+        target: function () {
             return buildTarget();
         },
         // 根据栏目定义
-        defaultBanner: function() {
+        defaultBanner: function () {
             return "";
         },
-        publish_link: function(val) {
+        publish_link: function (val) {
             return publishLink("macro");
         },
     },
     methods: {
-        loadPosts: function() {
+        loadPosts: function () {
             this.loading = true;
             getPosts(this.params, this)
                 .then((res) => {
@@ -297,23 +230,23 @@ export default {
                     this.loading = false;
                 });
         },
-        changePage: function(i) {
-            this.appendMode = false
-            this.page = i
+        changePage: function (i) {
+            this.appendMode = false;
+            this.page = i;
             window.scrollTo(0, 0);
         },
-        appendPage: function(i) {
-            this.appendMode = true
-            this.page = i
+        appendPage: function (i) {
+            this.appendMode = true;
+            this.page = i;
         },
-        filter: function(o) {
-            this.appendMode = false
+        filter: function (o) {
+            this.appendMode = false;
             this[o["type"]] = o["val"];
         },
-        showBanner: function(val) {
+        showBanner: function (val) {
             return val ? showBanner(val) : this.defaultBanner;
         },
-        showIcon: function(val) {
+        showIcon: function (val) {
             return __iconPath + "icon/" + val + ".png";
         },
         loadMacro(author, m, id) {
@@ -324,51 +257,44 @@ export default {
         },
     },
     filters: {
-        dateFormat: function(val) {
+        dateFormat: function (val) {
             return dateFormat(new Date(val));
         },
-        showAvatar: function(val) {
+        showAvatar: function (val) {
             return showAvatar(val);
         },
-        authorLink: function(val) {
+        authorLink: function (val) {
             return authorLink(val);
         },
-        postLink: function(val) {
-            // return "./?pid=" + val;
-            return location.origin + '/' + getAppType() + '/' + val;
+        postLink: function (val) {
+            return location.origin + "/" + getAppType() + "/" + val;
         },
-        isHighlight: function(val) {
+        isHighlight: function (val) {
             return val ? `color:${val};font-weight:600;` : "";
         },
-        showMark: function(val) {
+        showMark: function (val) {
             return mark_map[val];
         },
-        xficon: function(val) {
+        xficon: function (val) {
             if (!val || val == "其它") val = "通用";
             let xf_id = xfmap[val]["id"];
             return __imgPath + "image/xf/" + xf_id + ".png";
         },
     },
-    watch : {
-        params : {
-            deep : true,
-            handler : function (){
-                this.loadPosts()
-            }
+    watch: {
+        params: {
+            deep: true,
+            immediate: true,
+            handler: function () {
+                this.loadPosts();
+            },
         },
-        '$route.query.page' : function (val){
-            this.page = ~~val
-        }
+        "$route.query.page": function (val) {
+            this.page = ~~val;
+        },
     },
-    created: function() {
-        this.page = ~~this.$route.query.page || 1
-         let query = new URLSearchParams(location.search);
-        let client = (this.$route && this.$route.query.client) || query.get("client");
-        if(client){
-            this.client = client
-        }else{
-            this.client = 'std'
-        }
+    created: function () {
+        this.page = ~~this.$route.query.page || 1;
     },
     components: {
         macro,

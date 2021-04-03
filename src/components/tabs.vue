@@ -54,8 +54,8 @@ export default {
         },
     },
     created: function() {
-        getMyPostCount().then((res) => {
-            this.$store.state.my_macro_count = res.data.data.total
+        User.isLogin() && getMyPostCount().then((res) => {
+            this.$store.state.my_macro_count = res.data.data.macro || 0
         })
     },
 };

@@ -3,11 +3,10 @@
         <!-- 群号 -->
         <RightSideMsg>
             <em>宏作者交流群</em> :
-            <strong
-                ><a href="https://jq.qq.com/?_wv=1027&k=ZAsOkzUq"
-                    >297985102</a
-                ></strong
-            >
+            <strong>
+                <a href="https://jq.qq.com/?_wv=1027&k=CAiizina" v-if="client == 'origin'">590349918</a>
+                <a href="https://jq.qq.com/?_wv=1027&k=ZAsOkzUq" v-else>297985102</a>
+            </strong>
         </RightSideMsg>
 
         <!-- 排行榜 -->
@@ -16,11 +15,7 @@
         <!-- 其他链接 -->
         <div class="m-side-links">
             <h3 class="c-sidebar-right-title">
-                <img
-                    class="u-icon"
-                    svg-inline
-                    src="../assets/img/side/puzzle.svg"
-                />
+                <img class="u-icon" svg-inline src="../assets/img/side/puzzle.svg" />
                 帮助文档
             </h3>
             <div class="c-sidebar-right-list" v-if="links && links.length">
@@ -30,8 +25,10 @@
                     class="u-item"
                     :href="item.link"
                     target="_blank"
-                    ><i class="el-icon-collection"></i>{{ item.label }}</a
                 >
+                    <i class="el-icon-collection"></i>
+                    {{ item.label }}
+                </a>
             </div>
         </div>
 
@@ -45,17 +42,21 @@ import { getLinks } from "@/service/helper.js";
 export default {
     name: "list_side",
     props: [],
-    data: function() {
+    data: function () {
         return {
             links: [],
         };
     },
-    computed: {},
+    computed: {
+        client: function () {
+            return this.$store.state.client;
+        },
+    },
     methods: {},
-    mounted: function() {
+    mounted: function () {
         getLinks().then((res) => {
-            this.links = res.data.data.menu_group.menus
-        })
+            this.links = res.data.data.menu_group.menus;
+        });
     },
     components: {
         minirank,

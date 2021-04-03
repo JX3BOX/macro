@@ -1,18 +1,18 @@
 <template>
-    <div class="m-single-side" v-if="$store.state.status">
+    <div class="m-single-side">
         <div class="m-single-macroindex">
             <!-- 云端宏 -->
             <h2 class="m-cloud-name">
                 云端宏
-                <a class="u-help" href="/tool/18152/" target="_blank"
-                    ><i class="el-icon-question"></i>如何使用?</a
-                >
+                <a class="u-help" href="/tool/18152/" target="_blank">
+                    <i class="el-icon-question"></i>如何使用?
+                </a>
             </h2>
             <div class="m-single-meta" v-if="data.length">
                 <div class="u-data" v-for="(feed, i) in data" :key="feed + i">
                     <feed
                         class="u-feed"
-                        :author="author.name"
+                        :author="post.author"
                         :name="feed.name"
                         :subtype="subtype"
                     />
@@ -24,18 +24,16 @@
         <div id="directory"></div>
 
         <div class="m-single-collection" v-if="collection_id && collection">
-            <div class="u-title"><i class="el-icon-connection"></i> 关联</div>
+            <div class="u-title">
+                <i class="el-icon-connection"></i> 关联
+            </div>
             <ul class="u-list" v-if="collection_posts.length">
                 <li v-for="(item, i) in collection_posts" :key="i">
-                    <el-tooltip
-                        class="item"
-                        effect="dark"
-                        :content="item.title"
-                        placement="left"
-                    >
-                        <a :href="item | showLink" target="_blank"
-                            ><i class="el-icon-link"></i> {{ item.title || '-' }}</a
-                        >
+                    <el-tooltip class="item" effect="dark" :content="item.title" placement="left">
+                        <a :href="item | showLink" target="_blank">
+                            <i class="el-icon-link"></i>
+                            {{ item.title || '-' }}
+                        </a>
                     </el-tooltip>
                 </li>
             </ul>
@@ -50,47 +48,47 @@ import { getLink } from "@jx3box/jx3box-common/js/utils";
 export default {
     name: "single_side",
     props: [],
-    data: function() {
+    data: function () {
         return {
-            collection : ''
+            collection: "",
         };
     },
     computed: {
-        author: function() {
-            return this.$store.state.author;
+        post: function () {
+            return this.$store.state.post;
         },
-        data: function() {
+        data: function () {
             return _.get(this.$store.state.post.post_meta, "data") || [];
         },
-        subtype: function() {
+        subtype: function () {
             return _.get(this.$store.state.post, "post_subtype") || "通用";
         },
-        collection_id: function() {
-            let id = ~~this.$store.state.post.post_collection
-            if(!id || isNaN(id)) id = 0
-            return id
+        collection_id: function () {
+            let id = ~~this.$store.state.post.post_collection;
+            if (!id || isNaN(id)) id = 0;
+            return id;
         },
-        collection_posts : function (){
-            return this.collection && this.collection.posts || []
-        }
+        collection_posts: function () {
+            return (this.collection && this.collection.posts) || [];
+        },
     },
     watch: {
         collection_id: {
-            immediate : true,
-            handler : function (){
-            this.loadCollection()
-        }
-        }
+            immediate: true,
+            handler: function () {
+                this.loadCollection();
+            },
+        },
     },
     methods: {
-        loadCollection : function (){
+        loadCollection: function () {
             getCollection(this.collection_id).then((res) => {
                 this.collection = res.data.data.collection || [];
             });
-        }
+        },
     },
     filters: {
-        showLink: function(item) {
+        showLink: function (item) {
             if (item.type == "custom") {
                 return item.url;
             } else {
@@ -98,8 +96,7 @@ export default {
             }
         },
     },
-    mounted: function() {
-    },
+    mounted: function () {},
     components: {
         feed,
     },
