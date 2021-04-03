@@ -82,7 +82,7 @@ export default {
     },
     methods: {
         loadCollection: function () {
-            getCollection(this.collection_id).then((res) => {
+            this.collection_id && getCollection(this.collection_id).then((res) => {
                 this.collection = res.data.data.collection || [];
             });
         },
