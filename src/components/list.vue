@@ -106,7 +106,8 @@
                             </div>
                             <span class="u-date">
                                 <i class="el-icon-date"></i>
-                                <time>{{item.post_modified | dateFormat}}</time>
+                                <time v-if="order == 'update'">{{item.post_modified | dateFormat}}</time>
+                                <time v-else>{{item.post_date | dateFormat}}</time>
                             </span>
                         </div>
                     </li>
@@ -156,7 +157,6 @@ export default {
             loading: false, //加载状态
 
             search: "",
-            searchType: "authorname",
 
             data: [], //数据列表
             page: 1, //当前页数
@@ -165,7 +165,7 @@ export default {
             per: 18, //每页条目
             appendMode: false, //追加模式
 
-            order: "", //排序
+            order: "update", //排序
             mark: "", //角标
             lang: "", //语言
             zlp: "", //资料片
@@ -186,19 +186,30 @@ export default {
         subtype: function () {
             return this.$route.query.subtype;
         },
+        resetParams : function (){
+            return [this.subtype,this.search,this.mark,this.lang,this.zlp,this.client]
+        },
         params: function () {
             let params = {
                 per: this.per,
                 page: ~~this.page || 1,
             };
-            let optionalParams = ['subtype','search','order','mark','lang','zlp','client']
+            let optionalParams = [
+                "subtype",
+                "search",
+                "order",
+                "mark",
+                "lang",
+                "zlp",
+                "client",
+            ];
             optionalParams.forEach((item) => {
-                if(this[item]){
-                    params[item] = this[item]
+                if (this[item]) {
+                    params[item] = this[item];
                 }
-            })
-            if(this.subtype){
-                params.sticky = 1
+            });
+            if (this.subtype) {
+                params.sticky = 1;
             }
             return params;
         },
@@ -282,6 +293,9 @@ export default {
         },
     },
     watch: {
+        resetParams: function () {
+            this.page = 1;
+        },
         params: {
             deep: true,
             immediate: true,

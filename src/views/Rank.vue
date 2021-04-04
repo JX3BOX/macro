@@ -3,7 +3,7 @@
         <div class="m-macro-rank-full m-macro-rank" v-if="kungfuid">
             <el-table
                 :data="mount_data"
-                :default-sort="{ prop: 'value.7days', order: 'descending' }"
+                :default-sort="{ prop: '7days', order: 'descending' }"
                 :row-class-name="highlight"
                 :fit="true"
             >
@@ -148,9 +148,7 @@ export default {
             getRank(this.kungfuid)
                 .then((data) => {
                     this.mount_data = data;
-                })
-                .catch((err) => {
-                    console.log(err);
+                    this.$forceUpdate()
                 })
                 .finally(() => {
                     this.loading = false;
@@ -161,9 +159,7 @@ export default {
             getOverview()
                 .then((data) => {
                     this.data = this.fixnull(data);
-                })
-                .catch((err) => {
-                    console.log(err);
+                    this.$forceUpdate()
                 })
                 .finally(() => {
                     this.loading = false;
@@ -186,7 +182,7 @@ export default {
         },
     },
     watch: {
-        "kungfuid": {
+        kungfuid: {
             immediate: true,
             handler: function () {
                 this.kungfuid ? this.loadRank() : this.loadOverview();
