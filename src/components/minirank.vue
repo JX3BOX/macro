@@ -4,14 +4,10 @@
             <img class="u-icon" svg-inline src="../assets/img/side/rank.svg" />排行榜
             <span class="u-more" @click="viewRank">查看更多 &raquo;</span>
         </h3>
-        <ul class="u-list" v-if="kungfuid">
+        <ul class="u-list" v-if="subtype">
             <li v-for="(item, j) in mount_data" :key="j">
                 <a class="u-link" :href="item.pid | postLink">
-                    <span class="u-order" :class="highlight(j)">
-                        {{
-                        j + 1
-                        }}
-                    </span>
+                    <span class="u-order" :class="highlight(j)">{{j + 1}}</span>
                     <span class="u-name">{{ item.author }}#{{ item.item_version }}</span>
                     <span class="u-per">
                         <em class="u-count">+ {{ item.value["7days"] }}</em>
@@ -22,11 +18,7 @@
         <ul class="u-list" v-else>
             <li v-for="(item, j) in data" :key="j">
                 <a class="u-link" :href="item.pid | postLink">
-                    <span class="u-order" :class="highlight(j)">
-                        {{
-                        j + 1
-                        }}
-                    </span>
+                    <span class="u-order" :class="highlight(j)">{{ j + 1 }}</span>
                     <span class="u-name">{{ item.author }}#{{ item.v }}</span>
                     <span class="u-per">
                         <em class="u-count">+ {{ item["7days"] }}</em>
@@ -55,7 +47,7 @@ export default {
             return this.$route.query.subtype || "";
         },
         kungfuid: function () {
-            return this.subtype ? xfmap[this.subtype]["id"] : 0;
+            return this.subtype ? xfmap[this.subtype]["id"] : -1;
         },
     },
     methods: {
@@ -81,19 +73,23 @@ export default {
         subtype: {
             immediate: true,
             handler: function (subtype) {
-                this.loading = true
+                this.loading = true;
                 if (subtype) {
-                    getRank(this.kungfuid, 10).then((data) => {
-                        this.mount_data = data.slice(0, 10);
-                    }).finally(() => {
-                        this.loading = false
-                    })
+                    getRank(this.kungfuid, 10)
+                        .then((data) => {
+                            this.mount_data = data.slice(0, 10);
+                        })
+                        .finally(() => {
+                            this.loading = false;
+                        });
                 } else {
-                    getOverview(10).then((data) => {
-                        this.data = data.slice(0, 10);
-                    }).finally(() => {
-                        this.loading = false
-                    })
+                    getOverview(10)
+                        .then((data) => {
+                            this.data = data.slice(0, 10);
+                        })
+                        .finally(() => {
+                            this.loading = false;
+                        });
                 }
             },
         },

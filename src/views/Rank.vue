@@ -1,9 +1,9 @@
 <template>
     <div class="v-rank" v-loading="loading">
-        <div class="m-macro-rank-full m-macro-rank" v-if="kungfuid">
+        <div class="m-macro-rank-full m-macro-rank" v-if="subtype">
             <el-table
                 :data="mount_data"
-                :default-sort="{ prop: '7days', order: 'descending' }"
+                :default-sort="{ prop: 'value.7days', order: 'descending' }"
                 :row-class-name="highlight"
                 :fit="true"
             >
@@ -185,7 +185,7 @@ export default {
         kungfuid: {
             immediate: true,
             handler: function () {
-                this.kungfuid ? this.loadRank() : this.loadOverview();
+                this.subtype ? this.loadRank() : this.loadOverview();
             },
         },
     },

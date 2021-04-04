@@ -33,7 +33,7 @@
                         <macro
                             :ctx="item.macro"
                             :lang="lang"
-                            :name="post.author.name + '#' + item.name"
+                            :name="post.author + '#' + item.name"
                         />
                     </div>
                     <!-- 奇穴 -->
