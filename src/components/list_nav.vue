@@ -2,7 +2,7 @@
     <div class="m-list-nav">
         <h5 class="u-title">
             心法导航
-            <router-link class="u-more" to="/">全部心法 &raquo;</router-link>
+            <router-link class="u-more" :to="{query:{subtype:''}}">全部心法 &raquo;</router-link>
         </h5>
         <ul class="m-macro-nav u-list">
             <li class="u-item" v-for="(item,i) in xfmap" :key="i" v-show="item.client.includes(client)">

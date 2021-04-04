@@ -1,11 +1,12 @@
 <template>
     <div class="v-rank" v-loading="loading">
-        <div class="m-macro-rank-full m-macro-rank" v-if="subtype">
+        <div class="m-macro-rank-full m-macro-rank" v-if="!!subtype">
             <el-table
                 :data="mount_data"
                 :default-sort="{ prop: 'value.7days', order: 'descending' }"
                 :row-class-name="highlight"
                 :fit="true"
+                key="mounttable"
             >
                 <el-table-column type="index" label="👑" width="48"></el-table-column>
                 <el-table-column prop="downloadStr" label="云端宏" sortable>
@@ -54,6 +55,7 @@
                 :data="data"
                 :default-sort="{ prop: '7days', order: 'descending' }"
                 :row-class-name="highlight"
+                key="alltable"
             >
                 <el-table-column type="index" label="👑" width="48"></el-table-column>
                 <el-table-column prop="downloadStr" label="云端宏" sortable>
@@ -182,7 +184,7 @@ export default {
         },
     },
     watch: {
-        kungfuid: {
+        subtype: {
             immediate: true,
             handler: function () {
                 this.subtype ? this.loadRank() : this.loadOverview();
