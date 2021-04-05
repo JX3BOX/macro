@@ -238,11 +238,11 @@ export default {
                     this.pages = res.data.data.pages;
                 })
                 .finally(() => {
+                    this.appendMode = false
                     this.loading = false;
                 });
         },
         changePage: function (i) {
-            this.appendMode = false;
             this.page = i;
             window.scrollTo(0, 0);
         },
@@ -251,7 +251,6 @@ export default {
             this.page = i;
         },
         filter: function (o) {
-            this.appendMode = false;
             this[o["type"]] = o["val"];
         },
         showBanner: function (val) {
@@ -293,6 +292,9 @@ export default {
         },
     },
     watch: {
+        subtype : function (){
+            this.search = ''  
+        },
         resetParams: function () {
             this.page = 1;
         },
