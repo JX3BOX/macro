@@ -175,6 +175,7 @@ export default {
                     this.post = this.$store.state.post = res.data.data;
                     this.data = this.post.post_meta && this.post.post_meta.data;
                     this.$store.state.user_id = this.post.post_author;
+                    document.title = this.post.post_title
                 })
                 .then(() => {
                     if (this.data && this.data.length) {
