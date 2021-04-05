@@ -295,6 +295,9 @@ export default {
         subtype : function (){
             this.search = ''  
         },
+        client : function (){
+            this.zlp = ''  
+        },
         resetParams: function () {
             this.page = 1;
         },
