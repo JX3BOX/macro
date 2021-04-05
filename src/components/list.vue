@@ -82,7 +82,7 @@
                                     >
                                         <span
                                             class="u-macro-name"
-                                            @click="loadMacro(item.author,m,item.ID) "
+                                            @click="loadMacro(item.author_info.display_name,m,item.ID) "
                                         >{{ m.name || "无名称" }}</span>
                                     </el-tooltip>
                                 </li>
@@ -102,7 +102,7 @@
                                     class="u-author-name"
                                     :href="item.post_author | authorLink"
                                     target="_blank"
-                                >{{ item.author }}</a>
+                                >{{ item.author_info.display_name }}</a>
                             </div>
                             <span class="u-date">
                                 <i class="el-icon-date"></i>

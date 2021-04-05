@@ -1,5 +1,4 @@
 import { $cms } from "@jx3box/jx3box-common/js/https";
-import { __server } from "@jx3box/jx3box-common/data/jx3box.json";
 
 function getMyPost(params) {
     return $cms().get("/api/cms/posts/my", {
