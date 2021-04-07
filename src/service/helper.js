@@ -18,4 +18,8 @@ function getNewDict() {
     return axios.get(dict_url);
 }
 
-export { getCollection, getLinks, getNewDict };
+function getMenuGroup(name) {
+    return $helper({ mute: true }).get(`/api/menu_group/${name}`, {});
+}
+
+export { getCollection, getLinks, getNewDict,getMenuGroup };

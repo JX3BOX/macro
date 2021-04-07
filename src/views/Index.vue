@@ -6,7 +6,6 @@
 
 <script>
 import list from '@/components/list.vue'
-
 export default {
     name: "Index",
     props: [],
@@ -15,13 +14,14 @@ export default {
         };
     },
     computed: {
+        
     },
     methods: {
     },
     created: function() {
     },
     components: {
-        list
+        list,
     },
 };
 </script>

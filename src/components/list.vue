@@ -30,6 +30,8 @@
                 <!-- 排序过滤 -->
                 <orderBy @filter="filter"></orderBy>
             </template>
+            <!-- 推荐 -->
+            <rec-table v-if="isIndex" />
             <!-- 列表 -->
             <div class="m-archive-list" v-if="data.length">
                 <ul class="u-list">
@@ -129,6 +131,7 @@
 
 <script>
 import listbox from "@jx3box/jx3box-page/src/cms-list.vue";
+import rec_table from '@/components/rec_table.vue'
 import { cms as mark_map } from "@jx3box/jx3box-common/data/mark.json";
 import _ from "lodash";
 import { getPosts } from "../service/post";
@@ -183,6 +186,9 @@ export default {
         };
     },
     computed: {
+        isIndex: function () {
+            return !this.$route.query.subtype;
+        },
         subtype: function () {
             return this.$route.query.subtype;
         },
@@ -318,6 +324,7 @@ export default {
     components: {
         macro,
         listbox,
+        'rec-table' : rec_table
     },
 };
 </script>
