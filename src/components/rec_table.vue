@@ -1,6 +1,6 @@
 <template>
     <div class="m-index-rec">
-        <h5 class="u-title">当前版本编辑推荐</h5>
+        <h5 class="u-title"><span>当前版本编辑推荐</span></h5>
         <el-row>
             <el-col :span="6" v-for="(item,i) in data" :key="i">
                 <div class="u-rec">
