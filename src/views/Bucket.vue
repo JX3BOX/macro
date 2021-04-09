@@ -49,8 +49,8 @@
                                 />
 
                                 <!-- <Mark class="u-feed" :label="item.author.name"/> -->
-                                <span class="u-private" v-if="item.post_status == 'draft'"><i class="el-icon-lock"></i> 私有</span>
-                                <span class="u-private" v-if="item.post_status == 'pending'"><i class="el-icon-lock"></i> 请修改</span>
+                                <span class="u-private" v-if="~~item.visible"><i class="el-icon-lock"></i> {{item.visible | visibleTxt}}</span>
+                                <span class="u-draft" v-if="item.post_status == 'draft'"><i class="el-icon-edit-outline"></i> 草稿</span>
 
                                 <!-- 标题文字 -->
                                 <a
@@ -174,6 +174,7 @@ import {
     __iconPath,
     __imgPath,
     __ossRoot,
+    __visibleMap
 } from "@jx3box/jx3box-common/data/jx3box";
 import xfmap from "@jx3box/jx3box-data/data/xf/xf.json";
 import macro from "@/components/macro.vue";
@@ -314,6 +315,9 @@ export default {
             let xf_id = xfmap[val]["id"];
             return __imgPath + "image/xf/" + xf_id + ".png";
         },
+        visibleTxt : function (val){
+            return __visibleMap[val]
+        }
     },
     watch: {
         params: {

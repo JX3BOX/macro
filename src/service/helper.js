@@ -22,4 +22,10 @@ function getMenuGroup(name) {
     return $helper({ mute: true }).get(`/api/menu_group/${name}`, {});
 }
 
-export { getCollection, getLinks, getNewDict,getMenuGroup };
+function getBread(key) {
+    return $helper({ mute: true }).get(
+        `https://helper.jx3box.com/api/breadcrumb/${key}`
+    );
+}
+
+export { getCollection, getLinks, getNewDict, getMenuGroup, getBread };

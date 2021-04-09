@@ -1,6 +1,7 @@
 <template>
     <div class="m-index-rec">
         <h5 class="u-title"><span>当前版本编辑推荐</span></h5>
+        <div class="u-ac" v-html="ac"></div>
         <el-row>
             <el-col :span="6" v-for="(item,i) in data" :key="i">
                 <div class="u-rec">
@@ -15,7 +16,7 @@
 </template>
 
 <script>
-import { getMenuGroup } from "@/service/helper.js";
+import { getMenuGroup,getBread } from "@/service/helper.js";
 import { iconLink } from "@jx3box/jx3box-common/js/utils";
 const empty_item = {
     color: "",
@@ -30,6 +31,7 @@ export default {
     data: function () {
         return {
             data: [],
+            ac : ''
         };
     },
     computed: {},
@@ -55,6 +57,9 @@ export default {
                 }
             }
         });
+        getBread('macro_ac').then((res) => {
+            this.ac = res.data.data.breadcrumb.html
+        })
     },
 };
 </script>
