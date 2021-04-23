@@ -125,8 +125,11 @@ export default {
         xficon_id: function () {
             return this.xf && xfmap[this.xf]["id"];
         },
-        visible : function (){
-            return this.post._check
+        visible: function () {
+            return this.post._check;
+        },
+        client: function () {
+            return this.$store.state.client;
         },
     },
     methods: {
@@ -175,7 +178,7 @@ export default {
                     this.post = this.$store.state.post = res.data.data;
                     this.data = this.post.post_meta && this.post.post_meta.data;
                     this.$store.state.user_id = this.post.post_author;
-                    document.title = this.post.post_title
+                    document.title = this.post.post_title;
                 })
                 .then(() => {
                     if (this.data && this.data.length) {
@@ -206,10 +209,11 @@ export default {
                     this.loading = false;
                 });
 
-            getStat("macro", this.id).then((res) => {
+            let prefix = this.client == "origin" ? "origin" : "";
+            getStat(prefix + "macro", this.id).then((res) => {
                 this.stat = res.data;
             });
-            postStat("macro", this.id);
+            postStat(prefix + "macro", this.id);
         }
     },
     components: {
