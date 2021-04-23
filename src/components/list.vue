@@ -302,8 +302,9 @@ export default {
         subtype : function (){
             this.search = ''  
         },
-        client : function (){
-            this.zlp = ''  
+        client : function (val){
+            this.zlp = ''
+            this.$store.state.client = val == 'origin' ? 'origin' : 'std'
         },
         resetParams: function () {
             this.page = 1;

@@ -1,12 +1,14 @@
 <template>
     <div class="m-index-rec">
-        <h5 class="u-title"><span>当前版本编辑推荐</span></h5>
+        <h5 class="u-title">
+            <span>当前版本编辑推荐</span>
+        </h5>
         <div class="u-ac" v-html="ac"></div>
         <el-row>
             <el-col :span="6" v-for="(item,i) in data" :key="i">
                 <div class="u-rec">
                     <a :href="item.link" target="_blank" :style="item.color | highLight">
-                        <img :src="item.icon | iconLink" v-if="item.icon"/>
+                        <img :src="item.icon | iconLink" v-if="item.icon" />
                         {{item.label}}
                     </a>
                 </div>
@@ -16,7 +18,7 @@
 </template>
 
 <script>
-import { getMenuGroup,getBread } from "@/service/helper.js";
+import { getMenuGroup, getBread } from "@/service/helper.js";
 import { iconLink } from "@jx3box/jx3box-common/js/utils";
 const empty_item = {
     color: "",
@@ -31,15 +33,32 @@ export default {
     data: function () {
         return {
             data: [],
-            ac : ''
+            ac: "",
         };
     },
     computed: {
-        client : function (){
-            return this.$store.state.client
-        }
+        client: function () {
+            return this.$store.state.client;
+        },
     },
-    methods: {},
+    methods: {
+        init: function () {
+            let suffix = this.client == "origin" ? "-origin" : "";
+            getMenuGroup("macro-rec" + suffix).then((res) => {
+                this.data = res.data.data.menu_group.menus || [];
+
+                let _fix = this.data.length % 4;
+                if (_fix) {
+                    for (let i = 0; i < 4 - _fix; i++) {
+                        this.data.push(empty_item);
+                    }
+                }
+            });
+            getBread("macro-ac" + suffix).then((res) => {
+                this.ac = res.data.data.breadcrumb.html;
+            });
+        },
+    },
     filters: {
         highLight: function (val) {
             if (val) {
@@ -49,23 +68,11 @@ export default {
         },
         iconLink,
     },
-    created: function () {},
-    mounted: function () {
-        let suffix = this.client == 'origin' ? '-origin' : ''
-        getMenuGroup("macro-rec" + suffix).then((res) => {
-            this.data = res.data.data.menu_group.menus || [];
-
-            let _fix = this.data.length % 4;
-            if (_fix) {
-                for (let i = 0; i < 4 - _fix; i++) {
-                    this.data.push(empty_item);
-                }
-            }
-        });
-        getBread('macro-ac' + suffix).then((res) => {
-            this.ac = res.data.data.breadcrumb.html
-        })
-    },
+    watch : {
+        'client' : function (){
+            this.init()
+        }
+    }
 };
 </script>
 
