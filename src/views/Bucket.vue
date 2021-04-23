@@ -12,35 +12,19 @@
             >
                 <!-- 搜索 -->
                 <div class="m-archive-search" slot="search-after">
-                    <a
-                        :href="publish_link"
-                        class="u-publish el-button el-button--primary"
-                    >
-                        + 发布作品
-                    </a>
-                    <el-input
-                        placeholder="请输入搜索内容"
-                        v-model="search"
-                        class="input-with-select"
-                    >
+                    <a :href="publish_link" class="u-publish el-button el-button--primary">+ 发布作品</a>
+                    <el-input placeholder="请输入搜索内容" v-model="search" class="input-with-select">
                         <span slot="prepend">关键词</span>
-                        <el-button
-                            slot="append"
-                            icon="el-icon-search"
-                        ></el-button>
+                        <el-button slot="append" icon="el-icon-search"></el-button>
                     </el-input>
                 </div>
-                <el-alert title="自用宏将会被设置为仅私有，不论私有或公开游戏内均可以云端加载。" type="info" show-icon>
-                </el-alert>
+                <el-alert title="自用宏将会被设置为仅私有，不论私有或公开游戏内均可以云端加载。" type="info" show-icon></el-alert>
                 <!-- 列表 -->
                 <div class="m-archive-list" v-if="data.length">
                     <ul class="u-list">
                         <li class="u-item" v-for="(item, i) in data" :key="i">
                             <!-- 标题 -->
-                            <h2
-                                class="u-post"
-                                :class="{ isSticky: item.sticky }"
-                            >
+                            <h2 class="u-post" :class="{ isSticky: item.sticky }">
                                 <img
                                     class="u-icon"
                                     :src="item.post_subtype | xficon"
@@ -49,8 +33,13 @@
                                 />
 
                                 <!-- <Mark class="u-feed" :label="item.author.name"/> -->
-                                <span class="u-private" v-if="~~item.visible"><i class="el-icon-lock"></i> {{item.visible | visibleTxt}}</span>
-                                <span class="u-draft" v-if="item.post_status == 'draft'"><i class="el-icon-edit-outline"></i> 草稿</span>
+                                <span class="u-private" v-if="~~item.visible">
+                                    <i class="el-icon-lock"></i>
+                                    {{item.visible | visibleTxt}}
+                                </span>
+                                <span class="u-draft" v-if="item.post_status == 'draft'">
+                                    <i class="el-icon-edit-outline"></i> 草稿
+                                </span>
 
                                 <!-- 标题文字 -->
                                 <a
@@ -58,8 +47,7 @@
                                     :style="item.color | isHighlight"
                                     :href="item.ID | postLink"
                                     :target="target"
-                                    >{{ item.post_title || "无标题" }}</a
-                                >
+                                >{{ item.post_title || "无标题" }}</a>
 
                                 <!-- 角标 -->
                                 <span
@@ -72,8 +60,7 @@
                                         v-for="mark in item.mark"
                                         class="u-mark"
                                         :key="mark"
-                                        >{{ mark | showMark }}</i
-                                    >
+                                    >{{ mark | showMark }}</i>
                                 </span>
                             </h2>
 
@@ -93,10 +80,7 @@
                                             .data"
                                         :key="i"
                                     >
-                                        <img
-                                            class="u-macro-icon"
-                                            :src="showIcon(m.icon)"
-                                        />
+                                        <img class="u-macro-icon" :src="showIcon(m.icon)" />
                                         <el-tooltip
                                             effect="dark"
                                             :content="
@@ -113,8 +97,7 @@
                                                         item.ID
                                                     )
                                                 "
-                                                >{{ m.name }}</span
-                                            >
+                                            >{{ m.name }}</span>
                                         </el-tooltip>
                                     </li>
                                 </ul>
@@ -124,9 +107,11 @@
                             <div class="u-misc">
                                 <span class="u-date">
                                     <i class="el-icon-date"></i>
-                                    <time>{{
+                                    <time>
+                                        {{
                                         item.post_modified | dateFormat
-                                    }}</time>
+                                        }}
+                                    </time>
                                 </span>
                             </div>
                         </li>
@@ -143,19 +128,20 @@
                 <div class="u-box">
                     <h2 class="u-title">{{ drawer_title }}</h2>
                     <macro :ctx="drawer_content" />
-                    <a
-                        :href="drawer_link"
-                        class="u-skip el-button el-button--primary"
-                        ><i class="el-icon-copy-document"></i> 查看详情</a
-                    >
+                    <a :href="drawer_link" class="u-skip el-button el-button--primary">
+                        <i class="el-icon-copy-document"></i> 查看详情
+                    </a>
                 </div>
             </el-drawer>
         </div>
         <!-- 未登录 -->
         <div class="m-archive-noright" v-else>
             <div class="u-tip-login el-alert el-alert--warning is-light">
-                <i class="el-alert__icon el-icon-warning"></i
-                ><span>使用私有宏仓库，请先<a :href="login_url">登录</a></span>
+                <i class="el-alert__icon el-icon-warning"></i>
+                <span>
+                    使用私有宏仓库，请先
+                    <a :href="login_url">登录</a>
+                </span>
             </div>
         </div>
     </div>
@@ -174,7 +160,7 @@ import {
     __iconPath,
     __imgPath,
     __ossRoot,
-    __visibleMap
+    __visibleMap,
 } from "@jx3box/jx3box-common/data/jx3box";
 import xfmap from "@jx3box/jx3box-data/data/xf/xf.json";
 import macro from "@/components/macro.vue";
@@ -188,7 +174,7 @@ import {
 export default {
     name: "Bucket",
     props: [],
-    data: function() {
+    data: function () {
         return {
             uid: User.getInfo().uid,
             isLogin: User.isLogin(),
@@ -217,39 +203,39 @@ export default {
         };
     },
     computed: {
-        subtype: function() {
+        subtype: function () {
             return this.$route.query.subtype;
         },
-        params: function() {
+        params: function () {
             let params = {
                 per: this.per,
                 // subtype: this.subtype,
                 page: ~~this.page || 1,
                 // status: "draft",
                 // author: this.uid,
-                type : 'macro'
+                type: "macro",
             };
             if (this.search) {
                 params.search = this.search;
             }
             return params;
         },
-        target: function() {
+        target: function () {
             return buildTarget();
         },
-        login_url: function() {
+        login_url: function () {
             return __Links.account.login + "?redirect=" + location.href;
         },
         // 根据栏目定义
-        defaultBanner: function() {
+        defaultBanner: function () {
             return "";
         },
-        publish_link: function(val) {
+        publish_link: function (val) {
             return publishLink("macro");
         },
     },
     methods: {
-        loadPosts: function() {
+        loadPosts: function () {
             this.loading = true;
             getMyPost(this.params, this)
                 .then((res) => {
@@ -265,23 +251,23 @@ export default {
                     this.loading = false;
                 });
         },
-        changePage: function(i) {
+        changePage: function (i) {
             this.appendMode = false;
             this.page = i;
             window.scrollTo(0, 0);
         },
-        appendPage: function(i) {
+        appendPage: function (i) {
             this.appendMode = true;
             this.page = i;
         },
-        filter: function(o) {
+        filter: function (o) {
             this.appendMode = false;
             this[o["type"]] = o["val"];
         },
-        showBanner: function(val) {
+        showBanner: function (val) {
             return val ? showMinibanner(val) : this.defaultBanner;
         },
-        showIcon: function(val) {
+        showIcon: function (val) {
             return __iconPath + "icon/" + val + ".png";
         },
         loadMacro(author, m, id) {
@@ -292,45 +278,45 @@ export default {
         },
     },
     filters: {
-        dateFormat: function(val) {
+        dateFormat: function (val) {
             return dateFormat(new Date(val));
         },
-        showAvatar: function(val) {
+        showAvatar: function (val) {
             return showAvatar(val);
         },
-        authorLink: function(val) {
+        authorLink: function (val) {
             return authorLink(val);
         },
-        postLink: function(val) {
+        postLink: function (val) {
             return "./" + val;
         },
-        isHighlight: function(val) {
+        isHighlight: function (val) {
             return val ? `color:${val};font-weight:600;` : "";
         },
-        showMark: function(val) {
+        showMark: function (val) {
             return mark_map[val];
         },
-        xficon: function(val) {
+        xficon: function (val) {
             if (!val || val == "其它") val = "通用";
             let xf_id = xfmap[val]["id"];
             return __imgPath + "image/xf/" + xf_id + ".png";
         },
-        visibleTxt : function (val){
-            return __visibleMap[val]
-        }
+        visibleTxt: function (val) {
+            return __visibleMap[val];
+        },
     },
     watch: {
         params: {
             deep: true,
-            handler: function() {
+            handler: function () {
                 this.loadPosts();
             },
         },
-        "$route.query.page": function(val) {
+        "$route.query.page": function (val) {
             this.page = ~~val;
         },
     },
-    created: function() {
+    created: function () {
         this.page = ~~this.$route.query.page || 1;
         this.isLogin && this.loadPosts();
     },

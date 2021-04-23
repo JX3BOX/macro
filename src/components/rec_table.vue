@@ -34,7 +34,11 @@ export default {
             ac : ''
         };
     },
-    computed: {},
+    computed: {
+        client : function (){
+            return this.$store.state.client
+        }
+    },
     methods: {},
     filters: {
         highLight: function (val) {
@@ -47,7 +51,8 @@ export default {
     },
     created: function () {},
     mounted: function () {
-        getMenuGroup("macro-rec").then((res) => {
+        let suffix = this.client == 'origin' ? '-origin' : ''
+        getMenuGroup("macro-rec" + suffix).then((res) => {
             this.data = res.data.data.menu_group.menus || [];
 
             let _fix = this.data.length % 4;
@@ -57,7 +62,7 @@ export default {
                 }
             }
         });
-        getBread('macro_ac').then((res) => {
+        getBread('macro-ac' + suffix).then((res) => {
             this.ac = res.data.data.breadcrumb.html
         })
     },
