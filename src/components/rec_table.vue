@@ -68,11 +68,14 @@ export default {
         },
         iconLink,
     },
-    watch : {
-        'client' : function (){
-            this.init()
-        }
-    }
+    watch: {
+        client: {
+            immediate: true,
+            handler: function () {
+                this.init();
+            },
+        },
+    },
 };
 </script>
 
