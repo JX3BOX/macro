@@ -23,9 +23,7 @@ function getMenuGroup(name) {
 }
 
 function getBread(key) {
-    return $helper({ mute: true }).get(
-        `https://helper.jx3box.com/api/breadcrumb/${key}`
-    );
+    return $helper({ mute: true }).get(`/api/breadcrumb/${key}`);
 }
 
 export { getCollection, getLinks, getNewDict, getMenuGroup, getBread };
