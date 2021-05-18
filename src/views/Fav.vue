@@ -242,6 +242,9 @@ export default {
 .u-favtitle{
     .fl;
     .fz(14px);
+    &:hover{
+        color:@pink;
+    }
 }
 .u-favdate{
     .fr;
