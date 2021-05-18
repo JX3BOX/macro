@@ -26,4 +26,10 @@ function getBread(key) {
     return $helper({ mute: true }).get(`/api/breadcrumb/${key}`);
 }
 
-export { getCollection, getLinks, getNewDict, getMenuGroup, getBread };
+function getFavPosts(params) {
+    return $helper().get(`/api/my/post/favorites`, {
+        params,
+    });
+}
+
+export { getCollection, getLinks, getNewDict, getMenuGroup, getBread,getFavPosts };

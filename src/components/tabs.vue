@@ -15,6 +15,12 @@
                 <em class="u-ready" v-else>私人专属</em>
             </span>
         </el-tab-pane>
+        <el-tab-pane label="我收藏的宏" name="fav" v-if="isLogin">
+            <span slot="label" class="u-label">
+                <i class="el-icon-star-off"></i>
+                <b>宏收藏夹</b>
+            </span>
+        </el-tab-pane>
         <el-tab-pane label="排行榜" name="rank">
             <span slot="label">
                 <i class="el-icon-s-data"></i>
