@@ -209,11 +209,11 @@ export default {
                     this.loading = false;
                 });
 
-            let prefix = this.client == "origin" ? "origin" : "";
-            getStat(prefix + "macro", this.id).then((res) => {
+            // let prefix = this.client == "origin" ? "origin" : "";
+            getStat("macro", this.id).then((res) => {
                 this.stat = res.data;
             });
-            postStat(prefix + "macro", this.id);
+            postStat("macro", this.id);
         }
     },
     components: {
