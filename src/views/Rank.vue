@@ -119,6 +119,9 @@ export default {
         kungfuid: function () {
             return this.subtype ? xfmap[this.subtype]["id"] : 0;
         },
+        client: function () {
+            return this.$store.state.client;
+        },
     },
     methods: {
         trending: function (row, column) {
@@ -147,7 +150,7 @@ export default {
         },
         loadRank: function () {
             this.loading = true;
-            getRank(this.kungfuid)
+            getRank(this.kungfuid,this.client)
                 .then((data) => {
                     this.mount_data = data;
                     this.$forceUpdate()
@@ -158,7 +161,7 @@ export default {
         },
         loadOverview: function () {
             this.loading = true;
-            getOverview()
+            getOverview(this.client)
                 .then((data) => {
                     this.data = this.fixnull(data);
                     this.$forceUpdate()

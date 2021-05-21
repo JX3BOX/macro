@@ -25,4 +25,13 @@ function getMyPostCount() {
     return $cms().get("/api/cms/posts/user/my/count");
 }
 
-export { getPosts, getPost, getMyPostCount, getMyPost };
+function getCustomPosts(ids){
+    return $cms().get(`/api/cms/posts`,{
+        params : {
+            type : 'macro',
+            list : ids.join(',')
+        }
+    })
+}
+
+export { getPosts, getPost, getMyPostCount, getMyPost ,getCustomPosts};

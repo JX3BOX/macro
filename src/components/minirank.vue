@@ -33,6 +33,8 @@
 import { getOverview, getRank } from "../service/rank";
 import xfmap from "@jx3box/jx3box-data/data/xf/xf.json";
 import { getLink } from "@jx3box/jx3box-common/js/utils";
+import { getStatRank } from "@jx3box/jx3box-common/js/stat";
+import {getCustomPosts} from '@/service/post.js'
 export default {
     name: "rank",
     data: function () {
@@ -48,6 +50,9 @@ export default {
         },
         kungfuid: function () {
             return this.subtype ? xfmap[this.subtype]["id"] : -1;
+        },
+        client: function () {
+            return this.$store.state.client;
         },
     },
     methods: {
@@ -75,7 +80,7 @@ export default {
             handler: function (subtype) {
                 this.loading = true;
                 if (subtype) {
-                    getRank(this.kungfuid, 10)
+                    getRank(this.kungfuid,this.client,10)
                         .then((data) => {
                             this.mount_data = data.slice(0, 10);
                         })
@@ -83,7 +88,7 @@ export default {
                             this.loading = false;
                         });
                 } else {
-                    getOverview(10)
+                    getOverview(this.client,10)
                         .then((data) => {
                             this.data = data.slice(0, 10);
                         })
