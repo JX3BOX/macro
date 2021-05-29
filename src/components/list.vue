@@ -191,7 +191,7 @@ export default {
             return !this.$route.query.subtype;
         },
         subtype: function () {
-            return this.$route.query.subtype;
+            return this.$store.state.subtype;
         },
         resetParams : function (){
             return [this.subtype,this.search,this.mark,this.lang,this.zlp,this.client]
@@ -319,6 +319,9 @@ export default {
         "$route.query.page": function (val) {
             this.page = ~~val;
         },
+        '$route.params.subtype' : function (val){
+            this.$store.state.subtype = val
+        }
     },
     created: function () {
         this.page = ~~this.$route.query.page || 1;
