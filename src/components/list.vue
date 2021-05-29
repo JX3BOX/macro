@@ -319,7 +319,7 @@ export default {
         "$route.query.page": function (val) {
             this.page = ~~val;
         },
-        '$route.params.subtype' : function (val){
+        '$route.query.subtype' : function (val){
             this.$store.state.subtype = val
         }
     },
