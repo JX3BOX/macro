@@ -41,6 +41,10 @@
                 <i class="el-icon-video-play"></i> 测试云端同步
             </a>
         </div>
+        <div class="u-count">
+            字数：
+            <b>{{count}}</b>
+        </div>
     </div>
 </template>
 
@@ -92,6 +96,9 @@ export default {
             } else {
                 return this.lang == "cn";
             }
+        },
+        count: function () {
+            return this.data.length;
         },
     },
     methods: {
@@ -151,15 +158,32 @@ export default {
         },
     },
     created: function () {
-        getNewDict().then((res) => {
-            this.dict = res.data;
-        }).finally(() => {
-            if (this.ctx) {
-                this.data = this.ctx;
-                this.code = this.parse(this.ctx);
-            }
-        })
+        getNewDict()
+            .then((res) => {
+                this.dict = res.data;
+            })
+            .finally(() => {
+                if (this.ctx) {
+                    this.data = this.ctx;
+                    this.code = this.parse(this.ctx);
+                }
+            });
     },
     components: {},
 };
 </script>
+
+<style scoped lang="less">
+.u-macro-inner {
+    .pr;
+}
+.u-count {
+    .pa;
+    .rb(5px,10px);
+    .fz(12px);
+    color:#aaa;
+    b{
+        color:@color-link;
+    }
+}
+</style>
