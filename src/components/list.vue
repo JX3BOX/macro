@@ -191,7 +191,7 @@ export default {
             return !this.$route.query.subtype;
         },
         subtype: function () {
-            return this.$store.state.subtype;
+            return this.$route.query.subtype;
         },
         resetParams : function (){
             return [this.subtype,this.search,this.mark,this.lang,this.zlp,this.client]
