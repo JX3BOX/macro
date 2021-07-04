@@ -31,7 +31,7 @@
                 <orderBy @filter="filter"></orderBy>
             </template>
             <!-- 推荐 -->
-            <rec-table v-if="isIndex" />
+            <rec-table v-if="isIndex && !search" />
             <!-- 列表 -->
             <div class="m-archive-list" v-if="data.length">
                 <ul class="u-list">
