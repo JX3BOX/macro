@@ -6,8 +6,8 @@ Vue.use(Vuex);
 
 let store = {
     state: {
-        // client
-        client: location.href.includes("origin") ? "origin" : "std",
+        client: 'origin',
+        // client: location.href.includes("origin") ? "origin" : "std",
         subtype : '',
         // post
         id: getAppID(),

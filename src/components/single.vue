@@ -36,9 +36,14 @@
                             :name="post.author + '#' + item.name"
                         />
                     </div>
-                    <!-- 奇穴 -->
-                    <el-divider content-position="left" v-if="item.talent">奇穴</el-divider>
-                    <div class="u-talent talent-box" :id="`talent-box-${i}`"></div>
+                    <!-- 奇穴 镇派 -->
+                    <el-divider content-position="left" v-if="item.talent">
+                        {{ client === 'origin' ? '镇派' : '奇穴' }}
+                    </el-divider>
+                    <template v-if="client === 'origin'">
+                        <render-talent :talent-code="item.talent"></render-talent>
+                    </template>
+                    <div v-else class="u-talent talent-box" :id="`talent-box-${i}`"></div>
                     <div class="u-panel u-talent-panel" v-if="item.talent">
                         <el-button
                             class="u-talent-panel-copycode"
@@ -48,8 +53,9 @@
                             v-clipboard:copy="item.talent"
                             v-clipboard:success="onCopy"
                             v-clipboard:error="onError"
-                        >复制奇穴编码</el-button>
+                        >复制{{ client === 'origin' ? '镇派' : '奇穴' }}编码</el-button>
                         <el-button
+                            v-if="client !== 'origin'"
                             class="u-talent-panel-copytxt"
                             icon="el-icon-document-copy"
                             plain
@@ -59,6 +65,7 @@
                             v-clipboard:error="onError"
                         >复制奇穴文字</el-button>
                         <el-button
+                            v-if="client !== 'origin'"
                             class="u-talent-panel-copysq"
                             icon="el-icon-scissors"
                             plain
@@ -97,6 +104,8 @@ import macro from "@/components/macro.vue";
 import xfmap from "@jx3box/jx3box-data/data/xf/xf.json";
 import talent from "@jx3box/jx3box-talent";
 import Equip from "@jx3box/jx3box-editor/src/Equip.vue";
+
+import RenderTalent from "@jx3box/jx3box-talent2/src/RenderTalent2.vue"
 
 export default {
     name: "single",
@@ -138,6 +147,7 @@ export default {
                 title: "复制成功",
                 message: "复制内容 : " + val.text,
                 type: "success",
+                duration: 100000000000000
             });
         },
         onError: function () {
@@ -182,27 +192,30 @@ export default {
                 })
                 .then(() => {
                     if (this.data && this.data.length) {
-                        this.data.forEach((item, i) => {
-                            let container = `#talent-box-${i}`;
-                            let schema = item.talent;
-                            if (schema) {
-                                try {
-                                    schema = JSON.parse(schema);
-                                    schema.container = container;
-
-                                    let ins = new talent(schema);
-                                    ins.then((t) => {
-                                        this.talents.push(t.txt.toString());
-                                    });
-                                } catch (e) {
-                                    this.$notify.error({
-                                        title: "错误",
-                                        message: "奇穴编码解析失败",
-                                        position: "bottom-right",
-                                    });
+                        if (client !== 'origin') {
+                            // 正式服
+                            this.data.forEach((item, i) => {
+                                let container = `#talent-box-${i}`;
+                                let schema = item.talent;
+                                if (schema) {
+                                    try {
+                                        schema = JSON.parse(schema);
+                                        schema.container = container;
+    
+                                        let ins = new talent(schema);
+                                        ins.then((t) => {
+                                            this.talents.push(t.txt.toString());
+                                        });
+                                    } catch (e) {
+                                        this.$notify.error({
+                                            title: "错误",
+                                            message: "奇穴编码解析失败",
+                                            position: "bottom-right",
+                                        });
+                                    }
                                 }
-                            }
-                        });
+                            });
+                        } else {}
                     }
                 })
                 .finally(() => {
@@ -220,6 +233,7 @@ export default {
         macro,
         singlebox,
         Equip,
+        RenderTalent
     },
 };
 </script>
