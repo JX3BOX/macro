@@ -192,7 +192,7 @@ export default {
                 })
                 .then(() => {
                     if (this.data && this.data.length) {
-                        if (client !== 'origin') {
+                        if (this.client !== 'origin') {
                             // 正式服
                             this.data.forEach((item, i) => {
                                 let container = `#talent-box-${i}`;
