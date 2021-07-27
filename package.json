@@ -18,7 +18,7 @@
     "@jx3box/jx3box-macro": "^1.0.1",
     "@jx3box/jx3box-page": "^0.5.5",
     "@jx3box/jx3box-talent": "^1.1.0",
-    "@jx3box/jx3box-talent2": "^1.0.1",
+    "@jx3box/jx3box-talent2": "^1.0.5",
     "axios": "^0.21.1",
     "core-js": "^3.4.3",
     "element-ui": "^2.13.0",
