@@ -37,44 +37,46 @@
                         />
                     </div>
                     <!-- 奇穴 镇派 -->
-                    <el-divider content-position="left" v-if="item.talent">
-                        {{ client === 'origin' ? '镇派' : '奇穴' }}
-                    </el-divider>
-                    <template v-if="client === 'origin'">
-                        <render-talent :talent-code="item.talent"></render-talent>
+                    <template v-if="item.talent">
+                        <el-divider content-position="left">{{ client === 'origin' ? '镇派' : '奇穴' }}</el-divider>
+                        <div class="m-single-talent-container">
+                            <template v-if="client === 'origin'">
+                                <render-talent :talent-code="item.talent"></render-talent>
+                            </template>
+                            <div v-else class="u-talent talent-box" :id="`talent-box-${i}`"></div>
+                        </div>
+                        <div class="u-panel u-talent-panel" v-if="item.talent">
+                            <el-button
+                                class="u-talent-panel-copycode"
+                                icon="el-icon-s-tools"
+                                plain
+                                size="mini"
+                                v-clipboard:copy="item.talent"
+                                v-clipboard:success="onCopy"
+                                v-clipboard:error="onError"
+                            >复制{{ client === 'origin' ? '镇派' : '奇穴' }}编码</el-button>
+                            <el-button
+                                v-if="client !== 'origin'"
+                                class="u-talent-panel-copytxt"
+                                icon="el-icon-document-copy"
+                                plain
+                                size="mini"
+                                v-clipboard:copy="getTalentTXT(i)"
+                                v-clipboard:success="onCopy"
+                                v-clipboard:error="onError"
+                            >复制奇穴文字</el-button>
+                            <el-button
+                                v-if="client !== 'origin'"
+                                class="u-talent-panel-copysq"
+                                icon="el-icon-scissors"
+                                plain
+                                size="mini"
+                                v-clipboard:copy="getTalentSQ(item.talent)"
+                                v-clipboard:success="onCopy"
+                                v-clipboard:error="onError"
+                            >复制奇穴序列</el-button>
+                        </div>
                     </template>
-                    <div v-else class="u-talent talent-box" :id="`talent-box-${i}`"></div>
-                    <div class="u-panel u-talent-panel" v-if="item.talent">
-                        <el-button
-                            class="u-talent-panel-copycode"
-                            icon="el-icon-s-tools"
-                            plain
-                            size="mini"
-                            v-clipboard:copy="item.talent"
-                            v-clipboard:success="onCopy"
-                            v-clipboard:error="onError"
-                        >复制{{ client === 'origin' ? '镇派' : '奇穴' }}编码</el-button>
-                        <el-button
-                            v-if="client !== 'origin'"
-                            class="u-talent-panel-copytxt"
-                            icon="el-icon-document-copy"
-                            plain
-                            size="mini"
-                            v-clipboard:copy="getTalentTXT(i)"
-                            v-clipboard:success="onCopy"
-                            v-clipboard:error="onError"
-                        >复制奇穴文字</el-button>
-                        <el-button
-                            v-if="client !== 'origin'"
-                            class="u-talent-panel-copysq"
-                            icon="el-icon-scissors"
-                            plain
-                            size="mini"
-                            v-clipboard:copy="getTalentSQ(item.talent)"
-                            v-clipboard:success="onCopy"
-                            v-clipboard:error="onError"
-                        >复制奇穴序列</el-button>
-                    </div>
                     <!-- 配装 -->
                     <el-divider content-position="left" v-if="item.equip && item.equip_type">配装方案</el-divider>
                     <div class="u-equipbox">
@@ -105,7 +107,7 @@ import xfmap from "@jx3box/jx3box-data/data/xf/xf.json";
 import talent from "@jx3box/jx3box-talent";
 import Equip from "@jx3box/jx3box-editor/src/Equip.vue";
 
-import RenderTalent from "@jx3box/jx3box-talent2/src/RenderTalent2.vue"
+import RenderTalent from "@jx3box/jx3box-talent2/src/RenderTalent2.vue";
 
 export default {
     name: "single",
@@ -147,7 +149,6 @@ export default {
                 title: "复制成功",
                 message: "复制内容 : " + val.text,
                 type: "success",
-                duration: 100000000000000
             });
         },
         onError: function () {
@@ -187,12 +188,13 @@ export default {
                 .then((res) => {
                     this.post = this.$store.state.post = res.data.data;
                     this.data = this.post.post_meta && this.post.post_meta.data;
+                    this.$store.state.client = this.post?.client;
                     this.$store.state.user_id = this.post.post_author;
                     document.title = this.post.post_title;
                 })
                 .then(() => {
                     if (this.data && this.data.length) {
-                        if (this.client !== 'origin') {
+                        if (this.client !== "origin") {
                             // 正式服
                             this.data.forEach((item, i) => {
                                 let container = `#talent-box-${i}`;
@@ -201,7 +203,7 @@ export default {
                                     try {
                                         schema = JSON.parse(schema);
                                         schema.container = container;
-    
+
                                         let ins = new talent(schema);
                                         ins.then((t) => {
                                             this.talents.push(t.txt.toString());
@@ -215,7 +217,8 @@ export default {
                                     }
                                 }
                             });
-                        } else {}
+                        } else {
+                        }
                     }
                 })
                 .finally(() => {
@@ -233,7 +236,7 @@ export default {
         macro,
         singlebox,
         Equip,
-        RenderTalent
+        RenderTalent,
     },
 };
 </script>
