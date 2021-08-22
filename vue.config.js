@@ -12,7 +12,7 @@ module.exports = {
             template: "public/index.html",
             filename: "index.html",
         },
-        post: {
+        macro: {
             title: "剑三宏 - JX3BOX",
             entry: "src/post.js",
             template: "public/index.html",
@@ -36,13 +36,13 @@ module.exports = {
                 },
             },
             "/api/summary": {
-                target: "https://next.jx3box.com",
+                target: "https://next2.jx3box.com",
                 onProxyReq: function(request) {
                     request.setHeader("origin", "");
                 },
             },
             "/api/comment": {
-                target: "https://next.jx3box.com",
+                target: "https://next2.jx3box.com",
                 onProxyReq: function(request) {
                     request.setHeader("origin", "");
                 },
@@ -57,7 +57,7 @@ module.exports = {
                 },
             },
             "/api": {
-                target: "https://next.jx3box.com",
+                target: "https://next2.jx3box.com",
                 onProxyReq: function(request) {
                     request.setHeader("origin", "");
                 },
