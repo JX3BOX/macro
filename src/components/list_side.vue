@@ -4,8 +4,7 @@
         <RightSideMsg>
             <em>宏作者交流群</em> :
             <strong>
-                <a href="https://jq.qq.com/?_wv=1027&k=CAiizina" v-if="client == 'origin'">590349918</a>
-                <a href="https://jq.qq.com/?_wv=1027&k=ZAsOkzUq" v-else>297985102</a>
+                <a href="https://jq.qq.com/?_wv=1027&k=ZAsOkzUq">297985102</a>
             </strong>
         </RightSideMsg>
 
