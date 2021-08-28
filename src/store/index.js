@@ -14,11 +14,17 @@ let store = {
         post: "",
         // tab
         my_macro_count: 0,
+
+        // collections
+        collectionInfo: ''
     },
     mutations: {
         switchClient: function(state, val) {
             state.client = val || "std";
         },
+        SET_COLLECTION: function (state, val) {
+            state.collectionInfo = val
+        }
     },
     getters: {},
     actions: {},

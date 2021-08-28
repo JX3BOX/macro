@@ -29,3 +29,90 @@
 .m-thx {
     margin-top: 20px;
 }
+
+.u-collection {
+    .mb(28px);
+    &-title {
+        cursor: pointer;
+        position: relative;
+        border: 1px solid #ddd;
+        background-color: #fafbfc;
+        padding: 8px 10px 8px 10px;
+        display: block;
+        margin-bottom: 0;
+        border-radius: 4px;
+        line-height: 1.6;
+        font-size: 13px;
+        letter-spacing: 0.5px;
+        i{
+            .fz(16px);
+            .y(-1px);
+        }
+
+        &::after {
+            content: ">";
+            display: block;
+            position: absolute;
+            right: 10px;
+            top: 8px;
+            font-family: "宋体", Consolas;
+            color: #aaa;
+            -webkit-transform: rotate(0);
+            transform: rotate(0);
+        }
+
+        a {
+            .underline(@color-link);
+        }
+    }
+
+    .u-list {
+        // list-style: decimal;
+        // list-style-position: inside;
+        padding: 10px 20px;
+        margin: 0;
+    }
+
+    counter-reset: collection;
+    .u-item {
+        .fz(13px,32px);
+        border-bottom: 1px solid #eee;
+        transition: 0.15s ease-in-out;
+        .nobreak;
+        a{
+            .db;
+            &:before{
+                counter-increment:collection;
+                content:counter(collection) ". ";
+                color:#aaa;
+                .mr(5px);
+            }
+            &:hover {
+                background-color: #f0f6fd;
+                color:@pink;
+            }
+        }
+    }
+
+    .u-collection-content {
+        padding: 10px;
+        border: 1px dashed #ddd;
+        margin-top: 0;
+        background: none;
+        border-top: none;
+    }
+
+    .on {
+        &::after {
+            transform: rotate(90deg);
+        }
+    }
+
+    .fade-enter-active,
+    .fade-leave-active {
+        transition: opacity 0.5s;
+    }
+    .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+        opacity: 0;
+    }
+}

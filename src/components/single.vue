@@ -12,7 +12,30 @@
                 <em class="u-label">资料片</em>
                 <span class="u-value">{{ post.zlp || post.meta_1 || '未知'}}</span>
             </div>
+
         </template>
+        <div class="u-collection" v-if="collectionList && collectionList.length">
+            <div class="u-collection-title" @click="handleShow" :class="{ on: showCollection }">
+                <span><i class="el-icon-notebook-1"></i> 该作品已被收录至作者的剑三小册</span>
+                <a @click.stop :href="collectionInfo.id | getLink">《{{ collapseTitle }}》</a>
+            </div>
+            <transition name="fade">
+                <div v-if="showCollection">
+                    <ol
+                        v-if="collectionList && collectionList.length"
+                        class="u-list u-collection-content"
+                        :style="{ display: showCollection ? 'block' : 'none' }"
+                    >
+                        <li v-for="(item, i) in collectionList" :key="i" class="u-item">
+                            <a v-if="item" :href="item | showLink" target="_blank">
+                                <i class="el-icon-link"></i>
+                                {{ item.title }}
+                            </a>
+                        </li>
+                    </ol>
+                </div>
+            </transition>
+        </div>
         <!-- 宏内容 -->
         <div class="m-single-macro" v-if="visible">
             <el-tabs v-model="active" type="card">
@@ -103,6 +126,7 @@ import {
 import singlebox from "@jx3box/jx3box-page/src/cms-single";
 import { getPost } from "../service/post.js";
 import { getStat, postStat } from "@jx3box/jx3box-common/js/stat";
+import { getLink } from "@jx3box/jx3box-common/js/utils.js"
 // 子模块
 import macro from "@/components/macro.vue";
 import xfmap from "@jx3box/jx3box-data/data/xf/xf.json";
@@ -126,6 +150,8 @@ export default {
 
             active: "0",
             talents: [],
+
+            showCollection: false,
         };
     },
     computed: {
@@ -147,6 +173,15 @@ export default {
         client: function () {
             return this.$store.state.client;
         },
+        collectionInfo: function (){
+            return this.$store.state.collectionInfo;
+        },
+        collapseTitle: function (){
+            return this.collectionInfo?.title
+        },
+        collectionList: function (){
+            return this.collectionInfo?.posts
+        }
     },
     methods: {
         onCopy: function (val) {
@@ -177,6 +212,9 @@ export default {
         getTalentTXT: function (i) {
             return this.talents[i];
         },
+        handleShow: function (){
+            this.showCollection = !this.showCollection;
+        },
     },
     filters: {
         xficon: function (val) {
@@ -184,6 +222,16 @@ export default {
         },
         iconURL: function (val) {
             return __iconPath + "icon/" + val + ".png";
+        },
+        getLink: function (id){
+            return getLink('collection', id);
+        },
+        showLink: function (item) {
+            if (item.type == "custom") {
+                return item.url;
+            } else {
+                return getLink(item.type, item.id);
+            }
         },
     },
     created: function () {

@@ -84,6 +84,8 @@ export default {
         loadCollection: function () {
             this.collection_id && getCollection(this.collection_id).then((res) => {
                 this.collection = res.data.data.collection || [];
+
+                this.$store.commit('SET_COLLECTION', this.collection)
             });
         },
     },
