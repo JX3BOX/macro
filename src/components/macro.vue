@@ -34,11 +34,12 @@
             >复制云端宏</el-button>
             <a
                 class="u-macro-panel-test el-button el-button--mini is-plain"
-                v-if="isSuperAdmin"
+                v-if="isSuperAdmin || isAuthor"
                 :href="'https://pull.j3cx.com/api/macro/query?name=' + testname + '&_no_cache'"
                 target="_blank"
+                title="默认存在1分钟缓存，如需要即时生效请点击此按钮"
             >
-                <i class="el-icon-video-play"></i> 测试云端同步
+                <i class="el-icon-video-play"></i> 云端同步刷新
             </a>
         </div>
         <div class="u-count">
@@ -100,6 +101,9 @@ export default {
         count: function () {
             return this.data.length;
         },
+        isAuthor : function (){
+            return User.getInfo().uid == this.$store.state.user_id
+        }
     },
     methods: {
         onCopy: function (val) {
