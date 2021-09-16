@@ -14,7 +14,8 @@
             </div>
         </template>
         <!-- 文集+联合创作者 -->
-        <!-- TODO: -->
+        <Creators class="m-creators" :post-id="id" />
+        <Collection class="m-collection" :id="id" :defaultVisible="false"/>
         <!-- 宏内容 -->
         <div class="m-single-macro" v-if="visible">
             <el-tabs v-model="active" type="card">
@@ -113,6 +114,8 @@ import talent from "@jx3box/jx3box-talent";
 import Equip from "@jx3box/jx3box-editor/src/Equip.vue";
 
 import RenderTalent from "@jx3box/jx3box-talent2/src/RenderTalent2.vue";
+import Collection from '@jx3box/jx3box-common-ui/src/Collection.vue'
+import Creators from '@jx3box/jx3box-common-ui/src/Creators.vue'
 
 export default {
     name: "single",
@@ -129,8 +132,6 @@ export default {
 
             active: "0",
             talents: [],
-
-            showCollection: false,
         };
     },
     computed: {
@@ -152,15 +153,6 @@ export default {
         client: function () {
             return this.$store.state.client;
         },
-        collectionInfo: function (){
-            return this.$store.state.collectionInfo;
-        },
-        collapseTitle: function (){
-            return this.collectionInfo?.title
-        },
-        collectionList: function (){
-            return this.collectionInfo?.posts
-        }
     },
     methods: {
         onCopy: function (val) {
@@ -191,9 +183,6 @@ export default {
         getTalentTXT: function (i) {
             return this.talents[i];
         },
-        handleShow: function (){
-            this.showCollection = !this.showCollection;
-        },
     },
     filters: {
         xficon: function (val) {
@@ -201,16 +190,6 @@ export default {
         },
         iconURL: function (val) {
             return __iconPath + "icon/" + val + ".png";
-        },
-        getLink: function (id){
-            return getLink('collection', id);
-        },
-        showLink: function (item) {
-            if (item.type == "custom") {
-                return item.url;
-            } else {
-                return getLink(item.type, item.id);
-            }
         },
     },
     created: function () {
@@ -269,6 +248,8 @@ export default {
         singlebox,
         Equip,
         RenderTalent,
+        Collection,
+        Creators
     },
 };
 </script>
