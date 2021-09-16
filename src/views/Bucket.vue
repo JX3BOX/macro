@@ -209,10 +209,7 @@ export default {
         params: function () {
             let params = {
                 per: this.per,
-                // subtype: this.subtype,
                 page: ~~this.page || 1,
-                // status: "draft",
-                // author: this.uid,
                 type: "macro",
             };
             if (this.search) {

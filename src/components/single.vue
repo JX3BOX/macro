@@ -12,30 +12,9 @@
                 <em class="u-label">资料片</em>
                 <span class="u-value">{{ post.zlp || post.meta_1 || '未知'}}</span>
             </div>
-
         </template>
-        <div class="u-collection" v-if="collectionList && collectionList.length">
-            <div class="u-collection-title" @click="handleShow" :class="{ on: showCollection }">
-                <span><i class="el-icon-notebook-1"></i> 该作品已被收录至作者的剑三小册</span>
-                <a @click.stop :href="collectionInfo.id | getLink">《{{ collapseTitle }}》</a>
-            </div>
-            <transition name="fade">
-                <div v-if="showCollection">
-                    <ol
-                        v-if="collectionList && collectionList.length"
-                        class="u-list u-collection-content"
-                        :style="{ display: showCollection ? 'block' : 'none' }"
-                    >
-                        <li v-for="(item, i) in collectionList" :key="i" class="u-item">
-                            <a v-if="item" :href="item | showLink" target="_blank">
-                                <i class="el-icon-link"></i>
-                                {{ item.title }}
-                            </a>
-                        </li>
-                    </ol>
-                </div>
-            </transition>
-        </div>
+        <!-- 文集+联合创作者 -->
+        <!-- TODO: -->
         <!-- 宏内容 -->
         <div class="m-single-macro" v-if="visible">
             <el-tabs v-model="active" type="card">

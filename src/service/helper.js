@@ -1,4 +1,4 @@
-import { $helper } from "@jx3box/jx3box-common/js/https";
+import { $helper, $cms } from "@jx3box/jx3box-common/js/https";
 import axios from "axios";
 
 function getCollection($collection_id, params = {}) {
@@ -26,10 +26,16 @@ function getBread(key) {
     return $helper({ mute: true }).get(`/api/breadcrumb/${key}`);
 }
 
+// function getFavPosts(params) {
+//     return $helper().get(`/api/my/post/favorites`, {
+//         params,
+//     });
+// }
+
 function getFavPosts(params) {
-    return $helper().get(`/api/my/post/favorites`, {
+    return $cms().get(`/api/cms/posts/user/fav/my`, {
         params,
     });
 }
 
-export { getCollection, getLinks, getNewDict, getMenuGroup, getBread,getFavPosts };
+export { getCollection, getLinks, getNewDict, getMenuGroup, getBread, getFavPosts };

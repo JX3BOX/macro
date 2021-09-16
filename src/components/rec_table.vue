@@ -19,7 +19,7 @@
 
 <script>
 import { getMenuGroup, getBread } from "@/service/helper.js";
-import { iconLink } from "@jx3box/jx3box-common/js/utils";
+import { __imgPath } from "@jx3box/jx3box-common/data/jx3box.json";
 const empty_item = {
     color: "",
     label: "",
@@ -66,7 +66,9 @@ export default {
             }
             return "";
         },
-        iconLink,
+        iconLink : function (val){
+            return __imgPath + 'image/xf/' + val + '.png'
+        }
     },
     watch: {
         client: {
