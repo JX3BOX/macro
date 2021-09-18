@@ -117,7 +117,7 @@
                                                     class="u-macro-name"
                                                     @click="
                                                     loadMacro(
-                                                        item.fav_post_overview.author.name,
+                                                        item.fav_post_overview.author,
                                                         m,
                                                         item.fav_post_overview.ID
                                                     )
@@ -153,7 +153,7 @@
             >
                 <div class="u-box">
                     <h2 class="u-title">{{ drawer_title }}</h2>
-                    <macro :ctx="drawer_content" />
+                    <macro :ctx="drawer_content"  :name="drawer_title" />
                     <a :href="drawer_link" class="u-skip el-button el-button--primary">
                         <i class="el-icon-copy-document"></i> 查看详情
                     </a>

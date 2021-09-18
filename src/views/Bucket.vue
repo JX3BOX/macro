@@ -90,13 +90,7 @@
                                         >
                                             <span
                                                 class="u-macro-name"
-                                                @click="
-                                                    loadMacro(
-                                                        item.author.name,
-                                                        m,
-                                                        item.ID
-                                                    )
-                                                "
+                                                @click="loadMacro(item.author_info.display_name,m,item.ID) "
                                             >{{ m.name }}</span>
                                         </el-tooltip>
                                     </li>
@@ -127,7 +121,7 @@
             >
                 <div class="u-box">
                     <h2 class="u-title">{{ drawer_title }}</h2>
-                    <macro :ctx="drawer_content" />
+                    <macro :ctx="drawer_content" :name="drawer_title"  />
                     <a :href="drawer_link" class="u-skip el-button el-button--primary">
                         <i class="el-icon-copy-document"></i> 查看详情
                     </a>
