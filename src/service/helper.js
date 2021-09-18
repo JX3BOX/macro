@@ -33,7 +33,7 @@ function getBread(key) {
 // }
 
 function getFavPosts(params) {
-    return $cms().get(`/api/cms/posts/user/fav/my`, {
+    return $cms().get(`/api/cms/posts/user/my/fav`, {
         params,
     });
 }

@@ -311,7 +311,7 @@ export default {
             return authorLink(val);
         },
         postLink: function (val) {
-            return "./" + val;
+            return "/macro/" + val;
         },
         isHighlight: function (val) {
             return val ? `color:${val};font-weight:600;` : "";

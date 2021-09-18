@@ -14,8 +14,8 @@
             </div>
         </template>
         <!-- 文集+联合创作者 -->
-        <Creators class="m-creators" :post-id="id" />
-        <Collection class="m-collection" :id="id" :defaultVisible="false"/>
+        <Creators class="m-creators" :postId="id" :postType="post.post_type"/>
+        <Collection class="m-collection" :id="post.post_collection" :defaultVisible="post.collection_collapse"/>
         <!-- 宏内容 -->
         <div class="m-single-macro" v-if="visible">
             <el-tabs v-model="active" type="card">
@@ -114,8 +114,8 @@ import talent from "@jx3box/jx3box-talent";
 import Equip from "@jx3box/jx3box-editor/src/Equip.vue";
 
 import RenderTalent from "@jx3box/jx3box-talent2/src/RenderTalent2.vue";
-import Collection from '@jx3box/jx3box-common-ui/src/Collection.vue'
-import Creators from '@jx3box/jx3box-common-ui/src/Creators.vue'
+import Collection from '@jx3box/jx3box-common-ui/src/single/Collection.vue'
+import Creators from '@jx3box/jx3box-common-ui/src/single/Creators.vue'
 
 export default {
     name: "single",
@@ -145,7 +145,7 @@ export default {
             return _.get(this.post, "post_subtype");
         },
         xficon_id: function () {
-            return this.xf && xfmap[this.xf]["id"];
+            return this.xf && xfmap[this.xf]?.id;
         },
         visible: function () {
             return this.post._check;
