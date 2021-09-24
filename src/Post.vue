@@ -10,7 +10,7 @@
             :feedbackEnable="true"
             :crumbEnable="true"
         >
-            <img slot="logo" svg-inline src="./assets/img/macro.svg" />
+            <img slot="logo" svg-inline :src="getAppIcon('macro')" />
         </Breadcrumb>
         <LeftSidebar>
             <Nav class="m-nav" />
@@ -29,13 +29,16 @@
 import Nav from "@/components/single_nav.vue";
 import Side from "@/components/single_side.vue";
 import single from "@/components/single.vue";
+import {getAppIcon} from '@jx3box/jx3box-common/js/utils'
 export default {
     name: "App",
     props: [],
     data: function () {
         return {};
     },
-    methods: {},
+    methods: {
+        getAppIcon
+    },
     components: {
         Nav,
         Side,
@@ -49,4 +52,7 @@ export default {
 
 <style lang="less">
 @import "./assets/css/app.less";
+.c-crumb{
+    .none;
+}
 </style>
