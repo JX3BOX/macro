@@ -34,7 +34,6 @@ import Info from "@/components/Info.vue";
 import Nav from "@/components/list_nav.vue";
 import Side from "@/components/list_side.vue";
 import tabs from "@/components/tabs";
-
 export default {
     name: "App",
     props: [],
