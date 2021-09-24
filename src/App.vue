@@ -55,9 +55,11 @@ export default {
 
 <style lang="less">
 @import "./assets/css/app.less";
-.c-breadcrumb{
-    .u-op{
-        .none;
+@media screen and (max-width: @phone) {
+    .c-breadcrumb{
+        .u-op{
+            .none;
+        }
     }
 }
 </style>
