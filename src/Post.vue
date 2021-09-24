@@ -52,7 +52,9 @@ export default {
 
 <style lang="less">
 @import "./assets/css/app.less";
-.c-crumb{
-    .none;
+@media screen and (max-width: @phone) {
+    .c-crumb {
+        .none;
+    }
 }
 </style>
