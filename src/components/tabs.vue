@@ -11,8 +11,8 @@
             <span slot="label" class="u-label">
                 <i class="el-icon-receiving"></i>
                 <b>个人宏仓库</b>
-                <em class="u-pop" v-if="isLogin">{{ count }}</em>
-                <em class="u-ready" v-else>私人专属</em>
+                <!-- <em class="u-pop" v-if="isLogin">{{ count }}</em> -->
+                <!-- <em class="u-ready" v-else>私人专属</em> -->
             </span>
         </el-tab-pane>
         <el-tab-pane label="我收藏的宏" name="fav" v-if="isLogin">
@@ -60,10 +60,10 @@ export default {
         },
     },
     created: function () {
-        User.isLogin() &&
-            getMyPostCount().then((res) => {
-                this.$store.state.my_macro_count = res.data.data.macro || 0;
-            });
+        // User.isLogin() &&
+        //     getMyPostCount().then((res) => {
+        //         this.$store.state.my_macro_count = res.data.data.macro || 0;
+        //     });
     },
 };
 </script>
