@@ -24,7 +24,7 @@
                 <!-- 角标过滤 -->
                 <markBy @filter="filter"></markBy>
                 <!-- 资料片 -->
-                <zlpBy @filter="filter" :client="client"></zlpBy>
+                <!-- <zlpBy @filter="filter" :client="client"></zlpBy> -->
                 <!-- 语言过滤 -->
                 <menuBy @filter="filter" :data="langs" type="lang" placeholder="语言"></menuBy>
                 <!-- 排序过滤 -->

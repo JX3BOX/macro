@@ -1,6 +1,7 @@
 import { $helper, $cms } from "@jx3box/jx3box-common/js/https";
 import axios from "axios";
 
+// 关联文档
 function getCollection($collection_id, params = {}) {
     return $helper()({
         method: "GET",
@@ -9,23 +10,18 @@ function getCollection($collection_id, params = {}) {
     });
 }
 
-function getLinks() {
-    return $helper().get("api/menu_group/macro-links");
-}
-
 const dict_url = `https://cdn.jsdelivr.net/gh/JX3BOX/jx3box-dict@master/dict.json?v=${Date.now()}`;
 function getNewDict() {
     return axios.get(dict_url);
 }
 
-function getMenuGroup(name) {
-    return $helper({ mute: true }).get(`/api/menu_group/${name}`, {});
-}
 
+// 公告
 function getBread(key) {
     return $helper({ mute: true }).get(`/api/breadcrumb/${key}`);
 }
 
+// 收藏
 // function getFavPosts(params) {
 //     return $helper().get(`/api/my/post/favorites`, {
 //         params,
@@ -38,4 +34,16 @@ function getFavPosts(params) {
     });
 }
 
-export { getCollection, getLinks, getNewDict, getMenuGroup, getBread, getFavPosts };
+// 边栏文档
+function getMenuGroup(name) {
+    return $helper({ mute: true }).get(`/api/menu_group/${name}`, {});
+}
+function getMenuGroups(keys) {
+    return $helper({ mute: true }).get(`/api/menu_groups`, {
+        params: {
+            names:keys
+        },
+    });
+}
+
+export { getCollection, getNewDict, getMenuGroup, getBread, getFavPosts,getMenuGroups };
