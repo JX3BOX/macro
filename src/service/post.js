@@ -34,4 +34,10 @@ function getCustomPosts(ids){
     })
 }
 
-export { getPosts, getPost, getMyPostCount, getMyPost ,getCustomPosts};
+function getPzList(params){
+    return $cms().get(`/api/cms/app/pz`,{
+        params : params
+    })
+}
+
+export { getPosts, getPost, getMyPostCount, getMyPost ,getCustomPosts,getPzList};

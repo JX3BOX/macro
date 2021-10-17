@@ -14,8 +14,12 @@
             </div>
         </template>
         <!-- 文集+联合创作者 -->
-        <Creators class="m-creators" :postId="id" :postType="post.post_type"/>
-        <Collection class="m-collection" :id="post.post_collection" :defaultVisible="post.collection_collapse"/>
+        <Creators class="m-creators" :postId="id" :postType="post.post_type" />
+        <Collection
+            class="m-collection"
+            :id="post.post_collection"
+            :defaultVisible="post.collection_collapse"
+        />
         <!-- 宏内容 -->
         <div class="m-single-macro" v-if="visible">
             <el-tabs v-model="active" type="card">
@@ -80,19 +84,30 @@
                             >复制奇穴序列</el-button>
                         </div>
                     </template>
-                    <!-- 配装 -->
-                    <el-divider content-position="left" v-if="item.equip && item.equip_type">配装方案</el-divider>
-                    <div class="u-equipbox">
-                        <Equip :id="item.equip" v-if="item.equip_type == 'jx3box'" />
-                    </div>
                     <!-- 急速 -->
-                    <el-divider content-position="left" v-if="item.speed">推荐急速</el-divider>
+                    <el-divider content-position="left" v-if="item.speed">急速</el-divider>
                     <div class="u-speed" v-if="item.speed">{{ item.speed }}</div>
                 </el-tab-pane>
             </el-tabs>
+            <!-- 配装 -->
+            <template v-if="post.pz && post.pz.length">
+                <el-divider content-position="left">配装</el-divider>
+                <div class="u-equipbox">
+                    <!-- <Equip :id="item.equip" v-if="item.equip_type == 'jx3box'" /> -->
+                    <pz class="m-macro-pz" :raw="post.pz"></pz>
+                </div>
+            </template>
         </div>
         <!-- 盒币组件 -->
-        <Thx class="m-thx" slot="single-append" :postId="id" postType="macro" :userId="author_id" :adminBoxcoinEnable="true" :userBoxcoinEnable="true"/>
+        <Thx
+            class="m-thx"
+            slot="single-append"
+            :postId="id"
+            postType="macro"
+            :userId="author_id"
+            :adminBoxcoinEnable="true"
+            :userBoxcoinEnable="true"
+        />
     </singlebox>
 </template>
 
@@ -106,16 +121,17 @@ import {
 import singlebox from "@jx3box/jx3box-page/src/cms-single";
 import { getPost } from "../service/post.js";
 import { getStat, postStat } from "@jx3box/jx3box-common/js/stat";
-import { getLink } from "@jx3box/jx3box-common/js/utils.js"
+import { getLink } from "@jx3box/jx3box-common/js/utils.js";
 // 子模块
 import macro from "@/components/macro.vue";
 import xfmap from "@jx3box/jx3box-data/data/xf/xf.json";
 import talent from "@jx3box/jx3box-talent";
-import Equip from "@jx3box/jx3box-editor/src/Equip.vue";
+// import Equip from "@jx3box/jx3box-editor/src/Equip.vue";
+import pz from "@/components/pz.vue";
 
 import RenderTalent from "@jx3box/jx3box-talent2/src/RenderTalent2.vue";
-import Collection from '@jx3box/jx3box-common-ui/src/single/Collection.vue'
-import Creators from '@jx3box/jx3box-common-ui/src/single/Creators.vue'
+import Collection from "@jx3box/jx3box-common-ui/src/single/Collection.vue";
+import Creators from "@jx3box/jx3box-common-ui/src/single/Creators.vue";
 
 export default {
     name: "single",
@@ -138,8 +154,8 @@ export default {
         id: function () {
             return this.$store.state.id;
         },
-        author_id : function (){
-            return this.post?.post_author || 0
+        author_id: function () {
+            return this.post?.post_author || 0;
         },
         xf: function () {
             return _.get(this.post, "post_subtype");
@@ -246,10 +262,11 @@ export default {
     components: {
         macro,
         singlebox,
-        Equip,
+        // Equip,
         RenderTalent,
         Collection,
-        Creators
+        Creators,
+        pz,
     },
 };
 </script>
