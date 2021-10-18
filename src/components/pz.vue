@@ -1,9 +1,9 @@
 <template>
-    <div class="m-pz" v-loading="loading">
-        <el-tabs v-model="id" type="card">
+    <div class="m-pz" v-if="data">
+        <el-tabs v-model="key" type="card">
             <el-tab-pane
                 :label="item.name"
-                :name="String(item.id)"
+                :name="item.key"
                 v-for="item in data"
                 :key="item.id"
             >
@@ -24,23 +24,39 @@
 </template>
 
 <script>
+import {__Root} from '@jx3box/jx3box-common/data/jx3box.json'
 export default {
     name: "Pz",
     props: ["raw"],
     components: {},
     data: function () {
         return {
-            id: "",
-            loading: false,
+            key : '0',
             schema: null,
         };
     },
     computed: {
         data: function () {
-            return this.raw || [];
+            let arr = []
+            if(this.raw && this.raw.length){
+                this.raw.forEach((item,i) => {
+                    if(item.id){
+                        arr.push({
+                            id : item.id,
+                            key : String(i),
+                            name : item.name || '未命名'
+                        })
+                    }
+                })
+                return arr
+            }
+            return false
+        },
+        id : function (){
+            return this.data?.[~~this.key]['id']
         },
         src: function () {
-            return `https://www.jx3box.com/pz/iframe.html?id=${this.id}&mode=horizontal`;
+            return `${__Root}pz/iframe.html?id=${this.id}&mode=horizontal`;
         },
         url: function () {
             return `/pz/#/view/${this.id}`;
@@ -59,7 +75,6 @@ export default {
         },
     },
     mounted: function () {
-        this.id = String(this.raw[0]?.id) || "0";
         this.receiveMessage()
     },
 };

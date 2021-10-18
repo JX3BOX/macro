@@ -90,7 +90,7 @@
                 </el-tab-pane>
             </el-tabs>
             <!-- 配装 -->
-            <template v-if="pz && pz.length">
+            <template v-if="hasPz">
                 <el-divider content-position="left">配装</el-divider>
                 <div class="u-equipbox">
                     <!-- <Equip :id="item.equip" v-if="item.equip_type == 'jx3box'" /> -->
@@ -169,12 +169,14 @@ export default {
         client: function () {
             return this.$store.state.client;
         },
-        pz: function (){
-            return this.post.pz.filter(item => item.id).map(item => {
-                if (!item.name) item.name = '未命名'
-                return item
-            })
-        }
+        pz: function () {
+            return this.post?.pz;
+        },
+        hasPz: function () {
+            return this.post?.pz?.some((item) => {
+                return !!item.id;
+            });
+        },
     },
     methods: {
         onCopy: function (val) {
