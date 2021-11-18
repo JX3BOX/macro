@@ -6,7 +6,7 @@
         </h3>
         <ul class="u-list" v-if="subtype">
             <li v-for="(item, j) in mount_data" :key="j">
-                <a class="u-link" :href="item.pid | postLink">
+                <a class="u-link" :href="getMacroLink(item.pid,item.item_version)">
                     <span class="u-order" :class="highlight(j)">{{j + 1}}</span>
                     <span class="u-name">{{ item.author }}#{{ item.item_version }}</span>
                     <span class="u-per">
@@ -17,7 +17,7 @@
         </ul>
         <ul class="u-list" v-else>
             <li v-for="(item, j) in data" :key="j">
-                <a class="u-link" :href="item.pid | postLink">
+                <a class="u-link" :href="getMacroLink(item.pid,item.v)">
                     <span class="u-order" :class="highlight(j)">{{ j + 1 }}</span>
                     <span class="u-name">{{ item.author }}#{{ item.v }}</span>
                     <span class="u-per">
@@ -34,7 +34,8 @@ import { getOverview, getRank } from "../service/rank";
 import xfmap from "@jx3box/jx3box-data/data/xf/xf.json";
 import { getLink } from "@jx3box/jx3box-common/js/utils";
 import { getStatRank } from "@jx3box/jx3box-common/js/stat";
-import {getCustomPosts} from '@/service/post.js'
+import { getCustomPosts } from "@/service/post.js";
+import { getMacroLink } from "@/utils/misc.js";
 export default {
     name: "rank",
     data: function () {
@@ -68,6 +69,7 @@ export default {
                 return "t3";
             }
         },
+        getMacroLink,
     },
     filters: {
         postLink: function (pid) {
@@ -80,7 +82,7 @@ export default {
             handler: function (subtype) {
                 this.loading = true;
                 if (subtype) {
-                    getRank(this.kungfuid,this.client,10)
+                    getRank(this.kungfuid, this.client, 10)
                         .then((data) => {
                             this.mount_data = data.slice(0, 10);
                         })
@@ -88,7 +90,7 @@ export default {
                             this.loading = false;
                         });
                 } else {
-                    getOverview(this.client,10)
+                    getOverview(this.client, 10)
                         .then((data) => {
                             this.data = data.slice(0, 10);
                         })

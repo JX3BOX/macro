@@ -101,9 +101,9 @@ export default {
         count: function () {
             return this.data.length;
         },
-        isAuthor : function (){
-            return User.getInfo().uid == this.$store.state.user_id
-        }
+        isAuthor: function () {
+            return User.getInfo().uid == this.$store.state.user_id;
+        },
     },
     methods: {
         onCopy: function (val) {
@@ -162,16 +162,16 @@ export default {
         },
     },
     created: function () {
-        getNewDict()
-            .then((res) => {
-                this.dict = res.data;
-            })
-            .finally(() => {
+        // getNewDict()
+        //     .then((res) => {
+        //         this.dict = res.data;
+        //     })
+        //     .finally(() => {
                 if (this.ctx) {
                     this.data = this.ctx;
                     this.code = this.parse(this.ctx);
                 }
-            });
+            // });
     },
     components: {},
 };
@@ -185,9 +185,9 @@ export default {
     .pa;
     .rb(5px,10px);
     .fz(12px);
-    color:#aaa;
-    b{
-        color:@color-link;
+    color: #aaa;
+    b {
+        color: @color-link;
     }
 }
 </style>

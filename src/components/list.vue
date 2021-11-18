@@ -270,7 +270,7 @@ export default {
             this.drawer = true;
             this.drawer_title = author + "#" + m.name;
             this.drawer_content = m.macro;
-            this.drawer_link = "./" + id;
+            this.drawer_link = "./" + id  + '?tab=' + m.name;
         },
     },
     filters: {

@@ -13,10 +13,8 @@
                     <template slot-scope="scope">
                         <div class="u-cell-feed">
                             <img class="u-icon-xf" :src="kungfuid | xficon" />
-                            <a class="u-feed" :href="postLink(scope.row.pid)" target="_blank">
-                                {{ scope.row.author }}#{{
-                                scope.row.item_version
-                                }}
+                            <a class="u-feed" :href="getMacroLink(scope.row.pid,scope.row.item_version)" target="_blank">
+                                {{ scope.row.author }}#{{scope.row.item_version}}
                             </a>
                         </div>
                     </template>
@@ -63,7 +61,7 @@
                         <img class="u-icon-xf" :src="scope.row.xf | xficon" />
                         <a
                             class="u-feed"
-                            :href="postLink(scope.row.pid)"
+                            :href="getMacroLink(scope.row.pid,scope.row.downloadStr.split('#')[1])"
                             target="_blank"
                         >{{ scope.row.downloadStr }}</a>
                     </template>
@@ -102,6 +100,7 @@ import {
     __ossRoot,
 } from "@jx3box/jx3box-common/data/jx3box.json";
 import { getLink } from "@jx3box/jx3box-common/js/utils";
+import { getMacroLink } from "@/utils/misc.js";
 export default {
     name: "Rank",
     props: [],
@@ -124,6 +123,7 @@ export default {
         },
     },
     methods: {
+        getMacroLink,
         trending: function (row, column) {
             let trending = "";
             if (this.kungfuid) {
@@ -150,10 +150,10 @@ export default {
         },
         loadRank: function () {
             this.loading = true;
-            getRank(this.kungfuid,this.client)
+            getRank(this.kungfuid, this.client)
                 .then((data) => {
                     this.mount_data = data;
-                    this.$forceUpdate()
+                    this.$forceUpdate();
                 })
                 .finally(() => {
                     this.loading = false;
@@ -164,7 +164,7 @@ export default {
             getOverview(this.client)
                 .then((data) => {
                     this.data = this.fixnull(data);
-                    this.$forceUpdate()
+                    this.$forceUpdate();
                 })
                 .finally(() => {
                     this.loading = false;
