@@ -229,6 +229,15 @@ export default {
                 })
                 .then(() => {
                     if (this.data && this.data.length) {
+
+                        let activeTabName = new URLSearchParams(window.location.search).get("tab");
+                        if(activeTabName) {
+                            this.data.forEach((item, i) => {
+                                if(item.name === activeTabName)
+                                    this.active = i.toString();
+                            });
+                        }
+
                         if (this.client !== "origin") {
                             // 正式服
                             this.data.forEach((item, i) => {
