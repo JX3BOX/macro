@@ -25,19 +25,25 @@ function getMyPostCount() {
     return $cms().get("/api/cms/posts/user/my/count");
 }
 
-function getCustomPosts(ids){
-    return $cms().get(`/api/cms/posts`,{
-        params : {
-            type : 'macro',
-            list : ids.join(',')
-        }
-    })
+function getCustomPosts(ids) {
+    return $cms().get(`/api/cms/posts`, {
+        params: {
+            type: "macro",
+            list: ids.join(","),
+        },
+    });
 }
 
-function getPzList(params){
-    return $cms().get(`/api/cms/app/pz`,{
-        params : params
-    })
+function getPzList(params) {
+    return $cms().get(`/api/cms/app/pz`, {
+        params: params,
+    });
 }
 
-export { getPosts, getPost, getMyPostCount, getMyPost ,getCustomPosts,getPzList};
+function getFriendsPosts(params) {
+    return $cms().get(`/api/cms/posts/user/my/friends/macro`, {
+        params,
+    });
+}
+
+export { getPosts, getPost, getMyPostCount, getMyPost, getCustomPosts, getPzList, getFriendsPosts };

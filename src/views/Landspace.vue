@@ -18,127 +18,96 @@
                         <el-button slot="append" icon="el-icon-search"></el-button>
                     </el-input>
                 </div>
+                <el-alert title="此处仅显示亲友设置为“仅亲友可见”的宏。" type="info" show-icon></el-alert>
                 <!-- 列表 -->
-                <!-- <div class="m-archive-list" v-if="data.length">
-                    <ul class="u-list">
-                        <li class="u-item" v-for="(item, i) in data" :key="i">
-                            <a
-                                class="u-favtitle"
-                                :href="item.post_id | postLink"
-                                :target="target"
-                            ><i class="el-icon-star-off"></i> {{ item.post_title || "无标题" }}</a>
-                            <span class="u-favdate">
-                                <i class="el-icon-date"></i>
-                                <time>
-                                    {{
-                                    item.post_updated | dateFormat
-                                    }}
-                                </time>
-                            </span>
-                        </li>
-                    </ul>
-                </div>-->
                 <div class="m-archive-list" v-if="data.length">
                     <ul class="u-list">
                         <li class="u-item" v-for="(item, i) in data" :key="i">
-                            <template v-if="item && item.fav_post_overview">
-                                <!-- 标题 -->
-                                <h2
-                                    class="u-post"
+                            <!-- 标题 -->
+                            <h2 class="u-post" :class="{ isSticky: item.sticky }">
+                                <img
+                                    class="u-icon"
+                                    :src="item.post_subtype | xficon"
+                                    :alt="item.post_subtype"
+                                    :title="item.post_subtype"
+                                />
+
+                                <!-- <Mark class="u-feed" :label="item.author.name"/> -->
+                                <!-- <span class="u-private" v-if="~~item.visible">
+                                    <i class="el-icon-lock"></i>
+                                    {{item.visible | visibleTxt}}
+                                </span>-->
+                                <!-- <span class="u-draft" v-if="item.post_status == 'draft'">
+                                    <i class="el-icon-edit-outline"></i> 草稿
+                                </span>-->
+
+                                <!-- 标题文字 -->
+                                <a
+                                    class="u-title"
+                                    :style="item.color | isHighlight"
+                                    :href="item.ID | postLink"
+                                    :target="target"
+                                >{{ item.post_title || "无标题" }}</a>
+
+                                <!-- 角标 -->
+                                <span
+                                    class="u-marks"
+                                    v-if="
+                                        item.mark && item.mark.length
+                                    "
                                 >
-                                    <img
-                                        class="u-icon"
-                                        :src="item.fav_post_overview.post_subtype | xficon"
-                                        :alt="item.fav_post_overview.post_subtype"
-                                        :title="item.fav_post_overview.post_subtype"
-                                    />
+                                    <i
+                                        v-for="mark in item.mark"
+                                        class="u-mark"
+                                        :key="mark"
+                                    >{{ mark | showMark }}</i>
+                                </span>
+                            </h2>
 
-                                    <!-- <Mark class="u-feed" :label="item.author.name"/> -->
-                                    <!-- <span class="u-private" v-if="~~item.fav_post_overview.visible">
-                                        <i class="el-icon-lock"></i>
-                                        {{item.fav_post_overview.visible | visibleTxt}}
-                                    </span> -->
-                                    <!-- <span
-                                        class="u-draft"
-                                        v-if="item.fav_post_overview.post_status == 'draft'"
-                                    >
-                                        <i class="el-icon-edit-outline"></i> 草稿
-                                    </span> -->
-
-                                    <!-- 标题文字 -->
-                                    <a
-                                        class="u-title"
-                                        :style="item.fav_post_overview.color | isHighlight"
-                                        :href="item.fav_post_overview.ID | postLink"
-                                        :target="target"
-                                    >{{ item.fav_post_overview.post_title || "无标题" }}</a>
-
-                                    <!-- 角标 -->
-                                    <span
-                                        class="u-marks"
-                                        v-if="
-                                        item.fav_post_overview.mark && item.fav_post_overview.mark.length
+                            <!-- 字段 -->
+                            <div class="u-content">
+                                <ul
+                                    class="m-macro-list-item-meta"
+                                    v-if="
+                                        item.post_meta &&
+                                            item.post_meta.data &&
+                                            item.post_meta.data.length
                                     "
-                                    >
-                                        <i
-                                            v-for="mark in item.fav_post_overview.mark"
-                                            class="u-mark"
-                                            :key="mark"
-                                        >{{ mark | showMark }}</i>
-                                    </span>
-                                </h2>
-
-                                <!-- 字段 -->
-                                <div class="u-content">
-                                    <ul
-                                        class="m-macro-list-item-meta"
-                                        v-if="
-                                        item.fav_post_overview.post_meta &&
-                                            item.fav_post_overview.post_meta.data &&
-                                            item.fav_post_overview.post_meta.data.length
-                                    "
-                                    >
-                                        <li
-                                            class="u-macro"
-                                            v-for="(m, i) in item.fav_post_overview.post_meta
+                                >
+                                    <li
+                                        class="u-macro"
+                                        v-for="(m, i) in item.post_meta
                                             .data"
-                                            :key="i"
-                                        >
-                                            <img class="u-macro-icon" :src="showIcon(m.icon)" />
-                                            <el-tooltip
-                                                effect="dark"
-                                                :content="
+                                        :key="i"
+                                    >
+                                        <img class="u-macro-icon" :src="showIcon(m.icon)" />
+                                        <el-tooltip
+                                            effect="dark"
+                                            :content="
                                                 '点击快捷查看 · ' + m.name
                                             "
-                                                placement="top-start"
-                                            >
-                                                <span
-                                                    class="u-macro-name"
-                                                    @click="
-                                                    loadMacro(
-                                                        item.fav_post_overview.author,
-                                                        m,
-                                                        item.fav_post_overview.ID
-                                                    )
-                                                "
-                                                >{{ m.name || '未命名' }}</span>
-                                            </el-tooltip>
-                                        </li>
-                                    </ul>
-                                </div>
+                                            placement="top-start"
+                                        >
+                                            <span
+                                                class="u-macro-name"
+                                                @click="loadMacro(item.author,m,item.ID) "
+                                            >{{ m.name || '未命名' }}</span>
+                                        </el-tooltip>
+                                    </li>
+                                </ul>
+                            </div>
 
-                                <!-- 时间 -->
-                                <div class="u-misc">
-                                    <span class="u-date">
-                                        <i class="el-icon-date"></i>
-                                        <time>
-                                            {{
-                                            item.fav_post_overview.post_modified | dateFormat
-                                            }}
-                                        </time>
-                                    </span>
-                                </div>
-                            </template>
+                            <!-- 时间 -->
+                            <div class="u-misc">
+                                <span class="u-date">
+                                    <i class="el-icon-date"></i>
+                                    <time>
+                                        {{
+                                        item.post_modified | dateFormat
+                                        }}
+                                    </time>
+                                </span>
+                            </div>
                         </li>
                     </ul>
                 </div>
@@ -152,7 +121,7 @@
             >
                 <div class="u-box">
                     <h2 class="u-title">{{ drawer_title }}</h2>
-                    <macro :ctx="drawer_content"  :name="drawer_title" />
+                    <macro :ctx="drawer_content" :name="drawer_title" />
                     <a :href="drawer_link" class="u-skip el-button el-button--primary">
                         <i class="el-icon-copy-document"></i> 查看详情
                     </a>
@@ -164,7 +133,7 @@
             <div class="u-tip-login el-alert el-alert--warning is-light">
                 <i class="el-alert__icon el-icon-warning"></i>
                 <span>
-                    使用宏收藏夹，请先
+                    使用亲友限定分享仓库，请先
                     <a :href="login_url">登录</a>
                 </span>
             </div>
@@ -177,7 +146,7 @@ import listbox from "@jx3box/jx3box-page/src/cms-list.vue";
 import { cms as mark_map } from "@jx3box/jx3box-common/data/mark.json";
 import _ from "lodash";
 import User from "@jx3box/jx3box-common/js/user";
-import { getFavPosts } from "../service/helper.js";
+import { getFriendsPosts } from "../service/post";
 import dateFormat from "../utils/dateFormat";
 import {
     __ossMirror,
@@ -197,7 +166,7 @@ import {
     buildTarget,
 } from "@jx3box/jx3box-common/js/utils";
 export default {
-    name: "FavBucket",
+    name: "LandspaceBucket",
     props: [],
     data: function () {
         return {
@@ -211,8 +180,8 @@ export default {
 
             data: [], //数据列表
             page: 1, //当前页数
-            pages: 1,
             total: 1, //总条目数
+            pages: 1, //总页数
             per: 10, //每页条目
             // order: "", //排序模式
             // mark: "", //筛选模式
@@ -235,7 +204,7 @@ export default {
             let params = {
                 per: this.per,
                 page: ~~this.page || 1,
-                type: "macro",
+                // type: "macro",
             };
             if (this.search) {
                 params.search = this.search;
@@ -259,7 +228,7 @@ export default {
     methods: {
         loadPosts: function () {
             this.loading = true;
-            getFavPosts(this.params)
+            getFriendsPosts(this.params, this)
                 .then((res) => {
                     if (this.appendMode) {
                         this.data = this.data.concat(res.data.data.list);
@@ -267,6 +236,7 @@ export default {
                         this.data = res.data.data.list;
                     }
                     this.total = res.data.data.total;
+                    this.pages = res.data.data.pages;
                 })
                 .finally(() => {
                     this.loading = false;
@@ -295,13 +265,12 @@ export default {
             this.drawer = true;
             this.drawer_title = author + "#" + m.name;
             this.drawer_content = m.macro;
-            this.drawer_link = "./" + id  + '?tab=' + m.name;
+            this.drawer_link = "./" + id + "?tab=" + m.name;
         },
     },
     filters: {
         dateFormat: function (val) {
             return dateFormat(new Date(val));
-            // return dateFormat(new Date(val * 1000)); //PHP
         },
         showAvatar: function (val) {
             return showAvatar(val);
@@ -352,21 +321,4 @@ export default {
 <style lang="less">
 @import "../assets/css/list.less";
 @import "../assets/css/bucket.less";
-// .m-archive-list{
-//     .u-item{
-//         padding:10px 0;
-//     }
-// }
-// .u-favtitle{
-//     .fl;
-//     .fz(14px);
-//     &:hover{
-//         color:@pink;
-//     }
-// }
-// .u-favdate{
-//     .fr;
-//     .fz(12px);
-//     color:#999;
-// }
 </style>

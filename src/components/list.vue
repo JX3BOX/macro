@@ -85,7 +85,7 @@
                                         <span
                                             class="u-macro-name"
                                             @click="loadMacro(item.author_info.display_name,m,item.ID) "
-                                        >{{ m.name || "无名称" }}</span>
+                                        >{{ m.name || '未命名' }}</span>
                                     </el-tooltip>
                                 </li>
                             </ul>
