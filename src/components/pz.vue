@@ -10,13 +10,15 @@
                 <a class="u-pz-link" target="_blank" :href="url">
                     <i class="el-icon-link"></i> 点击查看配装详情
                 </a>
+                <div class="m-pz-container">
                 <iframe
                     :src="src"
                     scrolling="no"
                     width="1280"
                     height="720"
-                    style="border:none;background:none;max-width:100%;overflow:hidden;"
+                    style="border:none;background:none;"
                 ></iframe>
+                </div>
             </el-tab-pane>
         </el-tabs>
         <slot></slot>
@@ -88,5 +90,9 @@ export default {
     &:hover {
         color: @pink;
     }
+}
+.m-pz-container{
+    max-width: 100%;
+    overflow-x:auto ;
 }
 </style>
