@@ -1,5 +1,5 @@
 <template>
-    <singlebox :post="post" :stat="stat" v-loading="loading">
+    <singlebox :post="post" :stat="stat" v-loading="loading" @extendUpdate="updateExtend">
         <template slot="single-header">
             <div class="u-meta u-sub-block">
                 <em class="u-label">心法</em>
@@ -10,16 +10,10 @@
             </div>
             <div class="u-meta u-sub-block">
                 <em class="u-label">资料片</em>
-                <span class="u-value">{{ post.zlp || post.meta_1 || '未知'}}</span>
+                <span class="u-value">{{ zlp }}</span>
             </div>
         </template>
-        <!-- 文集+联合创作者 -->
-        <Creators class="m-creators" :postId="id" :postType="post.post_type" />
-        <Collection
-            class="m-collection"
-            :id="post.post_collection"
-            :defaultVisible="post.collection_collapse"
-        />
+
         <!-- 宏内容 -->
         <div class="m-single-macro" v-if="visible">
             <el-tabs v-model="active" type="card">
@@ -32,20 +26,12 @@
                     <!-- 宏 -->
                     <el-divider content-position="left" v-if="item.macro">宏</el-divider>
                     <div class="u-usage" v-if="item.desc">{{ item.desc }}</div>
-                    <div
-                        class="u-macro macro-box"
-                        :class="{ withUsage: item.desc }"
-                        v-if="item.macro"
-                    >
-                        <macro
-                            :ctx="item.macro"
-                            :lang="lang"
-                            :name="post.author + '#' + item.name"
-                        />
+                    <div class="u-macro macro-box" :class="{ withUsage: item.desc }" v-if="item.macro">
+                        <macro :ctx="item.macro" :lang="lang" :name="post.author + '#' + item.name" />
                     </div>
                     <!-- 奇穴 镇派 -->
                     <template v-if="item.talent">
-                        <el-divider content-position="left">{{ client === 'origin' ? '镇派' : '奇穴' }}</el-divider>
+                        <el-divider content-position="left">{{ client === "origin" ? "镇派" : "奇穴" }}</el-divider>
                         <div class="m-single-talent-container">
                             <template v-if="client === 'origin'">
                                 <render-talent :talent-code="item.talent"></render-talent>
@@ -53,15 +39,9 @@
                             <div v-else class="u-talent talent-box" :id="`talent-box-${i}`"></div>
                         </div>
                         <div class="u-panel u-talent-panel" v-if="item.talent">
-                            <el-button
-                                class="u-talent-panel-copycode"
-                                icon="el-icon-s-tools"
-                                plain
-                                size="mini"
-                                v-clipboard:copy="item.talent"
-                                v-clipboard:success="onCopy"
-                                v-clipboard:error="onError"
-                            >复制{{ client === 'origin' ? '镇派' : '奇穴' }}编码</el-button>
+                            <el-button class="u-talent-panel-copycode" icon="el-icon-s-tools" plain size="mini" v-clipboard:copy="item.talent" v-clipboard:success="onCopy" v-clipboard:error="onError"
+                                >复制{{ client === "origin" ? "镇派" : "奇穴" }}编码</el-button
+                            >
                             <el-button
                                 v-if="client !== 'origin'"
                                 class="u-talent-panel-copytxt"
@@ -71,7 +51,8 @@
                                 v-clipboard:copy="getTalentTXT(i)"
                                 v-clipboard:success="onCopy"
                                 v-clipboard:error="onError"
-                            >复制奇穴文字</el-button>
+                                >复制奇穴文字</el-button
+                            >
                             <el-button
                                 v-if="client !== 'origin'"
                                 class="u-talent-panel-copysq"
@@ -81,7 +62,8 @@
                                 v-clipboard:copy="getTalentSQ(item.talent)"
                                 v-clipboard:success="onCopy"
                                 v-clipboard:error="onError"
-                            >复制奇穴序列</el-button>
+                                >复制奇穴序列</el-button
+                            >
                         </div>
                     </template>
                     <!-- 急速 -->
@@ -98,52 +80,35 @@
                 </div>
             </template>
         </div>
-        <!-- 盒币组件 -->
-        <Thx
-            class="m-thx"
-            slot="single-append"
-            :postId="id"
-            postType="macro"
-            :userId="author_id"
-            :adminBoxcoinEnable="true"
-            :userBoxcoinEnable="true"
-        />
     </singlebox>
 </template>
 
 <script>
-import {
-    __ossRoot,
-    __ossMirror,
-    __iconPath,
-    __imgPath,
-} from "@jx3box/jx3box-common/data/jx3box.json";
-import singlebox from "@jx3box/jx3box-page/src/cms-single";
-import { getPost } from "../service/post.js";
-import { getStat, postStat } from "@jx3box/jx3box-common/js/stat";
-import { getLink } from "@jx3box/jx3box-common/js/utils.js";
-// 子模块
-import macro from "@/components/macro.vue";
-import xfmap from "@jx3box/jx3box-data/data/xf/xf.json";
-import talent from "@jx3box/jx3box-talent";
-// import Equip from "@jx3box/jx3box-editor/src/Equip.vue";
-import pz from "@/components/pz.vue";
-
+// 依赖模块
+import singlebox from "@jx3box/jx3box-common-ui/src/single/cms-single";
 import RenderTalent from "@jx3box/jx3box-talent2/src/RenderTalent2.vue";
-import Collection from "@jx3box/jx3box-common-ui/src/single/Collection.vue";
-import Creators from "@jx3box/jx3box-common-ui/src/single/Creators.vue";
+import pz from "./pz.vue";
+import macro from "@/components/macro.vue";
+import talent from "@jx3box/jx3box-talent";
+
+// 本地数据
+import { getPost } from "../../service/post.js";
+import { getStat, postStat } from "@jx3box/jx3box-common/js/stat";
+import xfmap from "@jx3box/jx3box-data/data/xf/xf.json";
+import { appKey } from "../../../setting.json";
+import { __ossRoot, __ossMirror, __iconPath, __imgPath } from "@jx3box/jx3box-common/data/jx3box.json";
 
 export default {
     name: "single",
-    props: [],
-    data: function () {
+    props: ["id"],
+    data: function() {
         return {
             loading: false,
 
             post: {},
             stat: {},
-            lang: "cn",
 
+            lang: "cn",
             data: [],
 
             active: "0",
@@ -151,48 +116,48 @@ export default {
         };
     },
     computed: {
-        id: function () {
-            return this.$store.state.id;
-        },
-        author_id: function () {
+        author_id: function() {
             return this.post?.post_author || 0;
         },
-        xf: function () {
-            return _.get(this.post, "post_subtype");
+        xf: function() {
+            return this.post?.post_subtype;
         },
-        xficon_id: function () {
+        xficon_id: function() {
             return this.xf && xfmap[this.xf]?.id;
         },
-        visible: function () {
-            return this.post._check;
+        zlp : function (){
+            return this.post?.zlp || "未知"  
         },
-        client: function () {
+        visible: function() {
+            return this.post?._check;
+        },
+        client: function() {
             return this.$store.state.client;
         },
-        pz: function () {
+        pz: function() {
             return this.post?.pz;
         },
-        hasPz: function () {
+        hasPz: function() {
             return this.post?.pz?.some((item) => {
                 return !!item.id;
             });
         },
     },
     methods: {
-        onCopy: function (val) {
+        onCopy: function(val) {
             this.$notify({
                 title: "复制成功",
                 message: "复制内容 : " + val.text,
                 type: "success",
             });
         },
-        onError: function () {
+        onError: function() {
             this.$notify.error({
                 title: "复制失败",
                 message: "请手动复制",
             });
         },
-        getTalentSQ: function (talent) {
+        getTalentSQ: function(talent) {
             if (talent) {
                 try {
                     let _parsed = JSON.parse(talent);
@@ -204,37 +169,38 @@ export default {
                 return "";
             }
         },
-        getTalentTXT: function (i) {
+        getTalentTXT: function(i) {
             return this.talents[i];
         },
+        updateExtend : function (val){
+            this.$store.state.extend = val
+        }
     },
     filters: {
-        xficon: function (val) {
+        xficon: function(val) {
             return __imgPath + "image/xf/" + val + ".png";
         },
-        iconURL: function (val) {
+        iconURL: function(val) {
             return __iconPath + "icon/" + val + ".png";
         },
     },
-    created: function () {
+    mounted: function() {
         if (this.id) {
             this.loading = true;
             getPost(this.id)
                 .then((res) => {
                     this.post = this.$store.state.post = res.data.data;
-                    this.data = this.post.post_meta && this.post.post_meta.data;
+                    this.data = this.post?.post_meta?.data;
                     this.$store.state.client = this.post?.client;
-                    this.$store.state.user_id = this.post.post_author;
-                    document.title = this.post.post_title;
+                    this.$store.state.user_id = this.post?.post_author;
+                    document.title = this.post?.post_title;
                 })
                 .then(() => {
                     if (this.data && this.data.length) {
-
                         let activeTabName = new URLSearchParams(window.location.search).get("tab");
-                        if(activeTabName) {
+                        if (activeTabName) {
                             this.data.forEach((item, i) => {
-                                if(item.name === activeTabName)
-                                    this.active = i.toString();
+                                if (item.name === activeTabName) this.active = i.toString();
                             });
                         }
 
@@ -269,26 +235,22 @@ export default {
                     this.loading = false;
                 });
 
-            // let prefix = this.client == "origin" ? "origin" : "";
-            getStat("macro", this.id).then((res) => {
-                this.stat = res.data;
+            getStat(appKey, this.id).then((res) => {
+                this.stat = this.$store.state.stat = res.data;
             });
-            postStat("macro", this.id);
+            postStat(appKey, this.id);
         }
     },
     components: {
-        macro,
         singlebox,
-        // Equip,
+        macro,
         RenderTalent,
-        Collection,
-        Creators,
         pz,
     },
 };
 </script>
 
 <style lang="less">
-@import "../assets/css/single.less";
-@import "../assets/css/macro.less";
+@import "../../assets/css/single.less";
+@import "../../assets/css/macro.less";
 </style>

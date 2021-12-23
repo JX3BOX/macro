@@ -1,15 +1,7 @@
 <template>
     <div class="m-bucket">
         <div class="m-bucket-list" v-if="isLogin" v-loading="loading">
-            <listbox
-                :data="data"
-                :total="total"
-                :pages="pages"
-                :per="per"
-                :page="page"
-                @appendPage="appendPage"
-                @changePage="changePage"
-            >
+            <listbox :data="data" :total="total" :pages="pages" :per="per" :page="page" @appendPage="appendPage" @changePage="changePage">
                 <!-- 搜索 -->
                 <div class="m-archive-search" slot="search-after">
                     <a :href="publish_link" class="u-publish el-button el-button--primary">+ 发布作品</a>
@@ -43,15 +35,8 @@
                         <li class="u-item" v-for="(item, i) in data" :key="i">
                             <template v-if="item && item.fav_post_overview">
                                 <!-- 标题 -->
-                                <h2
-                                    class="u-post"
-                                >
-                                    <img
-                                        class="u-icon"
-                                        :src="item.fav_post_overview.post_subtype | xficon"
-                                        :alt="item.fav_post_overview.post_subtype"
-                                        :title="item.fav_post_overview.post_subtype"
-                                    />
+                                <h2 class="u-post">
+                                    <img class="u-icon" :src="item.fav_post_overview.post_subtype | xficon" :alt="item.fav_post_overview.post_subtype" :title="item.fav_post_overview.post_subtype" />
 
                                     <!-- <Mark class="u-feed" :label="item.author.name"/> -->
                                     <!-- <span class="u-private" v-if="~~item.fav_post_overview.visible">
@@ -66,62 +51,23 @@
                                     </span> -->
 
                                     <!-- 标题文字 -->
-                                    <a
-                                        class="u-title"
-                                        :style="item.fav_post_overview.color | isHighlight"
-                                        :href="item.fav_post_overview.ID | postLink"
-                                        :target="target"
-                                    >{{ item.fav_post_overview.post_title || "无标题" }}</a>
+                                    <a class="u-title" :style="item.fav_post_overview.color | isHighlight" :href="item.fav_post_overview.ID | postLink" :target="target">{{
+                                        item.fav_post_overview.post_title || "无标题"
+                                    }}</a>
 
                                     <!-- 角标 -->
-                                    <span
-                                        class="u-marks"
-                                        v-if="
-                                        item.fav_post_overview.mark && item.fav_post_overview.mark.length
-                                    "
-                                    >
-                                        <i
-                                            v-for="mark in item.fav_post_overview.mark"
-                                            class="u-mark"
-                                            :key="mark"
-                                        >{{ mark | showMark }}</i>
+                                    <span class="u-marks" v-if="item.fav_post_overview.mark && item.fav_post_overview.mark.length">
+                                        <i v-for="mark in item.fav_post_overview.mark" class="u-mark" :key="mark">{{ mark | showMark }}</i>
                                     </span>
                                 </h2>
 
                                 <!-- 字段 -->
                                 <div class="u-content">
-                                    <ul
-                                        class="m-macro-list-item-meta"
-                                        v-if="
-                                        item.fav_post_overview.post_meta &&
-                                            item.fav_post_overview.post_meta.data &&
-                                            item.fav_post_overview.post_meta.data.length
-                                    "
-                                    >
-                                        <li
-                                            class="u-macro"
-                                            v-for="(m, i) in item.fav_post_overview.post_meta
-                                            .data"
-                                            :key="i"
-                                        >
+                                    <ul class="m-macro-list-item-meta" v-if="item.fav_post_overview.post_meta && item.fav_post_overview.post_meta.data && item.fav_post_overview.post_meta.data.length">
+                                        <li class="u-macro" v-for="(m, i) in item.fav_post_overview.post_meta.data" :key="i">
                                             <img class="u-macro-icon" :src="showIcon(m.icon)" />
-                                            <el-tooltip
-                                                effect="dark"
-                                                :content="
-                                                '点击快捷查看 · ' + m.name
-                                            "
-                                                placement="top-start"
-                                            >
-                                                <span
-                                                    class="u-macro-name"
-                                                    @click="
-                                                    loadMacro(
-                                                        item.fav_post_overview.author,
-                                                        m,
-                                                        item.fav_post_overview.ID
-                                                    )
-                                                "
-                                                >{{ m.name || '未命名' }}</span>
+                                            <el-tooltip effect="dark" :content="'点击快捷查看 · ' + m.name" placement="top-start">
+                                                <span class="u-macro-name" @click="loadMacro(item.fav_post_overview.author, m, item.fav_post_overview.ID)">{{ m.name || "未命名" }}</span>
                                             </el-tooltip>
                                         </li>
                                     </ul>
@@ -132,9 +78,7 @@
                                     <span class="u-date">
                                         <i class="el-icon-date"></i>
                                         <time>
-                                            {{
-                                            item.fav_post_overview.post_modified | dateFormat
-                                            }}
+                                            {{ item.fav_post_overview.post_modified | dateFormat }}
                                         </time>
                                     </span>
                                 </div>
@@ -144,18 +88,11 @@
                 </div>
             </listbox>
             <!-- 快捷查看宏 -->
-            <el-drawer
-                class="m-macro-drawer"
-                title="云端宏"
-                :visible.sync="drawer"
-                :append-to-body="true"
-            >
+            <el-drawer class="m-macro-drawer" title="云端宏" :visible.sync="drawer" :append-to-body="true">
                 <div class="u-box">
                     <h2 class="u-title">{{ drawer_title }}</h2>
-                    <macro :ctx="drawer_content"  :name="drawer_title" />
-                    <a :href="drawer_link" class="u-skip el-button el-button--primary">
-                        <i class="el-icon-copy-document"></i> 查看详情
-                    </a>
+                    <macro :ctx="drawer_content" :name="drawer_title" />
+                    <a :href="drawer_link" class="u-skip el-button el-button--primary"> <i class="el-icon-copy-document"></i> 查看详情 </a>
                 </div>
             </el-drawer>
         </div>
@@ -173,33 +110,20 @@
 </template>
 
 <script>
-import listbox from "@jx3box/jx3box-page/src/cms-list.vue";
+import listbox from "@jx3box/jx3box-common-ui/src/single/cms-list.vue";
 import { cms as mark_map } from "@jx3box/jx3box-common/data/mark.json";
 import _ from "lodash";
 import User from "@jx3box/jx3box-common/js/user";
 import { getFavPosts } from "../service/helper.js";
 import dateFormat from "../utils/dateFormat";
-import {
-    __ossMirror,
-    __Links,
-    __iconPath,
-    __imgPath,
-    __ossRoot,
-    __visibleMap,
-} from "@jx3box/jx3box-common/data/jx3box";
+import { __ossMirror, __Links, __iconPath, __imgPath, __ossRoot, __visibleMap } from "@jx3box/jx3box-common/data/jx3box";
 import xfmap from "@jx3box/jx3box-data/data/xf/xf.json";
 import macro from "@/components/macro.vue";
-import {
-    showAvatar,
-    authorLink,
-    showMinibanner,
-    publishLink,
-    buildTarget,
-} from "@jx3box/jx3box-common/js/utils";
+import { showAvatar, authorLink, showMinibanner, publishLink, buildTarget } from "@jx3box/jx3box-common/js/utils";
 export default {
     name: "FavBucket",
     props: [],
-    data: function () {
+    data: function() {
         return {
             uid: User.getInfo().uid,
             isLogin: User.isLogin(),
@@ -228,10 +152,10 @@ export default {
         };
     },
     computed: {
-        subtype: function () {
+        subtype: function() {
             return this.$route.query.subtype;
         },
-        params: function () {
+        params: function() {
             let params = {
                 per: this.per,
                 page: ~~this.page || 1,
@@ -242,22 +166,22 @@ export default {
             }
             return params;
         },
-        target: function () {
+        target: function() {
             return buildTarget();
         },
-        login_url: function () {
+        login_url: function() {
             return __Links.account.login + "?redirect=" + location.href;
         },
         // 根据栏目定义
-        defaultBanner: function () {
+        defaultBanner: function() {
             return "";
         },
-        publish_link: function (val) {
+        publish_link: function(val) {
             return publishLink("macro");
         },
     },
     methods: {
-        loadPosts: function () {
+        loadPosts: function() {
             this.loading = true;
             getFavPosts(this.params)
                 .then((res) => {
@@ -272,73 +196,73 @@ export default {
                     this.loading = false;
                 });
         },
-        changePage: function (i) {
+        changePage: function(i) {
             this.appendMode = false;
             this.page = i;
             window.scrollTo(0, 0);
         },
-        appendPage: function (i) {
+        appendPage: function(i) {
             this.appendMode = true;
             this.page = i;
         },
-        filter: function (o) {
+        filter: function(o) {
             this.appendMode = false;
             this[o["type"]] = o["val"];
         },
-        showBanner: function (val) {
+        showBanner: function(val) {
             return val ? showMinibanner(val) : this.defaultBanner;
         },
-        showIcon: function (val) {
+        showIcon: function(val) {
             return __iconPath + "icon/" + val + ".png";
         },
         loadMacro(author, m, id) {
             this.drawer = true;
             this.drawer_title = author + "#" + m.name;
             this.drawer_content = m.macro;
-            this.drawer_link = "./" + id  + '?tab=' + m.name;
+            this.drawer_link = "./" + id + "?tab=" + m.name;
         },
     },
     filters: {
-        dateFormat: function (val) {
+        dateFormat: function(val) {
             return dateFormat(new Date(val));
             // return dateFormat(new Date(val * 1000)); //PHP
         },
-        showAvatar: function (val) {
+        showAvatar: function(val) {
             return showAvatar(val);
         },
-        authorLink: function (val) {
+        authorLink: function(val) {
             return authorLink(val);
         },
-        postLink: function (val) {
+        postLink: function(val) {
             return "/macro/" + val;
         },
-        isHighlight: function (val) {
+        isHighlight: function(val) {
             return val ? `color:${val};font-weight:600;` : "";
         },
-        showMark: function (val) {
+        showMark: function(val) {
             return mark_map[val];
         },
-        xficon: function (val) {
+        xficon: function(val) {
             if (!val || val == "其它") val = "通用";
             let xf_id = xfmap[val]["id"];
             return __imgPath + "image/xf/" + xf_id + ".png";
         },
-        visibleTxt: function (val) {
+        visibleTxt: function(val) {
             return __visibleMap[val];
         },
     },
     watch: {
         params: {
             deep: true,
-            handler: function () {
+            handler: function() {
                 this.loadPosts();
             },
         },
-        "$route.query.page": function (val) {
+        "$route.query.page": function(val) {
             this.page = ~~val;
         },
     },
-    created: function () {
+    created: function() {
         this.page = ~~this.$route.query.page || 1;
         this.isLogin && this.loadPosts();
     },

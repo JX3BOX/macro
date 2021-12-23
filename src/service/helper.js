@@ -22,12 +22,6 @@ function getBread(key) {
 }
 
 // 收藏
-// function getFavPosts(params) {
-//     return $helper().get(`/api/my/post/favorites`, {
-//         params,
-//     });
-// }
-
 function getFavPosts(params) {
     return $cms().get(`/api/cms/posts/user/my/fav`, {
         params,

@@ -130,7 +130,7 @@
 </template>
 
 <script>
-import listbox from "@jx3box/jx3box-page/src/cms-list.vue";
+import listbox from "@jx3box/jx3box-common-ui/src/single/cms-list.vue";
 import rec_table from '@/components/rec_table.vue'
 import { cms as mark_map } from "@jx3box/jx3box-common/data/mark.json";
 import _ from "lodash";

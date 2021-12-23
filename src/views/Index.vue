@@ -5,21 +5,16 @@
 </template>
 
 <script>
-import list from '@/components/list.vue'
+import list from "@/components/list.vue";
 export default {
     name: "Index",
     props: [],
     data: function() {
-        return {
-        };
+        return {};
     },
-    computed: {
-        
-    },
-    methods: {
-    },
-    created: function() {
-    },
+    computed: {},
+    methods: {},
+    created: function() {},
     components: {
         list,
     },
