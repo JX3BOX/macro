@@ -1,75 +1,52 @@
 <template>
-    <div class="m-bucket">
-        <div class="m-bucket-list" v-if="isLogin" v-loading="loading">
-            <listbox :data="data" :total="total" :pages="pages" :per="per" :page="page" @appendPage="appendPage" @changePage="changePage">
-                <!-- 搜索 -->
-                <div class="m-archive-search" slot="search-after">
-                    <a :href="publish_link" class="u-publish el-button el-button--primary">+ 发布作品</a>
-                    <el-input placeholder="请输入搜索内容" v-model="search" class="input-with-select">
-                        <span slot="prepend">关键词</span>
-                        <el-button slot="append" icon="el-icon-search"></el-button>
-                    </el-input>
-                </div>
-                <el-alert title="此处仅显示亲友设置为“仅亲友可见”的宏。" type="info" show-icon></el-alert>
-                <!-- 列表 -->
-                <div class="m-archive-list" v-if="data.length">
-                    <ul class="u-list">
-                        <li class="u-item" v-for="(item, i) in data" :key="i">
-                            <!-- 标题 -->
-                            <h2 class="u-post" :class="{ isSticky: item.sticky }">
-                                <img class="u-icon" :src="item.post_subtype | xficon" :alt="item.post_subtype" :title="item.post_subtype" />
+    <div class="m-archive-box" v-loading="loading">
+        <!-- 已登录 -->
+        <div class="m-bucket" v-if="isLogin">
+            <!-- 搜索 -->
+            <div class="m-archive-search" slot="search-before">
+                <a :href="publish_link" class="u-publish el-button el-button--primary">+ 发布作品</a>
+                <el-input placeholder="请输入搜索内容" v-model="search">
+                    <span slot="prepend">关键词</span>
+                    <el-button slot="append" icon="el-icon-search"></el-button>
+                </el-input>
+            </div>
+            <!-- 筛选 -->
+            <div class="m-archive-filter">
+                <!-- 版本过滤 -->
+                <clientBy @filter="filterMeta" :type="client"></clientBy>
+                <!-- 角标过滤 -->
+                <markBy @filter="filterMeta"></markBy>
+                <!-- 语言过滤 -->
+                <menuBy @filter="filterMeta" :data="langs" type="lang" placeholder="语言"></menuBy>
+                <!-- 排序过滤 -->
+                <orderBy @filter="filterMeta"></orderBy>
+            </div>
+            <!-- 提醒 -->
+            <el-alert title="此处仅显示亲友设置为“仅亲友可见”的宏。" type="info" show-icon></el-alert>
+            <!-- 列表 -->
+            <div class="m-archive-list" v-if="data && data.length">
+                <ul class="u-list">
+                    <list-item v-for="(item, i) in data" :key="i + item" :item="item" :order="order" @loadMacro="loadMacro" />
+                </ul>
+            </div>
 
-                                <!-- <Mark class="u-feed" :label="item.author.name"/> -->
-                                <!-- <span class="u-private" v-if="~~item.visible">
-                                    <i class="el-icon-lock"></i>
-                                    {{item.visible | visibleTxt}}
-                                </span>-->
-                                <!-- <span class="u-draft" v-if="item.post_status == 'draft'">
-                                    <i class="el-icon-edit-outline"></i> 草稿
-                                </span>-->
+            <!-- 空 -->
+            <el-alert v-else class="m-archive-null" title="没有找到相关条目" type="info" center show-icon></el-alert>
 
-                                <!-- 标题文字 -->
-                                <a class="u-title" :style="item.color | isHighlight" :href="item.ID | postLink" :target="target">{{ item.post_title || "无标题" }}</a>
+            <!-- 下一页 -->
+            <el-button class="m-archive-more" v-show="hasNextPage" type="primary" @click="appendPage" :loading="loading" icon="el-icon-arrow-down">加载更多</el-button>
 
-                                <!-- 角标 -->
-                                <span class="u-marks" v-if="item.mark && item.mark.length">
-                                    <i v-for="mark in item.mark" class="u-mark" :key="mark">{{ mark | showMark }}</i>
-                                </span>
-                            </h2>
-
-                            <!-- 字段 -->
-                            <div class="u-content">
-                                <ul class="m-macro-list-item-meta" v-if="item.post_meta && item.post_meta.data && item.post_meta.data.length">
-                                    <li class="u-macro" v-for="(m, i) in item.post_meta.data" :key="i">
-                                        <img class="u-macro-icon" :src="showIcon(m.icon)" />
-                                        <el-tooltip effect="dark" :content="'点击快捷查看 · ' + m.name" placement="top-start">
-                                            <span class="u-macro-name" @click="loadMacro(item.author, m, item.ID)">{{ m.name || "未命名" }}</span>
-                                        </el-tooltip>
-                                    </li>
-                                </ul>
-                            </div>
-
-                            <!-- 时间 -->
-                            <div class="u-misc">
-                                <span class="u-date">
-                                    <i class="el-icon-date"></i>
-                                    <time>
-                                        {{ item.post_modified | dateFormat }}
-                                    </time>
-                                </span>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </listbox>
-            <!-- 快捷查看宏 -->
-            <el-drawer class="m-macro-drawer" title="云端宏" :visible.sync="drawer" :append-to-body="true">
-                <div class="u-box">
-                    <h2 class="u-title">{{ drawer_title }}</h2>
-                    <macro :ctx="drawer_content" :name="drawer_title" />
-                    <a :href="drawer_link" class="u-skip el-button el-button--primary"> <i class="el-icon-copy-document"></i> 查看详情 </a>
-                </div>
-            </el-drawer>
+            <!-- 分页 -->
+            <el-pagination
+                class="m-archive-pages"
+                background
+                layout="total, prev, pager, next, jumper"
+                :hide-on-single-page="true"
+                :page-size="per"
+                :total="total"
+                :current-page.sync="page"
+                @current-change="changePage"
+            ></el-pagination>
         </div>
         <!-- 未登录 -->
         <div class="m-archive-noright" v-else>
@@ -81,169 +58,207 @@
                 </span>
             </div>
         </div>
+        <!-- 快捷查看宏 -->
+        <el-drawer class="m-macro-drawer" title="云端宏" :visible.sync="drawer" :append-to-body="true">
+            <div class="u-box">
+                <h2 class="u-title">{{ drawer_title }}</h2>
+                <macro :ctx="drawer_content" :name="drawer_title" />
+                <a :href="drawer_link" class="u-skip el-button el-button--primary"> <i class="el-icon-copy-document"></i> 查看详情 </a>
+            </div>
+        </el-drawer>
     </div>
 </template>
 
 <script>
-import listbox from "@jx3box/jx3box-common-ui/src/single/cms-list.vue";
-import { cms as mark_map } from "@jx3box/jx3box-common/data/mark.json";
-import _ from "lodash";
-import User from "@jx3box/jx3box-common/js/user";
-import { getFriendsPosts } from "../service/post";
-import dateFormat from "../utils/dateFormat";
-import { __ossMirror, __Links, __iconPath, __imgPath, __ossRoot, __visibleMap } from "@jx3box/jx3box-common/data/jx3box";
+import { appKey } from "@/../setting.json";
+import listItem from "@/components/list/list_item.vue";
+import { publishLink } from "@jx3box/jx3box-common/js/utils";
+import { getFriendsPosts as getPosts } from "@/service/post";
 import xfmap from "@jx3box/jx3box-data/data/xf/xf.json";
 import macro from "@/components/macro.vue";
-import { showAvatar, authorLink, showMinibanner, publishLink, buildTarget } from "@jx3box/jx3box-common/js/utils";
+import User from "@jx3box/jx3box-common/js/user";
 export default {
     name: "LandspaceBucket",
     props: [],
     data: function() {
         return {
-            uid: User.getInfo().uid,
-            isLogin: User.isLogin(),
-
             loading: false, //加载状态
-
-            search: "",
-            searchType: "title",
-
             data: [], //数据列表
+
             page: 1, //当前页数
+            per: 10, //每页条目
             total: 1, //总条目数
             pages: 1, //总页数
-            per: 10, //每页条目
-            // order: "", //排序模式
-            // mark: "", //筛选模式
-            appendMode: false, //追加模式
+            number_queries: ["per", "page"],
 
-            filter_visible: false,
-            order_visible: false,
+            subtype: "", //子类别
+            order: "update", //排序模式
+            mark: "", //筛选模式
+            client: this.$store.state.client, //版本选择
+            search: "", //搜索字串
+            lang: "", //语言
 
             drawer: false,
             drawer_title: "",
             drawer_content: "",
             drawer_link: "",
+
+            langs: {
+                cn: "简体中文",
+                tr: "繁體中文",
+            },
+
+            uid: User.getInfo().uid,
+            isLogin: User.isLogin(),
         };
     },
     computed: {
-        subtype: function() {
-            return this.$route.query.subtype;
+        // 发布按钮链接
+        publish_link: function() {
+            return publishLink(appKey);
         },
-        params: function() {
-            let params = {
+        // 是否显示加载更多
+        hasNextPage: function() {
+            return this.pages > 1 && this.page < this.total;
+        },
+        // 请求关联参数
+        query: function() {
+            return {
+                page: this.page,
                 per: this.per,
-                page: ~~this.page || 1,
-                // type: "macro",
+
+                subtype: this.subtype,
+                order: this.order,
+                mark: this.mark,
+                client: this.client,
+                search: this.search,
+                lang: this.lang,
             };
-            if (this.search) {
-                params.search = this.search;
-            }
-            return params;
         },
-        target: function() {
-            return buildTarget();
+        // 重置页码参数
+        reset_queries: function() {
+            return [this.subtype, this.search];
         },
         login_url: function() {
             return __Links.account.login + "?redirect=" + location.href;
         },
-        // 根据栏目定义
-        defaultBanner: function() {
-            return "";
-        },
-        publish_link: function(val) {
-            return publishLink("macro");
-        },
     },
     methods: {
-        loadPosts: function() {
-            this.loading = true;
-            getFriendsPosts(this.params, this)
-                .then((res) => {
-                    if (this.appendMode) {
-                        this.data = this.data.concat(res.data.data.list);
+        // 构建最终请求参数
+        buildQuery: function(appendMode) {
+            let _query = {
+                page: this.page,
+            };
+            for (let key in this.query) {
+                if (this.query[key] !== undefined && this.query[key] !== "" && this.query[key] !== null) {
+                    if (key == "search") {
+                        _query.search = this.query.search.trim();
                     } else {
-                        this.data = res.data.data.list;
+                        _query[key] = this.query[key];
                     }
-                    this.total = res.data.data.total;
-                    this.pages = res.data.data.pages;
+                }
+            }
+            if (appendMode) {
+                _query.page += 1;
+            }
+            return _query;
+        },
+        // 加载数据
+        loadData: function(appendMode = false) {
+            let query = this.buildQuery(appendMode);
+            console.log("[cms-list]", "<loading data>", query);
+
+            this.loading = true;
+            return getPosts(query)
+                .then((res) => {
+                    if (appendMode) {
+                        this.data = this.data.concat(res.data?.data?.list);
+                    } else {
+                        this.data = res.data?.data?.list;
+                    }
+                    this.total = res.data?.data?.total;
+                    this.pages = res.data?.data?.pages;
                 })
                 .finally(() => {
                     this.loading = false;
                 });
         },
+        // 路由绑定
+        replaceRoute: function(extend) {
+            return this.$router
+                .push({ name: this.$route.name, query: Object.assign({}, this.$route.query, extend) })
+                .then(() => {
+                    window.scrollTo(0, 0);
+                })
+                .catch((err) => {});
+        },
+        // 条件过滤
+        filterMeta: function(o) {
+            this.replaceRoute({ [o["type"]]: o["val"], page: 1 });
+        },
+        // 翻页加载
         changePage: function(i) {
-            this.appendMode = false;
-            this.page = i;
-            window.scrollTo(0, 0);
+            this.replaceRoute({ page: i });
         },
-        appendPage: function(i) {
-            this.appendMode = true;
-            this.page = i;
+        // 追加加载
+        appendPage: function() {
+            this.loadData(true);
         },
-        filter: function(o) {
-            this.appendMode = false;
-            this[o["type"]] = o["val"];
-        },
-        showBanner: function(val) {
-            return val ? showMinibanner(val) : this.defaultBanner;
-        },
-        showIcon: function(val) {
-            return __iconPath + "icon/" + val + ".png";
-        },
-        loadMacro(author, m, id) {
+        // 打开抽屉
+        loadMacro([author, m, id]) {
             this.drawer = true;
             this.drawer_title = author + "#" + m.name;
             this.drawer_content = m.macro;
             this.drawer_link = "./" + id + "?tab=" + m.name;
         },
     },
-    filters: {
-        dateFormat: function(val) {
-            return dateFormat(new Date(val));
-        },
-        showAvatar: function(val) {
-            return showAvatar(val);
-        },
-        authorLink: function(val) {
-            return authorLink(val);
-        },
-        postLink: function(val) {
-            return "/macro/" + val;
-        },
-        isHighlight: function(val) {
-            return val ? `color:${val};font-weight:600;` : "";
-        },
-        showMark: function(val) {
-            return mark_map[val];
-        },
-        xficon: function(val) {
-            if (!val || val == "其它") val = "通用";
-            let xf_id = xfmap[val]["id"];
-            return __imgPath + "image/xf/" + xf_id + ".png";
-        },
-        visibleTxt: function(val) {
-            return __visibleMap[val];
-        },
-    },
     watch: {
-        params: {
+        // 加载路由参数
+        "$route.query": {
             deep: true,
-            handler: function() {
-                this.loadPosts();
+            immediate: true,
+            handler: function(query) {
+                if (Object.keys(query).length) {
+                    console.log("[cms-list]", "<route query change>", query);
+                    for (let key in query) {
+                        // for:element分页组件兼容性问题
+                        if (this.number_queries.includes(key)) {
+                            this[key] = ~~query[key];
+                        } else {
+                            this[key] = query[key];
+                        }
+                    }
+                }
             },
         },
-        "$route.query.page": function(val) {
-            this.page = ~~val;
+        // 重置分页参数
+        reset_queries: {
+            deep: true,
+            handler: function() {
+                console.log("[cms-list]", "<reset page>");
+                this.page = 1;
+            },
+        },
+        // 监听请求参数
+        query: {
+            deep: true,
+            immediate: true,
+            handler: function(query) {
+                console.log("[cms-list]", "<request query change>", query);
+                this.isLogin && this.loadData();
+            },
         },
     },
-    created: function() {
-        this.page = ~~this.$route.query.page || 1;
-        this.isLogin && this.loadPosts();
+    filters: {
+        xficon: function(val) {
+            if (!val || val == "其它") val = "通用";
+            let xf_id = xfmap[val]?.id;
+            return __imgPath + "image/xf/" + xf_id + ".png";
+        },
     },
     components: {
+        listItem,
         macro,
-        listbox,
     },
 };
 </script>

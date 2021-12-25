@@ -6,7 +6,7 @@
         </h5>
         <ul class="m-macro-nav u-list">
             <li class="u-item" v-for="(item, i) in xfmap" :key="i" v-show="item.client.includes(client)">
-                <router-link class="u-link" :to="{ query: { subtype: item.name } }">
+                <router-link class="u-link" :to="{ query: { subtype: item.name } }" :class="{on:isActive(item)}">
                     <i class="u-pic">
                         <img :src="item.id | xficon" :alt="item.name" />
                     </i>
@@ -42,7 +42,11 @@ export default {
             return this.$store.state.client;
         },
     },
-    methods: {},
+    methods: {
+        isActive : function (item){
+            return item.name == this.$route.query.subtype
+        }
+    },
     filters: {
         xficon: function(val) {
             return __imgPath + "image/xf/" + val + ".png";

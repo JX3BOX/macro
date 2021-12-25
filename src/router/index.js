@@ -1,11 +1,12 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 
+
 const Index = () => import("../views/Index.vue");
 const Bucket = () => import("../views/Bucket.vue");
 const Fav = () => import("../views/Fav.vue");
-const Rank = () => import("../views/Rank.vue");
 const Landspace = () => import("../views/Landspace.vue");
+const Rank = () => import("../views/Rank.vue");
 
 Vue.use(VueRouter);
 

@@ -44,28 +44,28 @@ import { getMyPostCount } from "@/service/post.js";
 export default {
     name: "tabs",
     props: [],
-    data: function () {
+    data: function() {
         return {
             view: "index",
             isLogin: User.isLogin(),
         };
     },
     watch: {
-        $route: function (_route) {
+        $route: function(_route) {
             this.view = _route.name;
         },
     },
     computed: {
-        count: function () {
+        count: function() {
             return this.$store.state.my_macro_count;
         },
     },
     methods: {
-        changeView: function () {
-            this.$router.push({ name: this.view, query: this.$route.query });
+        changeView: function() {
+            this.$router.push({ name: this.view, query: Object.assign({}, this.$route.query, { page: 1 }) });
         },
     },
-    created: function () {
+    created: function() {
         // User.isLogin() &&
         //     getMyPostCount().then((res) => {
         //         this.$store.state.my_macro_count = res.data.data.macro || 0;

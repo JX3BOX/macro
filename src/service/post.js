@@ -1,11 +1,6 @@
 import { $cms } from "@jx3box/jx3box-common/js/https";
 
-function getMyPost(params) {
-    return $cms().get("/api/cms/posts/my", {
-        params: params,
-    });
-}
-
+// 公共
 function getPosts(params) {
     let query = {
         type: "macro",
@@ -17,6 +12,34 @@ function getPosts(params) {
         params: query,
     });
 }
+
+// 我的
+function getMyPost(params) {
+    let query = {
+        type: "macro",
+    };
+    if (params) {
+        query = Object.assign(query, params);
+    }
+    return $cms().get("/api/cms/posts/my", {
+        params: query,
+    });
+}
+
+// 收藏
+function getFavPosts(params) {
+    let query = {
+        type: "macro",
+    };
+    if (params) {
+        query = Object.assign(query, params);
+    }
+    return $cms().get(`/api/cms/posts/user/my/fav`, {
+        params : query,
+    });
+}
+
+
 function getPost(id) {
     return $cms().get(`/api/cms/post/${id}`);
 }
@@ -46,4 +69,4 @@ function getFriendsPosts(params) {
     });
 }
 
-export { getPosts, getPost, getMyPostCount, getMyPost, getCustomPosts, getPzList, getFriendsPosts };
+export { getPosts, getPost, getMyPostCount, getMyPost, getCustomPosts, getPzList, getFriendsPosts ,getFavPosts};
