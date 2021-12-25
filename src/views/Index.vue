@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import list from "@/components/list.vue";
+import list from "@/components/list/list.vue";
 export default {
     name: "Index",
     props: [],

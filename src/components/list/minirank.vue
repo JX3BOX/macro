@@ -1,7 +1,7 @@
 <template>
     <div class="m-macro-rank-mini m-macro-rank" v-loading="loading">
         <h3 class="c-sidebar-right-title">
-            <img class="u-icon" svg-inline src="../assets/img/side/rank.svg" />排行榜
+            <img class="u-icon" svg-inline src="../../assets/img/side/rank.svg" />排行榜
             <span class="u-more" @click="viewRank">查看更多 &raquo;</span>
         </h3>
         <ul class="u-list" v-if="subtype">
@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import { getOverview, getRank } from "../service/rank";
+import { getOverview, getRank } from "../../service/rank";
 import xfmap from "@jx3box/jx3box-data/data/xf/xf.json";
 import { getLink } from "@jx3box/jx3box-common/js/utils";
 import { getStatRank } from "@jx3box/jx3box-common/js/stat";
@@ -107,5 +107,5 @@ export default {
 </script>
 
 <style lang="less">
-@import "../assets/css/rank.less";
+@import "../../assets/css/rank.less";
 </style>

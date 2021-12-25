@@ -1,9 +1,5 @@
 <template>
     <div class="m-info">
-        <div class="m-info-notice">
-            <!-- <span class="u-item" href="" target="_blank">🌈 自用宏将会被设为私有状态,不影响游戏内加载</span> -->
-        </div>
-
         <div class="m-info-router">
             <router-link title="云端宏" to="/"><i class="el-icon-collection"></i></router-link>
             <router-link title="我的宏" to="/bucket"><i class="el-icon-receiving"></i></router-link>
@@ -29,5 +25,39 @@ export default {
 </script>
 
 <style lang="less">
-@import '../assets/css/info.less';
+.m-info {
+    .fl;
+    white-space: nowrap;
+    overflow-x: auto;
+}
+@media screen and (max-width: @ipad) {
+    .m-info {
+        float: none;
+    }
+}
+.m-info-router {
+    .fr;
+    .fz(1rem);
+    a {
+        .mr(10px);
+        color: @darkblue;
+        &:hover {
+            color: @pink;
+        }
+    }
+    .router-link-exact-active,
+    .on {
+        color: @pink;
+    }
+    .none;
+}
+
+@media screen and (max-width: @phone) {
+    .m-info-router {
+        .db;
+        float: none;
+        .x(right);
+    }
+}
+
 </style>

@@ -1,20 +1,12 @@
 <template>
     <div id="app">
         <Header></Header>
-        <Breadcrumb
-            name="云端宏"
-            slug="macro"
-            root="/macro"
-            :publishEnable="true"
-            :adminEnable="true"
-            :feedbackEnable="true"
-            :crumbEnable="true"
-        >
+        <Breadcrumb name="云端宏" slug="macro" root="/macro" :publishEnable="true" :adminEnable="false" :feedbackEnable="true" :crumbEnable="true">
             <img slot="logo" svg-inline :src="getAppIcon('macro')" />
             <Info />
         </Breadcrumb>
         <LeftSidebar>
-            <Nav class="m-nav"/>
+            <Nav class="m-nav" />
         </LeftSidebar>
         <Main :withoutRight="false">
             <div class="m-main">
@@ -22,7 +14,7 @@
                 <router-view />
             </div>
             <RightSidebar>
-                <Side class="m-extend"/>
+                <Side class="m-extend" />
             </RightSidebar>
             <Footer></Footer>
         </Main>
@@ -30,19 +22,19 @@
 </template>
 
 <script>
-import Info from "@/components/Info.vue";
-import Nav from "@/components/list_nav.vue";
-import Side from "@/components/list_side.vue";
-import tabs from "@/components/tabs";
-import {getAppIcon} from '@jx3box/jx3box-common/js/utils'
+import Info from "@/components/list/Info.vue";
+import Nav from "@/components/list/list_nav.vue";
+import Side from "@/components/list/list_side.vue";
+import tabs from "@/components/tabs.vue";
+import { getAppIcon } from "@jx3box/jx3box-common/js/utils";
 export default {
     name: "App",
     props: [],
-    data: function () {
+    data: function() {
         return {};
     },
     methods: {
-        getAppIcon
+        getAppIcon,
     },
     components: {
         Info,
@@ -55,11 +47,4 @@ export default {
 
 <style lang="less">
 @import "./assets/css/app.less";
-@media screen and (max-width: @phone) {
-    .c-breadcrumb{
-        .u-op{
-            .none;
-        }
-    }
-}
 </style>
