@@ -22,7 +22,7 @@
         </div>
 
         <!-- 推荐 -->
-        <rec-table v-if="!search" />
+        <rec-table v-if="!search && !subtype" />
 
         <!-- 列表 -->
         <div class="m-archive-list" v-if="data && data.length">
