@@ -142,6 +142,10 @@ export default {
                     }
                 }
             }
+            // 当指定子类别时启用置顶
+            if(_query.subtype){
+                _query.sticky = 1
+            }
             if (appendMode) {
                 _query.page += 1;
             }
