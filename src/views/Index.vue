@@ -12,7 +12,7 @@
         <!-- 筛选 -->
         <div class="m-archive-filter">
             <!-- 版本过滤 -->
-            <clientBy @filter="filterMeta" :type="client"></clientBy>
+            <clientBy @filter="filterImperceptibly" :type="client"></clientBy>
             <!-- 角标过滤 -->
             <markBy @filter="filterMeta"></markBy>
             <!-- 语言过滤 -->
@@ -143,8 +143,8 @@ export default {
                 }
             }
             // 当指定子类别时启用置顶
-            if(_query.subtype){
-                _query.sticky = 1
+            if (_query.subtype) {
+                _query.sticky = 1;
             }
             if (appendMode) {
                 _query.page += 1;
@@ -183,6 +183,10 @@ export default {
         // 条件过滤
         filterMeta: function(o) {
             this.replaceRoute({ [o["type"]]: o["val"], page: 1 });
+        },
+        // 条件过滤（不附加路由）
+        filterImperceptibly: function(o) {
+            this[o["type"]] = o["val"];
         },
         // 翻页加载
         changePage: function(i) {
