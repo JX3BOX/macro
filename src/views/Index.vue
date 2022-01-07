@@ -3,7 +3,7 @@
         <!-- 搜索 -->
         <div class="m-archive-search" slot="search-before">
             <a :href="publish_link" class="u-publish el-button el-button--primary">+ 发布作品</a>
-            <el-input placeholder="请输入搜索内容" v-model="search">
+            <el-input placeholder="请输入搜索内容" v-model.trim.lazy="search">
                 <span slot="prepend">关键词</span>
                 <el-button slot="append" icon="el-icon-search"></el-button>
             </el-input>
