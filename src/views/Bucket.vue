@@ -77,6 +77,7 @@ import { getMyPost as getPosts } from "@/service/post";
 import xfmap from "@jx3box/jx3box-data/data/xf/xf.json";
 import macro from "@/components/macro.vue";
 import User from "@jx3box/jx3box-common/js/user";
+import {__Links} from '@jx3box/jx3box-common/data/jx3box.json'
 export default {
     name: "Bucket",
     props: [],
@@ -124,9 +125,6 @@ export default {
         // 请求关联参数
         query: function() {
             return {
-                page: this.page,
-                per: this.per,
-
                 subtype: this.subtype,
                 order: this.order,
                 mark: this.mark,
@@ -134,6 +132,13 @@ export default {
                 search: this.search,
                 lang: this.lang,
             };
+        },
+        // 分页相关参数
+        pg_queries : function (){
+            return {
+                page: this.page,
+                per: this.per,
+            }
         },
         // 重置页码参数
         reset_queries: function() {
@@ -146,9 +151,14 @@ export default {
     methods: {
         // 构建最终请求参数
         buildQuery: function(appendMode) {
+            if (appendMode) {
+                this.page += 1
+            }
             let _query = {
-                page: this.page,
+                per : this.per,
+                page : this.page,
             };
+
             for (let key in this.query) {
                 if (this.query[key] !== undefined && this.query[key] !== "" && this.query[key] !== null) {
                     if (key == "search") {
@@ -158,9 +168,7 @@ export default {
                     }
                 }
             }
-            if (appendMode) {
-                _query.page += 1;
-            }
+
             return _query;
         },
         // 加载数据
@@ -202,6 +210,7 @@ export default {
         },
         // 翻页加载
         changePage: function(i) {
+            this.loadData();
             this.replaceRoute({ page: i });
         },
         // 追加加载
