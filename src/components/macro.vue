@@ -2,36 +2,16 @@
     <div class="u-macro-inner">
         <div class="w-jx3macro" v-html="content"></div>
         <div class="u-panel u-macro-panel">
-            <el-button
-                class="u-macro-panel-copy"
-                icon="el-icon-document-copy"
-                plain
-                size="mini"
-                v-clipboard:copy="copytext"
-                v-clipboard:success="onCopy"
-                v-clipboard:error="onError"
-            >复制宏内容</el-button>
-            <el-button
-                icon="el-icon-refresh"
-                plain
-                size="mini"
-                @click="run"
-                v-if="isCN"
-                class="u-macro-panel-translate"
+            <el-button class="u-macro-panel-copy" icon="el-icon-document-copy" plain size="mini" v-clipboard:copy="copytext" v-clipboard:success="onCopy" v-clipboard:error="onError"
+                >复制宏内容</el-button
             >
+            <el-button icon="el-icon-refresh" plain size="mini" @click="run" v-if="isCN" class="u-macro-panel-translate">
                 <span v-if="status">轉換為繁體</span>
                 <span v-else>转换为简体</span>
             </el-button>
-            <el-button
-                class="u-macro-panel-copyname"
-                icon="el-icon-cloudy"
-                plain
-                type="primary"
-                size="mini"
-                v-clipboard:copy="copyname"
-                v-clipboard:success="onCopy"
-                v-clipboard:error="onError"
-            >复制云端宏</el-button>
+            <el-button class="u-macro-panel-copyname" icon="el-icon-cloudy" plain type="primary" size="mini" v-clipboard:copy="copyname" v-clipboard:success="onCopy" v-clipboard:error="onError"
+                >复制云端宏</el-button
+            >
             <a
                 class="u-macro-panel-test el-button el-button--mini is-plain"
                 v-if="isSuperAdmin || isAuthor"
@@ -44,7 +24,7 @@
         </div>
         <div class="u-count">
             字数：
-            <b>{{count}}</b>
+            <b>{{ count }}</b>
         </div>
     </div>
 </template>
@@ -52,26 +32,26 @@
 <script>
 import macro from "@jx3box/jx3box-macro";
 import "@jx3box/jx3box-macro/macro.css";
-import dict from "@jx3box/jx3box-dict/dict.json";
+import dict from "@jx3box/jx3box-dict/output/skill.json";
 import User from "@jx3box/jx3box-common/js/user";
-import { getNewDict } from "@/service/helper.js";
+// import { getNewDict } from "@/service/helper.js";
 export default {
     name: "macro",
     props: ["ctx", "lang", "name"],
-    data: function () {
+    data: function() {
         return {
             data: "",
             code: "",
             data_tw: "",
             code_tw: "",
-            status: 1, //默认简体
+            status: true, //默认简体
             flag: false, //是否已被转换过
             dict,
             isSuperAdmin: User.isSuperAdmin(),
         };
     },
     watch: {
-        ctx: function (ctx) {
+        ctx: function(ctx) {
             if (ctx) {
                 this.data = ctx;
                 this.code = this.parse(ctx);
@@ -79,41 +59,41 @@ export default {
         },
     },
     computed: {
-        content: function () {
+        content: function() {
             return this.status ? this.code : this.code_tw;
         },
-        copytext: function () {
+        copytext: function() {
             return this.status ? this.data : this.data_tw;
         },
-        copyname: function () {
+        copyname: function() {
             return this.name || "";
         },
-        testname: function () {
+        testname: function() {
             return this.name && this.name.replace("#", "-");
         },
-        isCN: function () {
+        isCN: function() {
             if (!this.lang) {
                 return true;
             } else {
                 return this.lang == "cn";
             }
         },
-        count: function () {
+        count: function() {
             return this.data.length;
         },
-        isAuthor: function () {
+        isAuthor: function() {
             return User.getInfo().uid == this.$store.state.user_id;
         },
     },
     methods: {
-        onCopy: function (val) {
+        onCopy: function(val) {
             this.$notify({
                 title: "复制成功",
                 message: "复制宏成功",
                 type: "success",
             });
         },
-        onError: function () {
+        onError: function() {
             this.$notify.error({
                 title: "复制失败",
                 message: "请手动复制",
@@ -121,26 +101,21 @@ export default {
         },
         translate(data) {
             if (data && data.length) {
-                let _data = "";
-                for (let f of data) {
-                    let i = dict.cn.indexOf(f);
-                    if (i >= 0) {
-                        _data += dict.tr[i];
-                    } else {
-                        _data += f;
+                dict['cn'].forEach((item,i) => {
+                    if(data.includes(item)){
+                        data = data.replace(new RegExp(item,'g'),dict['tr'][i])
                     }
-                }
-                return _data;
+                })
             }
-            return "";
+            return data;
         },
-        callTranslator: function () {
+        callTranslator: function() {
             if (this.data) {
                 this.data_tw = this.translate(this.data);
                 this.code_tw = this.parse(this.data_tw);
             }
         },
-        parse: function (data) {
+        parse: function(data) {
             if (data) {
                 try {
                     let ins = new macro(data);
@@ -153,25 +128,25 @@ export default {
                 return "";
             }
         },
-        run: function () {
+        run: function() {
             if (!this.flag) {
                 this.callTranslator();
                 this.flag = true;
             }
-            this.status = ~~!this.status;
+            this.status = !this.status;
         },
     },
-    created: function () {
+    created: function() {
         // getNewDict()
         //     .then((res) => {
         //         this.dict = res.data;
         //     })
         //     .finally(() => {
-                if (this.ctx) {
-                    this.data = this.ctx;
-                    this.code = this.parse(this.ctx);
-                }
-            // });
+        if (this.ctx) {
+            this.data = this.ctx;
+            this.code = this.parse(this.ctx);
+        }
+        // });
     },
     components: {},
 };
@@ -183,7 +158,7 @@ export default {
 }
 .u-count {
     .pa;
-    .rb(5px,10px);
+    .rb(5px, 10px);
     .fz(12px);
     color: #aaa;
     b {
