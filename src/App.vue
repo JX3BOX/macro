@@ -2,7 +2,6 @@
     <div id="app">
         <Header></Header>
         <Breadcrumb name="云端宏" slug="macro" root="/macro" :publishEnable="true" :adminEnable="false" :feedbackEnable="true" :crumbEnable="true">
-            <img slot="logo" svg-inline :src="getAppIcon('macro')" />
             <Info />
         </Breadcrumb>
         <LeftSidebar>
@@ -26,7 +25,6 @@ import Info from "@/components/list/Info.vue";
 import Nav from "@/components/list/list_nav.vue";
 import Side from "@/components/list/list_side.vue";
 import tabs from "@/components/tabs.vue";
-import { getAppIcon } from "@jx3box/jx3box-common/js/utils";
 export default {
     name: "App",
     props: [],
@@ -34,7 +32,6 @@ export default {
         return {};
     },
     methods: {
-        getAppIcon,
     },
     components: {
         Info,
