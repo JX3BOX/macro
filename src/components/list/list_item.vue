@@ -108,9 +108,7 @@ export default {
 			return __visibleMap[val];
 		},
 	},
-	created: function () {
-		console.log(this.item, this.order, "???");
-	},
+	created: function () {},
 	mounted: function () {},
 };
 </script>
