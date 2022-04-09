@@ -85,7 +85,7 @@
                                         <span
                                             class="u-macro-name"
                                             @click="loadMacro(item.author_info.display_name,m,item.ID) "
-                                        >{{ m.name || "无名称" }}</span>
+                                        >{{ m.name || '未命名' }}</span>
                                     </el-tooltip>
                                 </li>
                             </ul>
@@ -130,8 +130,8 @@
 </template>
 
 <script>
-import listbox from "@jx3box/jx3box-page/src/cms-list.vue";
-import rec_table from '@/components/rec_table.vue'
+import listbox from "@jx3box/jx3box-common-ui/src/single/cms-list.vue";
+import rec_table from './rec_table.vue'
 import { cms as mark_map } from "@jx3box/jx3box-common/data/mark.json";
 import _ from "lodash";
 import { getPosts } from "@/service/post";
@@ -270,7 +270,7 @@ export default {
             this.drawer = true;
             this.drawer_title = author + "#" + m.name;
             this.drawer_content = m.macro;
-            this.drawer_link = "./" + id;
+            this.drawer_link = "./" + id  + '?tab=' + m.name;
         },
     },
     filters: {
@@ -335,5 +335,5 @@ export default {
 </script>
 
 <style lang="less">
-@import "../assets/css/list.less";
+@import "../../assets/css/list.less";
 </style>

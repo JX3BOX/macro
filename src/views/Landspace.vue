@@ -1,6 +1,7 @@
 <template>
     <div class="m-archive-box" v-loading="loading">
-        <div class="m-bucket" v-if="isLogin" v-loading="loading">
+        <!-- 已登录 -->
+        <div class="m-bucket" v-if="isLogin">
             <!-- 搜索 -->
             <div class="m-archive-search" slot="search-before">
                 <a :href="publish_link" class="u-publish el-button el-button--primary">+ 发布作品</a>
@@ -20,11 +21,12 @@
                 <!-- 排序过滤 -->
                 <orderBy @filter="filterMeta"></orderBy>
             </div>
-
+            <!-- 提醒 -->
+            <el-alert title="此处仅显示亲友设置为“仅亲友可见”的宏。" type="info" show-icon></el-alert>
             <!-- 列表 -->
             <div class="m-archive-list" v-if="data && data.length">
                 <ul class="u-list">
-                    <list-item v-for="(item, i) in data" :key="i + item" :item="item.fav_post_overview" :order="order" @loadMacro="loadMacro" />
+                    <list-item v-for="(item, i) in data" :key="i + item" :item="item" :order="order" @loadMacro="loadMacro" />
                 </ul>
             </div>
 
@@ -46,20 +48,16 @@
                 @current-change="changePage"
             ></el-pagination>
         </div>
-        <!-- 已登录 -->
-        <div class="m-bucket" v-if="isLogin"></div>
-
         <!-- 未登录 -->
         <div class="m-archive-noright" v-else>
             <div class="u-tip-login el-alert el-alert--warning is-light">
                 <i class="el-alert__icon el-icon-warning"></i>
                 <span>
-                    使用宏收藏夹，请先
+                    使用亲友限定分享仓库，请先
                     <a :href="login_url">登录</a>
                 </span>
             </div>
         </div>
-
         <!-- 快捷查看宏 -->
         <el-drawer class="m-macro-drawer" title="云端宏" :visible.sync="drawer" :append-to-body="true">
             <div class="u-box">
@@ -75,13 +73,13 @@
 import { appKey } from "@/../setting.json";
 import listItem from "@/components/list/list_item.vue";
 import { publishLink } from "@jx3box/jx3box-common/js/utils";
-import { getFavPosts as getPosts } from "@/service/post";
+import { getFriendsPosts as getPosts } from "@/service/post";
 import xfmap from "@jx3box/jx3box-data/data/xf/xf.json";
 import macro from "@/components/macro.vue";
 import User from "@jx3box/jx3box-common/js/user";
 import {__Links} from '@jx3box/jx3box-common/data/jx3box.json'
 export default {
-    name: "FavBucket",
+    name: "LandspaceBucket",
     props: [],
     data: function() {
         return {

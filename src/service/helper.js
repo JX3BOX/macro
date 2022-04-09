@@ -21,18 +21,6 @@ function getBread(key) {
     return $helper({ mute: true }).get(`/api/breadcrumb/${key}`);
 }
 
-// 收藏
-// function getFavPosts(params) {
-//     return $helper().get(`/api/my/post/favorites`, {
-//         params,
-//     });
-// }
-
-function getFavPosts(params) {
-    return $cms().get(`/api/cms/posts/user/my/fav`, {
-        params,
-    });
-}
 
 // 边栏文档
 function getMenuGroup(name) {
@@ -46,4 +34,4 @@ function getMenuGroups(keys) {
     });
 }
 
-export { getCollection, getNewDict, getMenuGroup, getBread, getFavPosts,getMenuGroups };
+export { getCollection, getNewDict, getMenuGroup, getBread, getMenuGroups };

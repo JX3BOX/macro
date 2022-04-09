@@ -6,17 +6,22 @@
                 :name="item.key"
                 v-for="item in data"
                 :key="item.id"
+                :lazy="true"
             >
                 <a class="u-pz-link" target="_blank" :href="url">
                     <i class="el-icon-link"></i> 点击查看配装详情
                 </a>
+                <div class="m-pz-container">
                 <iframe
+                    v-if="name === item.name"
+                    :key="id"
                     :src="src"
                     scrolling="no"
                     width="1280"
                     height="720"
-                    style="border:none;background:none;max-width:100%;overflow:hidden;"
+                    style="border:none;background:none;"
                 ></iframe>
+                </div>
             </el-tab-pane>
         </el-tabs>
         <slot></slot>
@@ -61,6 +66,9 @@ export default {
         url: function () {
             return `/pz/#/view/${this.id}`;
         },
+        name() {
+            return this.data?.[~~this.key]['name']
+        }
     },
     methods: {
         receiveMessage: function () {
@@ -88,5 +96,9 @@ export default {
     &:hover {
         color: @pink;
     }
+}
+.m-pz-container{
+    max-width: 100%;
+    overflow-x:auto ;
 }
 </style>

@@ -14,19 +14,13 @@
         <!-- 其他链接 -->
         <div class="m-side-links">
             <h3 class="c-sidebar-right-title" style="border-bottom:none;">
-                <img class="u-icon" svg-inline src="../assets/img/side/puzzle.svg" />
+                <img class="u-icon" svg-inline src="../../assets/img/side/puzzle.svg" />
                 帮助文档
             </h3>
             <el-collapse class="u-groups" v-model="activeDocGroup">
                 <el-collapse-item title="入门帮助" name="newbie">
                     <div class="u-docs">
-                        <a
-                            v-for="(item, i) in macro_newbie"
-                            :key="i"
-                            class="u-doc"
-                            :href="item.link"
-                            target="_blank"
-                        >
+                        <a v-for="(item, i) in macro_newbie" :key="i" class="u-doc" :href="item.link" target="_blank">
                             <i class="el-icon-collection"></i>
                             {{ item.label }}
                         </a>
@@ -34,13 +28,7 @@
                 </el-collapse-item>
                 <el-collapse-item title="发布指南" name="senior">
                     <div class="u-docs">
-                        <a
-                            v-for="(item, i) in macro_senior"
-                            :key="i"
-                            class="u-doc"
-                            :href="item.link"
-                            target="_blank"
-                        >
+                        <a v-for="(item, i) in macro_senior" :key="i" class="u-doc" :href="item.link" target="_blank">
                             <i class="el-icon-collection"></i>
                             {{ item.label }}
                         </a>
@@ -48,13 +36,7 @@
                 </el-collapse-item>
                 <el-collapse-item title="辅助工具" name="tools">
                     <div class="u-docs">
-                        <a
-                            v-for="(item, i) in macro_tools"
-                            :key="i"
-                            class="u-doc"
-                            :href="item.link"
-                            target="_blank"
-                        >
+                        <a v-for="(item, i) in macro_tools" :key="i" class="u-doc" :href="item.link" target="_blank">
                             <i class="el-icon-collection"></i>
                             {{ item.label }}
                         </a>
@@ -68,30 +50,30 @@
 </template>
 
 <script>
-import minirank from "@/components/minirank.vue";
+import minirank from "./minirank.vue";
 import { getMenuGroups } from "@/service/helper.js";
 export default {
     name: "list_side",
     props: [],
-    data: function () {
+    data: function() {
         return {
             activeDocGroup: "",
-            'macro_newbie': [],
-            'macro_senior': [],
-            'macro_tools': [],
+            macro_newbie: [],
+            macro_senior: [],
+            macro_tools: [],
         };
     },
     computed: {
-        client: function () {
+        client: function() {
             return this.$store.state.client;
         },
     },
     methods: {},
-    mounted: function () {
-        getMenuGroups(['macro_newbie','macro_senior','macro_tools']).then((res) => {
-            let data = res.data.data.data || {}
-            for(let key in data){
-                this[key] = data[key]['menus']
+    mounted: function() {
+        getMenuGroups(["macro_newbie", "macro_senior", "macro_tools"]).then((res) => {
+            let data = res.data.data.data || {};
+            for (let key in data) {
+                this[key] = data[key]["menus"];
             }
         });
     },
@@ -102,5 +84,32 @@ export default {
 </script>
 
 <style lang="less">
-@import "../assets/css/list_side.less";
+.m-side-links {
+    .u-groups{
+        padding:0 5px;
+    }
+    .u-doc {
+        .db;
+        .fz(12px, 34px);
+        border-bottom: 1px solid #eee;
+        i {
+            .fz(16px);
+            .y(-2px);
+            color:#666;
+        }
+        &:last-child {
+            border-bottom: none;
+        }
+        &:hover{
+            .bold;
+        }
+    }
+}
+@media screen and (max-width: @phone) {
+    .m-side-rank,
+    .m-side-links {
+        .none;
+    }
+}
+
 </style>

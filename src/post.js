@@ -14,6 +14,12 @@ import "@jx3box/jx3box-common/css/element.css";
 import "@jx3box/jx3box-common/css/normalize.css";
 Vue.use(JX3BOX_UI);
 
+// 全局过滤器
+// import * as filters from './utils/filters.js';
+// Object.keys(filters).forEach(key => {
+//     Vue.filter(key, filters[key]);
+// });
+
 // 数据与路由
 import store from "@/store";
 
