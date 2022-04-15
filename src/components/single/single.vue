@@ -1,6 +1,6 @@
 <template>
 	<div>
-        
+
 		<singlebox :post="post" :stat="stat" v-loading="loading" @extendUpdate="updateExtend">
 			<template slot="single-header">
 				<div class="u-meta u-sub-block">
@@ -205,7 +205,6 @@ export default {
 									}
 								}
 							});
-						} else {
 						}
 					}
 				})
