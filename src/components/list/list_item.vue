@@ -39,7 +39,7 @@
 		<div class="u-misc">
 			<!-- 作者 -->
 			<div class="u-author">
-				<a class="u-author-name" :href="authorLink(item.post_author)" target="_blank">{{ item.author }}</a>
+				<a class="u-author-name" :href="authorLink(item.post_author)" target="_blank">{{ item.author_info && item.author_info.display_name || '匿名' }}</a>
 			</div>
 			<span class="u-date">
 				<i class="el-icon-date"></i>
