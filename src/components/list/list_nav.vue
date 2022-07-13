@@ -5,7 +5,7 @@
             <router-link class="u-more" :to="{ query: { subtype: '' } }">全部心法 &raquo;</router-link>
         </h5>
         <ul class="m-macro-nav u-list">
-            <li class="u-item" v-for="(item, i) in xfmap" :key="i" v-show="item.client.includes(client)">
+            <li class="u-item" v-for="(item, i) in xfmaps" :key="i" v-show="item.client.includes(client)">
                 <router-link class="u-link" :to="{ query: { subtype: item.name } }" :class="{on:isActive(item)}">
                     <i class="u-pic">
                         <img :src="item.id | xficon" :alt="item.name" />
@@ -31,16 +31,14 @@ import xfmap from "@jx3box/jx3box-data/data/xf/xf.json";
 import { __ossMirror, __imgPath, __ossRoot } from "@jx3box/jx3box-common/data/jx3box.json";
 export default {
     name: "list_nav",
-    props: [],
-    data: function() {
-        return {
-            xfmap,
-        };
-    },
     computed: {
         client: function() {
             return this.$store.state.client;
         },
+        xfmaps() {
+            delete xfmap['山居剑意']
+            return xfmap
+        }
     },
     methods: {
         isActive : function (item){
