@@ -67,7 +67,7 @@ export default {
             return "";
         },
         iconLink : function (val){
-            return __imgPath + 'image/xf/' + val + '.png'
+            return __iconPath + 'icon/' + val + '.png'
         }
     },
     watch: {
