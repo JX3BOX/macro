@@ -57,7 +57,7 @@ export default {
     props: [],
     data: function() {
         return {
-            activeDocGroup: "",
+            activeDocGroup: ['newbie','senior','tools'],
             macro_newbie: [],
             macro_senior: [],
             macro_tools: [],
