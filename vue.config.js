@@ -56,6 +56,12 @@ module.exports = {
                     request.setHeader("origin", "");
                 },
             },
+            "/api/cny": {
+                target: "https://pay.jx3box.com/",
+                onProxyReq: function(request) {
+                    request.setHeader("origin", "");
+                },
+            },
             "/api": {
                 target: "https://next2.jx3box.com",
                 onProxyReq: function(request) {

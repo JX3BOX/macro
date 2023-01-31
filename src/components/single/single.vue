@@ -66,7 +66,7 @@
 
 <script>
 // 依赖模块
-import singlebox from "@jx3box/jx3box-common-ui/src/single/cms-single";
+import singlebox from "@/components/cms-single";
 import RenderTalent from "@jx3box/jx3box-talent2/src/RenderTalent2.vue";
 import pz from "./pz.vue";
 import macro from "@/components/macro.vue";
