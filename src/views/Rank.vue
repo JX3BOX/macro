@@ -1,101 +1,104 @@
 <template>
-    <div class="v-rank" v-loading="loading">
-        <div class="m-macro-rank-full m-macro-rank" v-if="!!subtype">
-            <el-table
-                :data="mount_data"
-                :default-sort="{ prop: 'value.7days', order: 'descending' }"
-                :row-class-name="highlight"
-                :fit="true"
-                key="mounttable"
-            >
-                <el-table-column type="index" label="排名" width="48">
-                    <template slot-scope="scope">
-                        <span class="u-order">{{ scope.$index + 1 }}</span>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="downloadStr" label="云端宏" sortable>
-                    <template slot-scope="scope">
-                        <div class="u-cell-feed">
-                            <img class="u-icon-xf" :src="kungfuid | xficon" />
+    <listbox>
+        <div class="v-rank" v-loading="loading">
+            <div class="m-macro-rank-full m-macro-rank" v-if="!!subtype">
+                <el-table
+                    :data="mount_data"
+                    :default-sort="{ prop: 'value.7days', order: 'descending' }"
+                    :row-class-name="highlight"
+                    :fit="true"
+                    key="mounttable"
+                >
+                    <el-table-column type="index" label="排名" width="48">
+                        <template slot-scope="scope">
+                            <span class="u-order">{{ scope.$index + 1 }}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="downloadStr" label="云端宏" sortable>
+                        <template slot-scope="scope">
+                            <div class="u-cell-feed">
+                                <img class="u-icon-xf" :src="kungfuid | xficon" />
+                                <a
+                                    class="u-feed"
+                                    :href="getMacroLink(scope.row.pid, scope.row.item_version)"
+                                    target="_blank"
+                                >
+                                    {{ scope.row.author }}#{{ scope.row.item_version }}
+                                </a>
+                            </div>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="value.7days" label="7天" sortable width="100">
+                        <template slot-scope="scope">{{ scope.row.value["7days"] }}</template>
+                    </el-table-column>
+                    <el-table-column prop="value.30days" label="30天" sortable width="100">
+                        <template slot-scope="scope">{{ scope.row.value["30days"] }}</template>
+                    </el-table-column>
+                    <el-table-column prop="value.yesterday" label="昨日" sortable width="100">
+                        <template slot-scope="scope">{{ scope.row.value["yesterday"] }}</template>
+                    </el-table-column>
+                    <el-table-column prop="value.before2" label="前日" sortable width="100">
+                        <template slot-scope="scope">{{ scope.row.value["before2"] }}</template>
+                    </el-table-column>
+                    <el-table-column prop="trending" label="趋势" :formatter="trending" width="100">
+                        <template slot-scope="scope">
+                            <i class="el-icon-top u-trending" v-if="trending(scope.row) > 0">
+                                {{ (trending(scope.row) * 100).toFixed(2) + "%" }}
+                            </i>
+                            <i class="el-icon-bottom u-trending" v-if="trending(scope.row) < 0">
+                                {{ (trending(scope.row) * 100).toFixed(2) + "%" }}
+                            </i>
+                            <span class="u-trending u-trending-keep" v-if="trending(scope.row) == 0">-</span>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </div>
+            <div class="m-macro-rank-full m-macro-rank" v-else>
+                <el-table
+                    :data="data"
+                    :default-sort="{ prop: '7days', order: 'descending' }"
+                    :row-class-name="highlight"
+                    key="alltable"
+                >
+                    <el-table-column type="index" label="排名" width="48">
+                        <template slot-scope="scope">
+                            <span class="u-order">{{ scope.$index + 1 }}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="downloadStr" label="云端宏" sortable>
+                        <template slot-scope="scope">
+                            <img class="u-icon-xf" :src="scope.row.xf | xficon" />
                             <a
                                 class="u-feed"
-                                :href="getMacroLink(scope.row.pid, scope.row.item_version)"
+                                :href="getMacroLink(scope.row.pid, scope.row.downloadStr.split('#')[1])"
                                 target="_blank"
+                                >{{ scope.row.downloadStr }}</a
                             >
-                                {{ scope.row.author }}#{{ scope.row.item_version }}
-                            </a>
-                        </div>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="value.7days" label="7天" sortable width="100">
-                    <template slot-scope="scope">{{ scope.row.value["7days"] }}</template>
-                </el-table-column>
-                <el-table-column prop="value.30days" label="30天" sortable width="100">
-                    <template slot-scope="scope">{{ scope.row.value["30days"] }}</template>
-                </el-table-column>
-                <el-table-column prop="value.yesterday" label="昨日" sortable width="100">
-                    <template slot-scope="scope">{{ scope.row.value["yesterday"] }}</template>
-                </el-table-column>
-                <el-table-column prop="value.before2" label="前日" sortable width="100">
-                    <template slot-scope="scope">{{ scope.row.value["before2"] }}</template>
-                </el-table-column>
-                <el-table-column prop="trending" label="趋势" :formatter="trending" width="100">
-                    <template slot-scope="scope">
-                        <i class="el-icon-top u-trending" v-if="trending(scope.row) > 0">
-                            {{ (trending(scope.row) * 100).toFixed(2) + "%" }}
-                        </i>
-                        <i class="el-icon-bottom u-trending" v-if="trending(scope.row) < 0">
-                            {{ (trending(scope.row) * 100).toFixed(2) + "%" }}
-                        </i>
-                        <span class="u-trending u-trending-keep" v-if="trending(scope.row) == 0">-</span>
-                    </template>
-                </el-table-column>
-            </el-table>
-        </div>
-        <div class="m-macro-rank-full m-macro-rank" v-else>
-            <el-table
-                :data="data"
-                :default-sort="{ prop: '7days', order: 'descending' }"
-                :row-class-name="highlight"
-                key="alltable"
-            >
-                <el-table-column type="index" label="排名" width="48">
-                    <template slot-scope="scope">
-                        <span class="u-order">{{ scope.$index + 1 }}</span>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="downloadStr" label="云端宏" sortable>
-                    <template slot-scope="scope">
-                        <img class="u-icon-xf" :src="scope.row.xf | xficon" />
-                        <a
-                            class="u-feed"
-                            :href="getMacroLink(scope.row.pid, scope.row.downloadStr.split('#')[1])"
-                            target="_blank"
-                            >{{ scope.row.downloadStr }}</a
-                        >
-                    </template>
-                </el-table-column>
-                <el-table-column prop="7days" label="7天" sortable width="100"></el-table-column>
-                <el-table-column prop="30days" label="30天" sortable width="100"></el-table-column>
-                <el-table-column prop="yesterday" label="昨日" sortable width="100"></el-table-column>
-                <el-table-column prop="before2" label="前日" sortable width="100"></el-table-column>
-                <el-table-column prop="trending" label="趋势" :formatter="trending" width="100">
-                    <template slot-scope="scope">
-                        <i class="el-icon-top u-trending" v-if="trending(scope.row) > 0">
-                            {{ (trending(scope.row) * 100).toFixed(2) + "%" }}
-                        </i>
-                        <i class="el-icon-bottom u-trending" v-if="trending(scope.row) < 0">
-                            {{ (trending(scope.row) * 100).toFixed(2) + "%" }}
-                        </i>
-                        <span class="u-trending u-trending-keep" v-if="trending(scope.row) == 0">-</span>
-                    </template>
-                </el-table-column>
-            </el-table>
-        </div>
-    </div>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="7days" label="7天" sortable width="100"></el-table-column>
+                    <el-table-column prop="30days" label="30天" sortable width="100"></el-table-column>
+                    <el-table-column prop="yesterday" label="昨日" sortable width="100"></el-table-column>
+                    <el-table-column prop="before2" label="前日" sortable width="100"></el-table-column>
+                    <el-table-column prop="trending" label="趋势" :formatter="trending" width="100">
+                        <template slot-scope="scope">
+                            <i class="el-icon-top u-trending" v-if="trending(scope.row) > 0">
+                                {{ (trending(scope.row) * 100).toFixed(2) + "%" }}
+                            </i>
+                            <i class="el-icon-bottom u-trending" v-if="trending(scope.row) < 0">
+                                {{ (trending(scope.row) * 100).toFixed(2) + "%" }}
+                            </i>
+                            <span class="u-trending u-trending-keep" v-if="trending(scope.row) == 0">-</span>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </div>
+        </div></listbox
+    >
 </template>
 
 <script>
+import listbox from "@/components/list/listbox.vue";
 import { getRank, getOverview } from "../service/rank";
 import xfmap from "@jx3box/jx3box-data/data/xf/xf.json";
 import { __ossMirror, __imgPath, __ossRoot } from "@jx3box/jx3box-common/data/jx3box.json";
@@ -193,7 +196,9 @@ export default {
         },
     },
     mounted: function () {},
-    components: {},
+    components: {
+        listbox,
+    },
 };
 </script>
 

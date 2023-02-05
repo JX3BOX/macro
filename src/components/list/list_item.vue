@@ -12,8 +12,10 @@
 				</span>
 				<span class="u-draft" v-if="item.post_status == 'draft'"> <i class="el-icon-edit-outline"></i> 草稿 </span>
 			</template>
+            <!-- 资料片 -->
+			<span class="u-label u-zlp" v-if="item.zlp">{{ item.zlp }}</span>
 			<!-- 繁体标识 -->
-			<span class="u-label" v-if="item.lang == 'tr'">繁體</span>
+			<span class="u-label u-lang" v-if="item.lang == 'tr'">繁體</span>
 			<!-- 标题文字 -->
 			<a class="u-title" :style="showHighlight(item.color)" :href="postLink(item.ID)" :target="target">{{ item.post_title || "无标题" }}</a>
 

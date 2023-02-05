@@ -74,6 +74,7 @@ export default {
 
 .m-cloud-name{
     font-weight:300;
+    margin:0 0 10px 0;
 
     .u-help{
         color:#888;

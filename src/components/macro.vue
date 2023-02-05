@@ -110,7 +110,7 @@ export default {
             return this.data.length;
         },
         isAuthor: function () {
-            return User.getInfo().uid == this.$store.state.user_id;
+            return User.isLogin() && User.getInfo().uid == this.$store.state.user_id;
         },
     },
     methods: {
