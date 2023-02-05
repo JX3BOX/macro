@@ -1,4 +1,4 @@
-import { $helper, $cms } from "@jx3box/jx3box-common/js/https";
+import { $helper} from "@jx3box/jx3box-common/js/https";
 import axios from "axios";
 
 // 关联文档

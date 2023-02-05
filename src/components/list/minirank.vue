@@ -1,8 +1,10 @@
 <template>
     <div class="m-macro-rank-mini m-macro-rank" v-loading="loading">
-        <h3 class="c-sidebar-right-title">
-            <img class="u-icon" svg-inline src="../../assets/img/side/rank.svg" />排行榜
-            <span class="u-more" @click="viewRank">查看更多 &raquo;</span>
+        <h3 class="m-side-title">
+            <div class="u-title">
+                <img class="u-icon" svg-inline src="@/assets/img/side/rank.svg" />排行榜
+            </div>
+            <span class="u-more" @click="viewRank">查看更多<i class="el-icon-d-arrow-right"></i></span>
         </h3>
         <ul class="u-list" v-if="subtype">
             <li v-for="(item, j) in mount_data" :key="j">
@@ -10,7 +12,7 @@
                     <span class="u-order" :class="highlight(j)">{{j + 1}}</span>
                     <span class="u-name">{{ item.author }}#{{ item.item_version }}</span>
                     <span class="u-per">
-                        <em class="u-count">+ {{ item.value["7days"] }}</em>
+                        <em class="u-count"><i class="el-icon-sunny"></i> {{ item.value["7days"] }}</em>
                     </span>
                 </a>
             </li>
@@ -21,7 +23,7 @@
                     <span class="u-order" :class="highlight(j)">{{ j + 1 }}</span>
                     <span class="u-name">{{ item.author }}#{{ item.v }}</span>
                     <span class="u-per">
-                        <em class="u-count">+ {{ item["7days"] }}</em>
+                        <em class="u-count"><i class="el-icon-sunny"></i> {{ item["7days"] }}</em>
                     </span>
                 </a>
             </li>
@@ -33,8 +35,6 @@
 import { getOverview, getRank } from "../../service/rank";
 import xfmap from "@jx3box/jx3box-data/data/xf/xf.json";
 import { getLink } from "@jx3box/jx3box-common/js/utils";
-import { getStatRank } from "@jx3box/jx3box-common/js/stat";
-import { getCustomPosts } from "@/service/post.js";
 import { getMacroLink } from "@/utils/misc.js";
 export default {
     name: "rank",
@@ -107,5 +107,5 @@ export default {
 </script>
 
 <style lang="less">
-@import "../../assets/css/rank.less";
+@import "~@/assets/css/rank.less";
 </style>

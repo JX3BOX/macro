@@ -19,16 +19,20 @@
             </div>
             <!-- 过滤 -->
             <template slot="filter">
-                <!-- 版本过滤 -->
-                <clientBy @filter="filter" :type="client"></clientBy>
-                <!-- 角标过滤 -->
-                <markBy @filter="filter"></markBy>
-                <!-- 资料片 -->
-                <!-- <zlpBy @filter="filter" :client="client"></zlpBy> -->
-                <!-- 语言过滤 -->
-                <menuBy @filter="filter" :data="langs" type="lang" placeholder="语言"></menuBy>
-                <!-- 排序过滤 -->
-                <orderBy @filter="filter"></orderBy>
+                <div class="m-filter--left">
+                    <!-- 版本过滤 -->
+                    <clientBy @filter="filter" :type="client"></clientBy>
+                    <!-- 角标过滤 -->
+                    <markBy @filter="filter"></markBy>
+                    <!-- 资料片 -->
+                    <!-- <zlpBy @filter="filter" :client="client"></zlpBy> -->
+                    <!-- 语言过滤 -->
+                    <menuBy @filter="filter" :data="langs" type="lang" placeholder="语言"></menuBy>
+                </div>
+                <div class="m-filter--right">
+                    <!-- 排序过滤 -->
+                    <orderBy @filter="filter"></orderBy>
+                </div>
             </template>
             <!-- 推荐 -->
             <rec-table v-if="isIndex && !search" />
@@ -53,15 +57,12 @@
                                 :style="item.color | isHighlight"
                                 :href="item.ID | postLink"
                                 :target="target"
-                            >{{ item.post_title || "无标题" }}</a>
+                                >{{ item.post_title || "无标题" }}</a
+                            >
 
                             <!-- 角标 -->
                             <span class="u-marks" v-if="item.mark && item.mark.length">
-                                <i
-                                    v-for="mark in item.mark"
-                                    class="u-mark"
-                                    :key="mark"
-                                >{{ mark | showMark }}</i>
+                                <i v-for="mark in item.mark" class="u-mark" :key="mark">{{ mark | showMark }}</i>
                             </span>
                         </h2>
 
@@ -69,11 +70,7 @@
                         <div class="u-content">
                             <ul
                                 class="m-macro-list-item-meta"
-                                v-if="
-                                    item.post_meta &&
-                                        item.post_meta.data &&
-                                        item.post_meta.data.length
-                                "
+                                v-if="item.post_meta && item.post_meta.data && item.post_meta.data.length"
                             >
                                 <li class="u-macro" v-for="(m, i) in item.post_meta.data" :key="i">
                                     <img class="u-macro-icon" :src="showIcon(m.icon)" />
@@ -84,8 +81,9 @@
                                     >
                                         <span
                                             class="u-macro-name"
-                                            @click="loadMacro(item.author_info.display_name,m,item.ID) "
-                                        >{{ m.name || '未命名' }}</span>
+                                            @click="loadMacro(item.author_info.display_name, m, item.ID)"
+                                            >{{ m.name || "未命名" }}</span
+                                        >
                                     </el-tooltip>
                                 </li>
                             </ul>
@@ -100,16 +98,14 @@
                                     :src="item.author.avatar | showAvatar"
                                     :alt="item.author.name"
                                 />-->
-                                <a
-                                    class="u-author-name"
-                                    :href="item.post_author | authorLink"
-                                    target="_blank"
-                                >{{ item.author_info.display_name }}</a>
+                                <a class="u-author-name" :href="item.post_author | authorLink" target="_blank">{{
+                                    item.author_info.display_name
+                                }}</a>
                             </div>
                             <span class="u-date">
                                 <i class="el-icon-date"></i>
-                                <time v-if="order == 'update'">{{item.post_modified | dateFormat}}</time>
-                                <time v-else>{{item.post_date | dateFormat}}</time>
+                                <time v-if="order == 'update'">{{ item.post_modified | dateFormat }}</time>
+                                <time v-else>{{ item.post_date | dateFormat }}</time>
                             </span>
                         </div>
                     </li>
@@ -131,17 +127,12 @@
 
 <script>
 import listbox from "@jx3box/jx3box-common-ui/src/single/cms-list.vue";
-import rec_table from './rec_table.vue'
+import rec_table from "./rec_table.vue";
 import { cms as mark_map } from "@jx3box/jx3box-common/data/mark.json";
 import _ from "lodash";
 import { getPosts } from "@/service/post";
-import dateFormat from "@/utils/dateFormat";
-import {
-    __ossMirror,
-    __iconPath,
-    __imgPath,
-    __ossRoot,
-} from "@jx3box/jx3box-common/data/jx3box";
+import { showDate } from "@jx3box/jx3box-common/js/moment.js";
+import { __ossMirror, __iconPath, __imgPath, __ossRoot } from "@jx3box/jx3box-common/data/jx3box";
 import xfmap from "@jx3box/jx3box-data/data/xf/xf.json";
 import macro from "@/components/macro.vue";
 import {
@@ -183,7 +174,6 @@ export default {
                 cn: "简体中文",
                 tr: "繁體中文",
             },
-            
         };
     },
     computed: {
@@ -193,23 +183,15 @@ export default {
         subtype: function () {
             return this.$route.query.subtype;
         },
-        resetParams : function (){
-            return [this.subtype,this.search,this.mark,this.lang,this.zlp,this.client]
+        resetParams: function () {
+            return [this.subtype, this.search, this.mark, this.lang, this.zlp, this.client];
         },
         params: function () {
             let params = {
                 per: this.per,
                 page: ~~this.page || 1,
             };
-            let optionalParams = [
-                "subtype",
-                "search",
-                "order",
-                "mark",
-                "lang",
-                "zlp",
-                "client",
-            ];
+            let optionalParams = ["subtype", "search", "order", "mark", "lang", "zlp", "client"];
             optionalParams.forEach((item) => {
                 if (this[item]) {
                     params[item] = this[item];
@@ -245,7 +227,7 @@ export default {
                     this.pages = res.data.data.pages;
                 })
                 .finally(() => {
-                    this.appendMode = false
+                    this.appendMode = false;
                     this.loading = false;
                 });
         },
@@ -270,12 +252,12 @@ export default {
             this.drawer = true;
             this.drawer_title = author + "#" + m.name;
             this.drawer_content = m.macro;
-            this.drawer_link = "./" + id  + '?tab=' + m.name;
+            this.drawer_link = "./" + id + "?tab=" + m.name;
         },
     },
     filters: {
         dateFormat: function (val) {
-            return dateFormat(new Date(val));
+            return showDate(new Date(val));
         },
         showAvatar: function (val) {
             return showAvatar(val);
@@ -299,12 +281,12 @@ export default {
         },
     },
     watch: {
-        subtype : function (){
-            this.search = ''  
+        subtype: function () {
+            this.search = "";
         },
-        client : function (val){
-            this.zlp = ''
-            this.$store.state.client = val == 'origin' ? 'origin' : 'std'
+        client: function (val) {
+            this.zlp = "";
+            this.$store.state.client = val == "origin" ? "origin" : "std";
         },
         resetParams: function () {
             this.page = 1;
@@ -319,9 +301,9 @@ export default {
         "$route.query.page": function (val) {
             this.page = ~~val;
         },
-        '$route.query.subtype' : function (val){
-            this.$store.state.subtype = val
-        }
+        "$route.query.subtype": function (val) {
+            this.$store.state.subtype = val;
+        },
     },
     created: function () {
         this.page = ~~this.$route.query.page || 1;
@@ -329,7 +311,7 @@ export default {
     components: {
         macro,
         listbox,
-        'rec-table' : rec_table
+        "rec-table": rec_table,
     },
 };
 </script>

@@ -10,16 +10,20 @@
     margin-top:5px;
     margin-bottom:10px;
     a {
-        .db;
-        // border-bottom: 1px solid #eee;
-        .fz(14px, 32px);
-        padding: 5px 25px;
+        .fz(13px, 32px);
+        padding: 2px 10px;
+        margin-bottom:5px;
+        .r(3px);
         color: #555;
+        .flex;
+        align-items: center;
+        gap:8px;
+        border:1px solid #eee;
+        background-color: #fff;
+
         .u-icon{
-            .y(-3px);
-            .mr(5px);
-            fill:#555;
-            .size(16px);
+            // fill:#555;
+            .size(18px);
         }
 
         .u-fav,.u-pass,.u-user,.u-avatar{
@@ -36,13 +40,16 @@
             // background-color: #fff;
             color:@darkblue;
             svg{fill:@darkblue;}
+            .bold;
+            background-color:#f5f7fa;
+            border-color:@color-link;
         }
 
-        border-top:1px solid transparent;
-        border-bottom:1px solid transparent;
+        // border-top:1px solid transparent;
+        // border-bottom:1px solid transparent;
 
         .u-mark{
-            
+
             color:#fff;
             .fz(12px);
             font-style: normal;
@@ -61,6 +68,16 @@
             &.ispending{
                 background-color:#fba524;
             }
+        }
+
+        .pr;
+        em{
+            .fz(12px,34px);
+            color:#999;
+            .pa;.rt(0);
+            font-style: italic;
+            font-weight: normal;
+            transform: scale(0.7);
         }
     }
     .router-link-exact-active,.on {

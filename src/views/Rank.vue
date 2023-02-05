@@ -1,13 +1,29 @@
 <template>
     <div class="v-rank" v-loading="loading">
         <div class="m-macro-rank-full m-macro-rank" v-if="!!subtype">
-            <el-table :data="mount_data" :default-sort="{ prop: 'value.7days', order: 'descending' }" :row-class-name="highlight" :fit="true" key="mounttable">
-                <el-table-column type="index" label="👑" width="48"></el-table-column>
+            <el-table
+                :data="mount_data"
+                :default-sort="{ prop: 'value.7days', order: 'descending' }"
+                :row-class-name="highlight"
+                :fit="true"
+                key="mounttable"
+            >
+                <el-table-column type="index" label="排名" width="48">
+                    <template slot-scope="scope">
+                        <span class="u-order">{{ scope.$index + 1 }}</span>
+                    </template>
+                </el-table-column>
                 <el-table-column prop="downloadStr" label="云端宏" sortable>
                     <template slot-scope="scope">
                         <div class="u-cell-feed">
                             <img class="u-icon-xf" :src="kungfuid | xficon" />
-                            <a class="u-feed" :href="getMacroLink(scope.row.pid, scope.row.item_version)" target="_blank"> {{ scope.row.author }}#{{ scope.row.item_version }} </a>
+                            <a
+                                class="u-feed"
+                                :href="getMacroLink(scope.row.pid, scope.row.item_version)"
+                                target="_blank"
+                            >
+                                {{ scope.row.author }}#{{ scope.row.item_version }}
+                            </a>
                         </div>
                     </template>
                 </el-table-column>
@@ -37,12 +53,26 @@
             </el-table>
         </div>
         <div class="m-macro-rank-full m-macro-rank" v-else>
-            <el-table :data="data" :default-sort="{ prop: '7days', order: 'descending' }" :row-class-name="highlight" key="alltable">
-                <el-table-column type="index" label="👑" width="48"></el-table-column>
+            <el-table
+                :data="data"
+                :default-sort="{ prop: '7days', order: 'descending' }"
+                :row-class-name="highlight"
+                key="alltable"
+            >
+                <el-table-column type="index" label="排名" width="48">
+                    <template slot-scope="scope">
+                        <span class="u-order">{{ scope.$index + 1 }}</span>
+                    </template>
+                </el-table-column>
                 <el-table-column prop="downloadStr" label="云端宏" sortable>
                     <template slot-scope="scope">
                         <img class="u-icon-xf" :src="scope.row.xf | xficon" />
-                        <a class="u-feed" :href="getMacroLink(scope.row.pid, scope.row.downloadStr.split('#')[1])" target="_blank">{{ scope.row.downloadStr }}</a>
+                        <a
+                            class="u-feed"
+                            :href="getMacroLink(scope.row.pid, scope.row.downloadStr.split('#')[1])"
+                            target="_blank"
+                            >{{ scope.row.downloadStr }}</a
+                        >
                     </template>
                 </el-table-column>
                 <el-table-column prop="7days" label="7天" sortable width="100"></el-table-column>
@@ -61,7 +91,6 @@
                     </template>
                 </el-table-column>
             </el-table>
-            <el-alert class="m-rank-tips" title="可在侧边栏指定心法以查看对应心法排名" type="warning" show-icon></el-alert>
         </div>
     </div>
 </template>
@@ -75,7 +104,7 @@ import { getMacroLink } from "@/utils/misc.js";
 export default {
     name: "Rank",
     props: [],
-    data: function() {
+    data: function () {
         return {
             data: [],
             mount_data: [],
@@ -83,19 +112,19 @@ export default {
         };
     },
     computed: {
-        subtype: function() {
+        subtype: function () {
             return this.$route.query.subtype || "";
         },
-        kungfuid: function() {
+        kungfuid: function () {
             return this.subtype ? xfmap[this.subtype]["id"] : 0;
         },
-        client: function() {
+        client: function () {
             return this.$store.state.client;
         },
     },
     methods: {
         getMacroLink,
-        trending: function(row, column) {
+        trending: function (row, column) {
             let trending = "";
             if (this.kungfuid) {
                 trending = (row.value.before2 - row.value.yesterday) / row.value.yesterday;
@@ -105,7 +134,7 @@ export default {
             if (!isFinite(trending)) trending = 0;
             return isNaN(trending) ? "N/A" : trending.toFixed(4);
         },
-        fixnull: function(data) {
+        fixnull: function (data) {
             let _data = [];
             data.forEach((item) => {
                 if (item["7days"] && item.pid) {
@@ -114,10 +143,10 @@ export default {
             });
             return _data;
         },
-        postLink: function(val) {
+        postLink: function (val) {
             return getLink("macro", val);
         },
-        loadRank: function() {
+        loadRank: function () {
             this.loading = true;
             getRank(this.kungfuid, this.client)
                 .then((data) => {
@@ -128,7 +157,7 @@ export default {
                     this.loading = false;
                 });
         },
-        loadOverview: function() {
+        loadOverview: function () {
             this.loading = true;
             getOverview(this.client)
                 .then((data) => {
@@ -151,19 +180,19 @@ export default {
         },
     },
     filters: {
-        xficon: function(id) {
+        xficon: function (id) {
             return __imgPath + "image/xf/" + id + ".png";
         },
     },
     watch: {
         subtype: {
             immediate: true,
-            handler: function() {
+            handler: function () {
                 this.subtype ? this.loadRank() : this.loadOverview();
             },
         },
     },
-    mounted: function() {},
+    mounted: function () {},
     components: {},
 };
 </script>

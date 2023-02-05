@@ -29,7 +29,7 @@
             color:@pink;
         }
     }
-    
+
 }
 @media screen and (max-width:@smallpc){
     .m-macro-list-item-meta .u-macro{
@@ -53,20 +53,20 @@
     .u-private{
         background-color:#fba524;
         color:#fff;
-        padding:1px 3px;
+        padding:2px 5px 2px 3px;
         .r(2px);
-        .fz(12px);
+        .fz(12px,14px);
         .mr(5px);
     }
     .u-draft{
         background-color:#aaa;
         color:#fff;
-        padding:1px 3px;
+        padding:2px 5px 2px 3px;
         .r(2px);
-        .fz(12px);
+        .fz(12px,14px);
         .mr(5px);
     }
-    
+
     .u-content{
         // padding:10px 15px;
         color:#555;
@@ -94,6 +94,8 @@
             .mr(5px);
         }
         .mb(10px);
+        .flex;
+        align-items: center;
     }
 
     .u-misc{
@@ -108,6 +110,11 @@
         .mt(0);
         // .mr(10px);
         i{.mr(5px);}
+    }
+    .u-title{
+        &:hover{
+            color:@pink;
+        }
     }
 }
 

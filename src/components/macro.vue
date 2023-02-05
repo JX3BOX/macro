@@ -1,5 +1,5 @@
 <template>
-    <div class="u-macro-inner">
+    <div class="m-macro-inner">
         <template v-if="data">
             <div class="w-jx3macro" v-html="content"></div>
             <div class="u-panel u-macro-panel">
@@ -169,20 +169,29 @@ export default {
 };
 </script>
 
-<style scoped lang="less">
-.u-macro-inner {
+<style lang="less">
+.m-macro-inner {
     .pr;
     .u-empty-text {
         margin-top: -2px;
     }
+    .u-count {
+        .pa;
+        .rb(5px, 10px);
+        .fz(12px);
+        color: #aaa;
+        b {
+            color: @color-link;
+        }
+    }
 }
-.u-count {
-    .pa;
-    .rb(5px, 10px);
-    .fz(12px);
-    color: #aaa;
-    b {
-        color: @color-link;
+@media screen and (max-width: @phone) {
+    .m-macro-inner {
+        .u-count {
+            .ps;
+            .x;
+            .mt(10px);
+        }
     }
 }
 </style>

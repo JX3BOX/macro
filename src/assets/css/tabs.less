@@ -4,7 +4,7 @@
     background-color:#fff;
     .z(100);
     b{
-        // font-weight: normal;
+        font-weight: normal;
         color:@color;
     }
 
@@ -15,6 +15,9 @@
     .el-tabs__item.is-active{
         b,i{
             color:@primary;
+        }
+        b{
+            .bold;
         }
     }
 
@@ -27,9 +30,10 @@
     em{
         .fz(12px);
         .pr;top:-5px;.ml(3px);
-        padding:0 4px;
+        padding:2px 4px;
         .r(2px);
         font-style:normal;
+        font-weight: normal;
     }
     .u-secret,.u-hot{
         background-color:#c00;

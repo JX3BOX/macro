@@ -1,7 +1,7 @@
 <template>
     <div class="m-index-rec">
         <h5 class="u-title">
-            <span>当前版本编辑推荐</span>
+            <span><i class="el-icon-star-off"></i>当前版本编辑推荐</span>
         </h5>
         <div class="u-ac" v-html="ac"></div>
         <el-row>
@@ -117,6 +117,7 @@ export default {
         border-right: 1px solid @border;
         border-bottom: 1px solid @border;
         a {
+            .nobreak;
             .db;
             .fz(12px, 20px);
             padding: 8px 10px;

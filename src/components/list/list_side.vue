@@ -13,9 +13,11 @@
 
         <!-- 其他链接 -->
         <div class="m-side-links">
-            <h3 class="c-sidebar-right-title" style="border-bottom:none;">
-                <img class="u-icon" svg-inline src="../../assets/img/side/puzzle.svg" />
-                帮助文档
+            <h3 class="m-side-title" style="border-bottom: none;">
+                <div class="u-title">
+                    <img class="u-icon" svg-inline src="@/assets/img/side/docs.svg" />
+                    帮助文档
+                </div>
             </h3>
             <el-collapse class="u-groups" v-model="activeDocGroup">
                 <el-collapse-item title="入门帮助" name="newbie">
@@ -55,21 +57,21 @@ import { getMenuGroups } from "@/service/helper.js";
 export default {
     name: "list_side",
     props: [],
-    data: function() {
+    data: function () {
         return {
-            activeDocGroup: ['newbie','senior','tools'],
+            activeDocGroup: [],
             macro_newbie: [],
             macro_senior: [],
             macro_tools: [],
         };
     },
     computed: {
-        client: function() {
+        client: function () {
             return this.$store.state.client;
         },
     },
     methods: {},
-    mounted: function() {
+    mounted: function () {
         getMenuGroups(["macro_newbie", "macro_senior", "macro_tools"]).then((res) => {
             let data = res.data.data.data || {};
             for (let key in data) {
@@ -84,32 +86,5 @@ export default {
 </script>
 
 <style lang="less">
-.m-side-links {
-    .u-groups{
-        padding:0 5px;
-    }
-    .u-doc {
-        .db;
-        .fz(12px, 34px);
-        border-bottom: 1px solid #eee;
-        i {
-            .fz(16px);
-            .y(-2px);
-            color:#666;
-        }
-        &:last-child {
-            border-bottom: none;
-        }
-        &:hover{
-            .bold;
-        }
-    }
-}
-@media screen and (max-width: @phone) {
-    .m-side-rank,
-    .m-side-links {
-        .none;
-    }
-}
-
+@import '~@/assets/css/side.less';
 </style>
