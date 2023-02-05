@@ -107,6 +107,8 @@ export default {
         border-bottom: 1px solid @border;
         padding:10px;
         .fz(12px,2);
+        .x;
+        white-space: pre-wrap;
     }
     .u-rec {
         img {
