@@ -8,8 +8,9 @@
                     :row-class-name="highlight"
                     :fit="true"
                     key="mounttable"
+                    border
                 >
-                    <el-table-column type="index" label="排名" width="48">
+                    <el-table-column type="index" label="" width="40">
                         <template slot-scope="scope">
                             <span class="u-order">{{ scope.$index + 1 }}</span>
                         </template>
@@ -59,8 +60,9 @@
                     :default-sort="{ prop: '7days', order: 'descending' }"
                     :row-class-name="highlight"
                     key="alltable"
+                    border
                 >
-                    <el-table-column type="index" label="排名" width="48">
+                    <el-table-column type="index" label="" width="40">
                         <template slot-scope="scope">
                             <span class="u-order">{{ scope.$index + 1 }}</span>
                         </template>

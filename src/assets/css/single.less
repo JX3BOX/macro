@@ -13,11 +13,22 @@
     .mt(24px);
 }
 
+
 @media screen and (max-width:@phone){
     .m-single-talent-container{
-        overflow-x: auto;
+        // overflow-x: auto;
+        // overflow-y: visible;
         .w-qixue-box .w-qixue-item-pop {
-            width: 65vw;
+            .none;
+        }
+        .w-qixue-box{
+            width: 100%;
+            overflow: auto;
+            box-sizing: border-box;
+        }
+        .w-qixue-clist{
+            display: inline-flex;
+            flex-wrap: nowrap;
         }
     }
 }

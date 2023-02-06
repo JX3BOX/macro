@@ -19,6 +19,8 @@
                     <markBy @filter="filterMeta"></markBy>
                     <!-- 语言过滤 -->
                     <menuBy @filter="filterMeta" :data="langs" type="lang" placeholder="语言"></menuBy>
+                    <!-- 资料片过滤 -->
+                    <zlpBy @filter="filterMeta" type="zlp" :client="client"></zlpBy>
                 </div>
                 <div class="m-filter--right">
                     <!-- 排序过滤 -->
@@ -109,6 +111,7 @@ export default {
             client: this.$store.state.client, //版本选择
             search: "", //搜索字串
             lang: "", //语言
+            zlp : '', //资料片
 
             drawer: false,
             drawer_title: "",
@@ -139,6 +142,7 @@ export default {
                 client: this.client,
                 search: this.search,
                 lang: this.lang,
+                zlp : this.zlp,
             };
         },
         // 分页相关参数
