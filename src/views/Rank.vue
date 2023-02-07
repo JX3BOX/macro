@@ -132,9 +132,9 @@ export default {
         trending: function (row, column) {
             let trending = "";
             if (this.kungfuid) {
-                trending = (row.value.before2 - row.value.yesterday) / row.value.yesterday;
+                trending = (row.value.yesterday - row.value.before2) / row.value.yesterday;
             } else {
-                trending = (row.before2 - row.yesterday) / row.yesterday;
+                trending = (row.yesterday - row.before2) / row.yesterday;
             }
             if (!isFinite(trending)) trending = 0;
             return isNaN(trending) ? "N/A" : trending.toFixed(4);
