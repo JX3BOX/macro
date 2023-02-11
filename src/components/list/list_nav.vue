@@ -22,17 +22,17 @@
                 <span>配装模拟器</span>
                 <em>Assembly Simulator</em>
             </a>
-            <a href="/app/talent" target="_blank" v-if="client=='std'">
+            <a href="/macro/talent" target="_blank" v-if="client=='std'">
                 <img class="u-icon" :src="getAppIcon('talent',true)" />
                 <span>奇穴模拟器</span>
                 <em>Talent Simulator</em>
             </a>
-            <a href="/app/talent2" target="_blank" v-else>
+            <a href="/macro/talent2" target="_blank" v-else>
                 <img class="u-icon" :src="getAppIcon('talent',true)" />
                 <span>镇派模拟器</span>
                 <em>Talent Simulator</em>
             </a>
-            <a href="/app/macroeditor" target="_blank">
+            <a href="/macro/macroeditor" target="_blank">
                 <img class="u-icon" :src="getAppIcon('macroeditor',true)" />
                 <span>宏编辑器</span>
                 <em>Macro Editor</em>

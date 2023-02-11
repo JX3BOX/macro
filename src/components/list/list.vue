@@ -44,7 +44,7 @@
                         <h2 class="u-post" :class="{ isSticky: item.sticky }">
                             <img
                                 class="u-icon"
-                                :src="item.post_subtype | xficon"
+                                :src="xficon(item.post_subtype)"
                                 :alt="item.post_subtype"
                                 :title="item.post_subtype"
                             />
@@ -54,15 +54,15 @@
                             <!-- 标题文字 -->
                             <a
                                 class="u-title"
-                                :style="item.color | isHighlight"
-                                :href="item.ID | postLink"
+                                :style="isHighlight(item.color)"
+                                :href="postLink(item.ID)"
                                 :target="target"
                                 >{{ item.post_title || "无标题" }}</a
                             >
 
                             <!-- 角标 -->
                             <span class="u-marks" v-if="item.mark && item.mark.length">
-                                <i v-for="mark in item.mark" class="u-mark" :key="mark">{{ mark | showMark }}</i>
+                                <i v-for="mark in item.mark" class="u-mark" :key="mark">{{ showMark(mark) }}</i>
                             </span>
                         </h2>
 
@@ -98,14 +98,14 @@
                                     :src="item.author.avatar | showAvatar"
                                     :alt="item.author.name"
                                 />-->
-                                <a class="u-author-name" :href="item.post_author | authorLink" target="_blank">{{
+                                <a class="u-author-name" :href="authorLink(item.post_author)" target="_blank">{{
                                     item.author_info.display_name
                                 }}</a>
                             </div>
                             <span class="u-date">
                                 <i class="el-icon-date"></i>
-                                <time v-if="order == 'update'">{{ item.post_modified | dateFormat }}</time>
-                                <time v-else>{{ item.post_date | dateFormat }}</time>
+                                <time v-if="order == 'update'">{{ dateFormat(item.post_modified) }}</time>
+                                <time v-else>{{ dateFormat(item.post_date) }}</time>
                             </span>
                         </div>
                     </li>
@@ -254,8 +254,6 @@ export default {
             this.drawer_content = m.macro;
             this.drawer_link = "./" + id + "?tab=" + m.name;
         },
-    },
-    filters: {
         dateFormat: function (val) {
             return showDate(new Date(val));
         },

@@ -1,0 +1,219 @@
+@import "../../../node_modules/@jx3box/jx3box-talent/talent.css";
+
+.m-talent {
+    padding: 20px 30px;
+    max-width: 1200px;
+    .auto(x);
+    min-height: calc(100vh - @header-height - @bread-height - 100px);
+}
+@media screen and (max-width: @phone) {
+    .m-talent {
+        padding: 20px;
+        overflow: hidden;
+    }
+}
+
+// 头部
+.m-talent-header {
+    .clearfix;
+}
+.m-talent-title {
+    font-size: 24px;
+    font-weight: 500;
+    .x;
+    margin: 0 0 20px 0;
+}
+@media screen and (max-width: @phone) {
+    .m-talent-title {
+        .none;
+    }
+}
+
+// 工具栏
+.m-talent-panel {
+    // .x;
+    .mb(20px);
+    .pr;
+    .u-toolbar {
+        .pa;
+        .rb(0);
+    }
+}
+@media screen and (max-width: @phone) {
+    .m-talent-panel {
+        .u-toolbar {
+            .ps;
+            .mt(10px);
+        }
+    }
+}
+
+.m-talent-version {
+    .db;
+    // .x;
+    white-space: nowrap;
+    .u-label {
+        background-color: #f5f7fa;
+        color: #909399;
+        vertical-align: top;
+        .dbi;
+        position: relative;
+        border: 1px solid #dcdfe6;
+        border-radius: 4px;
+        padding: 11px 20px;
+        white-space: nowrap;
+        border-right: 0;
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+        .fz(14px, 16px);
+    }
+    .el-input__inner {
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+    }
+}
+@media screen and (max-width: @phone) {
+    .m-talent-version {
+        display: flex;
+    }
+}
+
+// 包裹层
+// .m-talent-wrapper{
+// max-width:1440px;
+// .auto(x);
+// border:1px solid #eee;
+// padding:10px 20px 20px 20px;
+// box-sizing: border-box;
+// background-color:@bg-light;
+// .r(4px);
+// }
+.m-talent-left {
+    margin-top: 8px;
+}
+@media screen and (max-width: 1900px) {
+    .m-talent-wrapper {
+        .el-col {
+            .db;
+            float: none;
+            .w(auto);
+        }
+    }
+}
+
+// 心法选择
+.m-talent-xf {
+    .u-pic {
+        .db;
+        .size(48px);
+        background-color: @bg-black;
+        .r(4px);
+        transition: 0.1s ease-in;
+        .tm(0.4);
+        box-sizing: border-box;
+    }
+    .u-txt {
+        .db;
+        .x;
+        .fz(14px, 2);
+        white-space: nowrap;
+        overflow: hidden;
+        .w(48px);
+    }
+
+    .el-radio {
+        .ml(0);
+        .mr(15px);
+    }
+    .el-radio__input {
+        .none;
+    }
+    .el-radio__label {
+        .db;
+        padding-left: 0;
+    }
+
+    .is-checked {
+        .u-pic {
+            border: 3px solid @primary;
+            // filter: saturate(120%)  brightness(120%);
+            .tm(1);
+        }
+        .u-txt {
+            .bold;
+        }
+    }
+}
+@media screen and (max-width: @phone) {
+    .m-talent-xf {
+        .mr(-20px);
+    }
+}
+
+// 子标题
+.m-talent-subtitle {
+    .fz(1.2rem, 2);
+    border-bottom: 1px dotted #ddd;
+    //.bold;
+    margin: 10px 0 10px 0;
+    // font-weight: 300;
+}
+
+// 编码
+.m-talent-code {
+    .pointer;
+    font-family: Consolas;
+}
+.u-copy {
+    padding: 10px 0;
+    i {
+        .mr(3px);
+    }
+    color: @primary;
+    &:hover {
+        color: @pink;
+    }
+}
+.m-talent-extend {
+    .u-btn {
+        .mt(10px);
+    }
+}
+
+.m-talent-tip {
+    .fz(13px);
+    color: #888;
+}
+
+.m-talent-shortcut {
+    ul,
+    li {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    li {
+        .mb(10px);
+    }
+}
+
+.qx-container {
+    .mb(20px);
+}
+
+.c-footer {
+    max-width: 1200px;
+    .auto(x);
+}
+
+@media screen and (max-width: @phone) {
+    .el-message-box {
+        .w(100%);
+    }
+}
+
+
+.m-talent-op {
+    .mt(20px);
+    .x;
+}

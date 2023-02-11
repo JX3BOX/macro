@@ -15,11 +15,21 @@ let store = {
             collection_data : '',
             directory : false,
         },
+
+        // 通你妹
+        selectMeridians: [],
+        defineMeridians: [],
     },
     mutations: {
         switchClient: function(state, val) {
             state.client = val || "std";
         },
+        setSelect(state, select){
+            state.selectMeridians = select
+        },
+        setDefine(state, define){
+            state.defineMeridians = define
+        }
     },
     getters: {},
     actions: {},

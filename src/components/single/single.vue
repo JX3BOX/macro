@@ -40,9 +40,9 @@
 								<div v-else class="u-talent talent-box" :id="`talent-box-${i}`"></div>
 							</div>
 							<div class="u-panel u-talent-panel" v-if="item.talent">
-								<el-button class="u-talent-panel-copycode" icon="el-icon-s-tools" plain size="mini" v-clipboard:copy="item.talent" v-clipboard:success="onCopy" v-clipboard:error="onError">复制{{ client === "origin" ? "镇派" : "奇穴" }}编码</el-button>
-								<el-button v-if="client !== 'origin'" class="u-talent-panel-copytxt" icon="el-icon-document-copy" plain size="mini" v-clipboard:copy="getTalentTXT(i)" v-clipboard:success="onCopy" v-clipboard:error="onError">复制奇穴文字</el-button>
-								<el-button v-if="client !== 'origin'" class="u-talent-panel-copysq" icon="el-icon-scissors" plain size="mini" v-clipboard:copy="getTalentSQ(item.talent)" v-clipboard:success="onCopy" v-clipboard:error="onError">复制奇穴序列</el-button>
+								<el-button class="u-talent-panel-copycode" icon="el-icon-s-tools" plain size="mini" @click="copy(item.talent)">复制{{ client === "origin" ? "镇派" : "奇穴" }}编码</el-button>
+								<el-button v-if="client !== 'origin'" class="u-talent-panel-copytxt" icon="el-icon-document-copy" plain size="mini" @click="copy(getTalentTXT(i))">复制奇穴文字</el-button>
+								<el-button v-if="client !== 'origin'" class="u-talent-panel-copysq" icon="el-icon-scissors" plain size="mini" @click="copy(getTalentSQ(item.talent))">复制奇穴序列</el-button>
 							</div>
 						</template>
 						<!-- 急速 -->
@@ -70,6 +70,7 @@ import RenderTalent from "@jx3box/jx3box-talent2/src/RenderTalent2.vue";
 import pz from "./pz.vue";
 import macro from "@/components/macro.vue";
 import talent from "@jx3box/jx3box-talent";
+import { copy } from "@/utils/clipboard";
 
 // 本地数据
 import { getPost } from "../../service/post.js";
@@ -123,19 +124,7 @@ export default {
 		},
 	},
 	methods: {
-		onCopy: function (val) {
-			this.$notify({
-				title: "复制成功",
-				message: "复制内容 : " + val.text,
-				type: "success",
-			});
-		},
-		onError: function () {
-			this.$notify.error({
-				title: "复制失败",
-				message: "请手动复制",
-			});
-		},
+		copy,
 		getTalentSQ: function (talent) {
 			if (talent) {
 				try {

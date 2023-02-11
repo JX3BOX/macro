@@ -71,11 +71,6 @@ export default {
         },
         getMacroLink,
     },
-    filters: {
-        postLink: function (pid) {
-            return getLink("macro", pid);
-        },
-    },
     watch: {
         subtype: {
             immediate: true,

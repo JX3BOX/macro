@@ -18,7 +18,7 @@
                     <el-table-column prop="downloadStr" label="云端宏" sortable>
                         <template slot-scope="scope">
                             <div class="u-cell-feed">
-                                <img class="u-icon-xf" :src="kungfuid | xficon" />
+                                <img class="u-icon-xf" :src="xficon(kungfuid)" />
                                 <a
                                     class="u-feed"
                                     :href="getMacroLink(scope.row.pid, scope.row.item_version)"
@@ -69,7 +69,7 @@
                     </el-table-column>
                     <el-table-column prop="downloadStr" label="云端宏" sortable>
                         <template slot-scope="scope">
-                            <img class="u-icon-xf" :src="scope.row.xf | xficon" />
+                            <img class="u-icon-xf" :src="xficon(scope.row.xf)" />
                             <a
                                 class="u-feed"
                                 :href="getMacroLink(scope.row.pid, scope.row.downloadStr.split('#')[1])"
@@ -183,8 +183,6 @@ export default {
             }
             return "";
         },
-    },
-    filters: {
         xficon: function (id) {
             return __imgPath + "image/xf/" + id + ".png";
         },

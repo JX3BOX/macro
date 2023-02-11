@@ -294,13 +294,6 @@ export default {
             },
         },
     },
-    filters: {
-        xficon: function (val) {
-            if (!val || val == "其它") val = "通用";
-            let xf_id = xfmap[val]?.id;
-            return __imgPath + "image/xf/" + xf_id + ".png";
-        },
-    },
     components: {
         listItem,
         macro,

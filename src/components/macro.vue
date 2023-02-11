@@ -8,9 +8,7 @@
                     icon="el-icon-document-copy"
                     plain
                     size="mini"
-                    v-clipboard:copy="copytext"
-                    v-clipboard:success="onCopy"
-                    v-clipboard:error="onError"
+                    @click="copy(copytext)"
                     >复制宏内容</el-button
                 >
                 <el-button
@@ -30,9 +28,7 @@
                     plain
                     type="primary"
                     size="mini"
-                    v-clipboard:copy="copyname"
-                    v-clipboard:success="onCopy"
-                    v-clipboard:error="onError"
+                    @click="copy(copyname)"
                     >复制云端宏</el-button
                 >
                 <a
@@ -64,7 +60,7 @@ import macro from "@jx3box/jx3box-macro";
 import "@jx3box/jx3box-macro/macro.css";
 import dict from "@jx3box/jx3box-dict/output/skill.json";
 import User from "@jx3box/jx3box-common/js/user";
-// import { getNewDict } from "@/service/helper.js";
+import { copy } from "@/utils/clipboard";
 export default {
     name: "macro",
     props: ["ctx", "lang", "name"],
@@ -114,18 +110,8 @@ export default {
         },
     },
     methods: {
-        onCopy: function (val) {
-            this.$notify({
-                title: "复制成功",
-                message: "复制宏成功",
-                type: "success",
-            });
-        },
-        onError: function () {
-            this.$notify.error({
-                title: "复制失败",
-                message: "请手动复制",
-            });
+        copy: function (text) {
+            copy(text, { success_message: "复制宏成功" })
         },
         translate(data) {
             if (data && data.length) {
@@ -197,8 +183,8 @@ export default {
         .pa;
         .rt(0,-8px);
         background-color: #fff;
-        bottom:auto;
-        padding:0 5px;
+        bottom: auto;
+        padding: 0 5px;
     }
 }
 </style>

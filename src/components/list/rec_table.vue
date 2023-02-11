@@ -7,8 +7,8 @@
         <el-row>
             <el-col :span="6" v-for="(item,i) in data" :key="i">
                 <div class="u-rec">
-                    <a :href="item.link" target="_blank" :style="item.color | highLight">
-                        <img :src="item.icon | iconLink" v-if="item.icon" />
+                    <a :href="item.link" target="_blank" :style="highLight(item.color)">
+                        <img :src="iconLink(item.icon)" v-if="item.icon" />
                         {{item.label}}
                     </a>
                 </div>
@@ -58,8 +58,6 @@ export default {
                 this.ac = res.data.data.breadcrumb.html;
             });
         },
-    },
-    filters: {
         highLight: function (val) {
             if (val) {
                 return "color:" + val + ";font-weight:bold;";
