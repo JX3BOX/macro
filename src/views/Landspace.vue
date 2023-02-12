@@ -1,113 +1,86 @@
 <template>
-    <listbox>
-        <div class="m-archive-box" v-loading="loading">
-            <!-- 已登录 -->
-            <div class="m-bucket" v-if="isLogin">
-                <!-- 搜索 -->
-                <div class="m-archive-search" slot="search-before">
-                    <a :href="publish_link" class="u-publish el-button el-button--primary">+ 发布作品</a>
-                    <el-input placeholder="请输入搜索内容" v-model.trim.lazy="search">
-                        <span slot="prepend">关键词</span>
-                        <el-button slot="append" icon="el-icon-search"></el-button>
-                    </el-input>
-                </div>
-                <!-- 筛选 -->
-                <div class="m-archive-filter">
-                    <div class="m-filter--left">
-                        <!-- 版本过滤 -->
-                        <clientBy @filter="filterImperceptibly" :type="client"></clientBy>
-                        <!-- 角标过滤 -->
-                        <markBy @filter="filterMeta"></markBy>
-                        <!-- 语言过滤 -->
-                        <menuBy @filter="filterMeta" :data="langs" type="lang" placeholder="语言"></menuBy>
-                    </div>
-                    <div class="m-filter--right">
-                        <!-- 排序过滤 -->
-                        <orderBy @filter="filterMeta"></orderBy>
-                    </div>
-                </div>
-                <!-- 提醒 -->
-                <el-alert title="此处仅显示亲友设置为“仅亲友可见”的宏。" type="info" show-icon></el-alert>
-                <!-- 列表 -->
-                <div class="m-archive-list" v-if="data && data.length">
-                    <ul class="u-list">
-                        <list-item
-                            v-for="(item, i) in data"
-                            :key="i + item"
-                            :item="item"
-                            :order="order"
-                            @loadMacro="loadMacro"
-                        />
-                    </ul>
-                </div>
-
-                <!-- 空 -->
-                <el-alert
-                    v-else
-                    class="m-archive-null"
-                    title="没有找到相关条目"
-                    type="info"
-                    center
-                    show-icon
-                ></el-alert>
-
-                <!-- 下一页 -->
-                <el-button
-                    class="m-archive-more"
-                    v-show="hasNextPage"
-                    type="primary"
-                    @click="appendPage"
-                    :loading="loading"
-                    icon="el-icon-arrow-down"
-                    >加载更多</el-button
-                >
-
-                <!-- 分页 -->
-                <el-pagination
-                    class="m-archive-pages"
-                    background
-                    layout="total, prev, pager, next, jumper"
-                    :hide-on-single-page="true"
-                    :page-size="per"
-                    :total="total"
-                    :current-page.sync="page"
-                    @current-change="changePage"
-                ></el-pagination>
+    <div class="m-archive-box" v-loading="loading">
+        <!-- 已登录 -->
+        <div class="m-bucket" v-if="isLogin">
+            <!-- 搜索 -->
+            <common-header
+                @filterImperceptibly="filterImperceptibly"
+                @filterMeta="filterMeta"
+                @search="onSearch"
+            ></common-header>
+            <!-- 提醒 -->
+            <el-alert title="此处仅显示亲友设置为“仅亲友可见”的宏。" type="info" show-icon></el-alert>
+            <!-- 列表 -->
+            <div class="m-archive-list" v-if="data && data.length">
+                <ul class="u-list">
+                    <list-item
+                        v-for="(item, i) in data"
+                        :key="i + item"
+                        :item="item"
+                        :order="order"
+                        @loadMacro="loadMacro"
+                    />
+                </ul>
             </div>
-            <!-- 未登录 -->
-            <div class="m-archive-noright" v-else>
-                <div class="u-tip-login el-alert el-alert--warning is-light">
-                    <i class="el-alert__icon el-icon-warning"></i>
-                    <span>
-                        使用亲友限定分享仓库，请先
-                        <a :href="login_url">登录</a>
-                    </span>
-                </div>
+
+            <!-- 空 -->
+            <el-alert v-else class="m-archive-null" title="没有找到相关条目" type="info" center show-icon></el-alert>
+
+            <!-- 下一页 -->
+            <el-button
+                class="m-archive-more"
+                v-show="hasNextPage"
+                type="primary"
+                @click="appendPage"
+                :loading="loading"
+                icon="el-icon-arrow-down"
+                >加载更多</el-button
+            >
+
+            <!-- 分页 -->
+            <el-pagination
+                class="m-archive-pages"
+                background
+                layout="total, prev, pager, next, jumper"
+                :hide-on-single-page="true"
+                :page-size="per"
+                :total="total"
+                :current-page.sync="page"
+                @current-change="changePage"
+            ></el-pagination>
+        </div>
+        <!-- 未登录 -->
+        <div class="m-archive-noright" v-else>
+            <div class="u-tip-login el-alert el-alert--warning is-light">
+                <i class="el-alert__icon el-icon-warning"></i>
+                <span>
+                    使用亲友限定分享仓库，请先
+                    <a :href="login_url">登录</a>
+                </span>
             </div>
-            <!-- 快捷查看宏 -->
-            <el-drawer class="m-macro-drawer" title="云端宏" :visible.sync="drawer" :append-to-body="true">
-                <div class="u-box">
-                    <h2 class="u-title">{{ drawer_title }}</h2>
-                    <macro :ctx="drawer_content" :name="drawer_title" />
-                    <a :href="drawer_link" class="u-skip el-button el-button--primary">
-                        <i class="el-icon-copy-document"></i> 查看详情
-                    </a>
-                </div>
-            </el-drawer>
-        </div></listbox
-    >
+        </div>
+        <!-- 快捷查看宏 -->
+        <el-drawer class="m-macro-drawer" title="云端宏" :visible.sync="drawer" :append-to-body="true">
+            <div class="u-box">
+                <h2 class="u-title">{{ drawer_title }}</h2>
+                <macro :ctx="drawer_content" :name="drawer_title" />
+                <a :href="drawer_link" class="u-skip el-button el-button--primary">
+                    <i class="el-icon-copy-document"></i> 查看详情
+                </a>
+            </div>
+        </el-drawer>
+    </div>
 </template>
 
 <script>
-import listbox from "@/components/list/listbox.vue";
-import { appKey } from "@/../setting.json";
-import listItem from "@/components/list/list_item.vue";
-import { publishLink } from "@jx3box/jx3box-common/js/utils";
 import { getFriendsPosts as getPosts } from "@/service/post";
 import xfmap from "@jx3box/jx3box-data/data/xf/xf.json";
-import macro from "@/components/macro.vue";
 import User from "@jx3box/jx3box-common/js/user";
 import { __Links } from "@jx3box/jx3box-common/data/jx3box.json";
+
+import listItem from "@/components/list/list_item.vue";
+import macro from "@/components/macro.vue";
+import CommonHeader from "@/components/common-header.vue";
 export default {
     name: "LandspaceBucket",
     props: [],
@@ -144,10 +117,6 @@ export default {
         };
     },
     computed: {
-        // 发布按钮链接
-        publish_link: function () {
-            return publishLink(appKey);
-        },
         // 是否显示加载更多
         hasNextPage: function () {
             return this.pages > 1 && this.page < this.total;
@@ -200,6 +169,9 @@ export default {
             }
 
             return _query;
+        },
+        onSearch: function (search) {
+            this.search = search;
         },
         // 加载数据
         loadData: function (appendMode = false) {
@@ -295,7 +267,7 @@ export default {
     components: {
         listItem,
         macro,
-        listbox
+        CommonHeader,
     },
 };
 </script>

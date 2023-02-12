@@ -1,30 +1,8 @@
 <template>
-    <listbox>
         <div class="m-archive-box" v-loading="loading">
             <div class="m-bucket" v-if="isLogin" v-loading="loading">
                 <!-- 搜索 -->
-                <div class="m-archive-search" slot="search-before">
-                    <a :href="publish_link" class="u-publish el-button el-button--primary">+ 发布作品</a>
-                    <el-input placeholder="请输入搜索内容" v-model.trim.lazy="search">
-                        <span slot="prepend">关键词</span>
-                        <el-button slot="append" icon="el-icon-search"></el-button>
-                    </el-input>
-                </div>
-                <!-- 筛选 -->
-                <div class="m-archive-filter">
-                    <div class="m-filter--left">
-                        <!-- 版本过滤 -->
-                        <clientBy @filter="filterImperceptibly" :type="client"></clientBy>
-                        <!-- 角标过滤 -->
-                        <markBy @filter="filterMeta"></markBy>
-                        <!-- 语言过滤 -->
-                        <menuBy @filter="filterMeta" :data="langs" type="lang" placeholder="语言"></menuBy>
-                    </div>
-                    <div class="m-filter--right">
-                        <!-- 排序过滤 -->
-                        <orderBy @filter="filterMeta"></orderBy>
-                    </div>
-                </div>
+                <common-header @filterImperceptibly="filterImperceptibly" @filterMeta="filterMeta" @search="onSearch"></common-header>
 
                 <!-- 列表 -->
                 <div class="m-archive-list" v-if="data && data.length">
@@ -97,11 +75,9 @@
                 </div>
             </el-drawer>
         </div>
-    </listbox>
 </template>
 
 <script>
-import listbox from "@/components/list/listbox.vue";
 import { appKey } from "@/../setting.json";
 import listItem from "@/components/list/list_item.vue";
 import { publishLink } from "@jx3box/jx3box-common/js/utils";
@@ -110,6 +86,8 @@ import xfmap from "@jx3box/jx3box-data/data/xf/xf.json";
 import macro from "@/components/macro.vue";
 import User from "@jx3box/jx3box-common/js/user";
 import { __Links } from "@jx3box/jx3box-common/data/jx3box.json";
+
+import CommonHeader from "@/components/common-header.vue";
 export default {
     name: "FavBucket",
     props: [],
@@ -202,6 +180,9 @@ export default {
             }
 
             return _query;
+        },
+        onSearch: function (search) {
+            this.search = search;
         },
         // 加载数据
         loadData: function (appendMode = false) {
@@ -297,7 +278,7 @@ export default {
     components: {
         listItem,
         macro,
-        listbox
+        CommonHeader,
     },
 };
 </script>

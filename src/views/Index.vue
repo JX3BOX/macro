@@ -1,96 +1,68 @@
 <template>
-    <listbox>
-        <div class="m-archive-box" v-loading="loading">
-            <!-- 搜索 -->
-            <div class="m-archive-search" slot="search-before">
-                <a :href="publish_link" class="u-publish el-button el-button--primary">+ 发布作品</a>
-                <el-input placeholder="请输入搜索内容" v-model.trim.lazy="search">
-                    <span slot="prepend"><i class="el-icon-search"></i> <span class="u-search">关键词</span></span>
-                    <el-button slot="append" icon="el-icon-position" class="u-btn"></el-button>
-                </el-input>
+    <div class="m-archive-box" v-loading="loading">
+        <common-header @filterImperceptibly="filterImperceptibly" @filterMeta="filterMeta" @search="onSearch"></common-header>
+
+        <!-- 推荐 -->
+        <rec-table v-if="!search && !subtype" />
+
+        <!-- 列表 -->
+        <div class="m-archive-list" v-if="data && data.length">
+            <ul class="u-list">
+                <list-item
+                    v-for="(item, i) in data"
+                    :key="i + item"
+                    :item="item"
+                    :order="order"
+                    @loadMacro="loadMacro"
+                />
+            </ul>
+        </div>
+
+        <!-- 空 -->
+        <el-alert v-else class="m-archive-null" title="没有找到相关条目" type="info" center show-icon></el-alert>
+
+        <!-- 下一页 -->
+        <el-button
+            class="m-archive-more"
+            v-show="hasNextPage"
+            type="primary"
+            @click="appendPage"
+            :loading="loading"
+            icon="el-icon-arrow-down"
+            >加载更多</el-button
+        >
+
+        <!-- 分页 -->
+        <el-pagination
+            class="m-archive-pages"
+            background
+            layout="total, prev, pager, next, jumper"
+            :hide-on-single-page="true"
+            :page-size="per"
+            :total="total"
+            :current-page.sync="page"
+            @current-change="changePage"
+        ></el-pagination>
+
+        <!-- 快捷查看宏 -->
+        <el-drawer class="m-macro-drawer" title="云端宏" :visible.sync="drawer" :append-to-body="true">
+            <div class="u-box">
+                <h2 class="u-title">{{ drawer_title }}</h2>
+                <macro :ctx="drawer_content" :name="drawer_title" />
+                <a :href="drawer_link" class="u-skip el-button el-button--primary">
+                    <i class="el-icon-copy-document"></i> 查看详情
+                </a>
             </div>
-
-            <!-- 筛选 -->
-            <div class="m-archive-filter">
-                <div class="m-filter--left">
-                    <!-- 版本过滤 -->
-                    <clientBy @filter="filterImperceptibly" :type="client"></clientBy>
-                    <!-- 角标过滤 -->
-                    <markBy @filter="filterMeta"></markBy>
-                    <!-- 语言过滤 -->
-                    <menuBy @filter="filterMeta" :data="langs" type="lang" placeholder="语言"></menuBy>
-                    <!-- 资料片过滤 -->
-                    <zlpBy @filter="filterMeta" type="zlp" :client="client"></zlpBy>
-                </div>
-                <div class="m-filter--right">
-                    <!-- 排序过滤 -->
-                    <orderBy @filter="filterMeta"></orderBy>
-                </div>
-            </div>
-
-            <!-- 推荐 -->
-            <rec-table v-if="!search && !subtype" />
-
-            <!-- 列表 -->
-            <div class="m-archive-list" v-if="data && data.length">
-                <ul class="u-list">
-                    <list-item
-                        v-for="(item, i) in data"
-                        :key="i + item"
-                        :item="item"
-                        :order="order"
-                        @loadMacro="loadMacro"
-                    />
-                </ul>
-            </div>
-
-            <!-- 空 -->
-            <el-alert v-else class="m-archive-null" title="没有找到相关条目" type="info" center show-icon></el-alert>
-
-            <!-- 下一页 -->
-            <el-button
-                class="m-archive-more"
-                v-show="hasNextPage"
-                type="primary"
-                @click="appendPage"
-                :loading="loading"
-                icon="el-icon-arrow-down"
-                >加载更多</el-button
-            >
-
-            <!-- 分页 -->
-            <el-pagination
-                class="m-archive-pages"
-                background
-                layout="total, prev, pager, next, jumper"
-                :hide-on-single-page="true"
-                :page-size="per"
-                :total="total"
-                :current-page.sync="page"
-                @current-change="changePage"
-            ></el-pagination>
-
-            <!-- 快捷查看宏 -->
-            <el-drawer class="m-macro-drawer" title="云端宏" :visible.sync="drawer" :append-to-body="true">
-                <div class="u-box">
-                    <h2 class="u-title">{{ drawer_title }}</h2>
-                    <macro :ctx="drawer_content" :name="drawer_title" />
-                    <a :href="drawer_link" class="u-skip el-button el-button--primary">
-                        <i class="el-icon-copy-document"></i> 查看详情
-                    </a>
-                </div>
-            </el-drawer>
-        </div></listbox
-    >
+        </el-drawer>
+    </div>
 </template>
 <script>
-import listbox from "@/components/list/listbox.vue";
-import { appKey } from "@/../setting.json";
-import listItem from "@/components/list/list_item.vue";
-import { publishLink } from "@jx3box/jx3box-common/js/utils";
 import { getPosts } from "@/service/post";
+
+import listItem from "@/components/list/list_item.vue";
 import macro from "@/components/macro.vue";
 import recTable from "@/components/list/rec_table.vue";
+import CommonHeader from "@/components/common-header.vue";
 export default {
     name: "Index",
     props: [],
@@ -111,7 +83,7 @@ export default {
             client: this.$store.state.client, //版本选择
             search: "", //搜索字串
             lang: "", //语言
-            zlp : '', //资料片
+            zlp: "", //资料片
 
             drawer: false,
             drawer_title: "",
@@ -125,10 +97,6 @@ export default {
         };
     },
     computed: {
-        // 发布按钮链接
-        publish_link: function () {
-            return publishLink(appKey);
-        },
         // 是否显示加载更多
         hasNextPage: function () {
             return this.pages > 1 && this.page < this.total;
@@ -142,7 +110,7 @@ export default {
                 client: this.client,
                 search: this.search,
                 lang: this.lang,
-                zlp : this.zlp,
+                zlp: this.zlp,
             };
         },
         // 分页相关参数
@@ -184,10 +152,13 @@ export default {
 
             return _query;
         },
+        onSearch: function (search) {
+            this.search = search;
+        },
         // 加载数据
         loadData: function (appendMode = false) {
             let query = this.buildQuery(appendMode);
-            console.log("[cms-list]", "<loading data>", query);
+            // console.log("[cms-list]", "<loading data>", query);
 
             this.loading = true;
             return getPosts(query)
@@ -245,7 +216,7 @@ export default {
             immediate: true,
             handler: function (query) {
                 if (Object.keys(query).length) {
-                    console.log("[cms-list]", "<route query change>", query);
+                    // console.log("[cms-list]", "<route query change>", query);
                     for (let key in query) {
                         // for:element分页组件兼容性问题
                         if (this.number_queries.includes(key)) {
@@ -261,7 +232,7 @@ export default {
         reset_queries: {
             deep: true,
             handler: function () {
-                console.log("[cms-list]", "<reset page>");
+                // console.log("[cms-list]", "<reset page>");
                 this.page = 1;
             },
         },
@@ -270,7 +241,7 @@ export default {
             deep: true,
             immediate: true,
             handler: function (query) {
-                console.log("[cms-list]", "<request query change>", query);
+                // console.log("[cms-list]", "<request query change>", query);
                 this.loadData();
             },
         },
@@ -281,7 +252,7 @@ export default {
         listItem,
         recTable,
         macro,
-        listbox
+        CommonHeader,
     },
 };
 </script>

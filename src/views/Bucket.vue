@@ -1,31 +1,9 @@
 <template>
-    <listbox>
         <div class="m-archive-box" v-loading="loading">
             <!-- 已登录 -->
             <div class="m-bucket" v-if="isLogin">
                 <!-- 搜索 -->
-                <div class="m-archive-search" slot="search-before">
-                    <a :href="publish_link" class="u-publish el-button el-button--primary">+ 发布作品</a>
-                    <el-input placeholder="请输入搜索内容" v-model.trim.lazy="search">
-                        <span slot="prepend">关键词</span>
-                        <el-button slot="append" icon="el-icon-search"></el-button>
-                    </el-input>
-                </div>
-                <!-- 筛选 -->
-                <div class="m-archive-filter">
-                    <div class="m-filter--left">
-                        <!-- 版本过滤 -->
-                        <clientBy @filter="filterImperceptibly" :type="client"></clientBy>
-                        <!-- 角标过滤 -->
-                        <markBy @filter="filterMeta"></markBy>
-                        <!-- 语言过滤 -->
-                        <menuBy @filter="filterMeta" :data="langs" type="lang" placeholder="语言"></menuBy>
-                    </div>
-                    <div class="m-filter--right">
-                        <!-- 排序过滤 -->
-                        <orderBy @filter="filterMeta"></orderBy>
-                    </div>
-                </div>
+                <common-header @filterImperceptibly="filterImperceptibly" @filterMeta="filterMeta" @search="onSearch"></common-header>
                 <!-- 提醒 -->
                 <el-alert
                     title="自用宏将会被设置为仅私有，不论私有或公开游戏内均可以云端加载。"
@@ -99,19 +77,17 @@
                 </div>
             </el-drawer>
         </div>
-    </listbox>
 </template>
 
 <script>
-import listbox from "@/components/list/listbox.vue";
-import { appKey } from "@/../setting.json";
-import listItem from "@/components/list/list_item.vue";
-import { publishLink } from "@jx3box/jx3box-common/js/utils";
 import { getMyPost as getPosts } from "@/service/post";
 import xfmap from "@jx3box/jx3box-data/data/xf/xf.json";
-import macro from "@/components/macro.vue";
 import User from "@jx3box/jx3box-common/js/user";
 import { __Links } from "@jx3box/jx3box-common/data/jx3box.json";
+
+import macro from "@/components/macro.vue";
+import listItem from "@/components/list/list_item.vue";
+import CommonHeader from "@/components/common-header.vue";
 export default {
     name: "Bucket",
     props: [],
@@ -148,10 +124,6 @@ export default {
         };
     },
     computed: {
-        // 发布按钮链接
-        publish_link: function () {
-            return publishLink(appKey);
-        },
         // 是否显示加载更多
         hasNextPage: function () {
             return this.pages > 1 && this.page < this.total;
@@ -204,6 +176,9 @@ export default {
             }
 
             return _query;
+        },
+        onSearch: function (search) {
+            this.search = search;
         },
         // 加载数据
         loadData: function (appendMode = false) {
@@ -299,7 +274,7 @@ export default {
     components: {
         listItem,
         macro,
-        listbox
+        CommonHeader,
     },
 };
 </script>

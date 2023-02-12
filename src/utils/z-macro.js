@@ -49,8 +49,8 @@ const {
 			var nextIsCondition = state.nextIsCondition
 			state.nextIsCondition = false
 			var ch = stream.next();
-			console.log('next', ch)
-			console.log('nextIsCondition', nextIsCondition)
+			// console.log('next', ch)
+			// console.log('nextIsCondition', nextIsCondition)
 			if (inCondition) {
 				if (ch === ']') {
 					state.inCondition = false
@@ -78,11 +78,10 @@ const {
 					}
 				}
 
-				console.log('this_current', stream.current())
+				// console.log('this_current', stream.current())
 
 				return "condition-else"
 			} else if (ch === '[' || logic.includes(ch)) {
-				console.log('ch', ch)
 				state.inCondition = true
 				state.nextIsCondition = true
 				return "string-2"
@@ -133,9 +132,9 @@ const {
 			var escaped = false,
 				next;
 			while ((next = stream.next()) != null) {
-				console.log(stream)
+				// console.log(stream)
 				if (!escaped && (next == "]" || next == "$" && stream.eat("{"))) {
-					console.log('in')
+					// console.log('in')
 					state.tokenize = tokenBase;
 					break;
 				}
@@ -164,7 +163,6 @@ const {
 	});
 
 	CodeMirror.registerHelper("hint", "macro", function (cm) {
-        console.log('hint')
 		//自动补全
 		var hintList = ['/cast', '/fcast', "buff", "nobuff", "bufftime", "life", "mana", "rage", "qidian", "energy", "sun", "moon", "sun_power", "moon_power", "skill_energy", "skill", "noskill", "last_skill", "npclevel", "nearby_enemy", "skill_notin_cd", "tbuff", "tnobuff", "tbufftime"];
 
