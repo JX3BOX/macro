@@ -1,6 +1,8 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import DefaultLayout from "@/layout/ListLayout.vue";
+import SingleLayout from "@/layout/SingleLayout.vue";
+import AppLayout from "@/layout/AppLayout.vue"
 
 Vue.use(VueRouter);
 
@@ -47,29 +49,47 @@ const routes = [
     {
         name: "post",
         path: "/:id(\\d+)",
-        component: () => import("@/views/Post.vue"),
+        component: SingleLayout,
+        redirect: {
+            name: 'detail'
+        },
+        children: [
+            {
+                name: "detail",
+                path: "",
+                component: () => import("@/views/Single.vue"),
+            }
+        ]
     },
 
     // 应用
+
     {
-        name: "macroeditor",
-        path: "/macroeditor",
-        component: () => import("@/views/MacroEditor.vue")
-    },
-    {
-        name: "talent",
-        path: "/talent",
-        component: () => import("@/views/Talent.vue")
-    },
-    {
-        name: "talent2",
-        path: "/talent2",
-        component: () => import("@/views/Talent2.vue")
-    },
-    {
-        name: "meridians",
-        path: "/meridians",
-        component: () => import("@/views/Meridians.vue")
+        name: "app",
+        path: "/",
+        component: AppLayout,
+        children: [
+            {
+                name: "macroeditor",
+                path: "/macroeditor",
+                component: () => import("@/views/MacroEditor.vue")
+            },
+            {
+                name: "talent",
+                path: "/talent",
+                component: () => import("@/views/Talent.vue")
+            },
+            {
+                name: "talent2",
+                path: "/talent2",
+                component: () => import("@/views/Talent2.vue")
+            },
+            {
+                name: "meridians",
+                path: "/meridians",
+                component: () => import("@/views/Meridians.vue")
+            },
+        ]
     },
 ];
 

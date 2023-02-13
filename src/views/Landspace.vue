@@ -7,6 +7,7 @@
                 @filterImperceptibly="filterImperceptibly"
                 @filterMeta="filterMeta"
                 @search="onSearch"
+                :canFilter="false"
             ></common-header>
             <!-- 提醒 -->
             <el-alert title="此处仅显示亲友设置为“仅亲友可见”的宏。" type="info" show-icon></el-alert>

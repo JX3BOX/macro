@@ -1,7 +1,6 @@
 <template>
     <div id="app">
-        <Header></Header>
-        <Breadcrumb name="镇派模拟器" slug="talent2" root="/app/talent2" :feedbackEnable="true" :crumbEnable="true">
+        <Breadcrumb name="镇派模拟器" slug="talent2" root="/macro/talent2" :feedbackEnable="true" :crumbEnable="true">
             <img slot="logo" svg-inline :src="getIcon('talent2')" />
             <div class="m-info"></div>
         </Breadcrumb>

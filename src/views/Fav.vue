@@ -2,7 +2,7 @@
         <div class="m-archive-box" v-loading="loading">
             <div class="m-bucket" v-if="isLogin" v-loading="loading">
                 <!-- 搜索 -->
-                <common-header @filterImperceptibly="filterImperceptibly" @filterMeta="filterMeta" @search="onSearch"></common-header>
+                <common-header @filterImperceptibly="filterImperceptibly" @filterMeta="filterMeta" @search="onSearch" :canFilter="false"></common-header>
 
                 <!-- 列表 -->
                 <div class="m-archive-list" v-if="data && data.length">

@@ -1,7 +1,6 @@
 <template>
     <div id="app">
-        <Header></Header>
-        <Breadcrumb name="经脉模拟器" slug="meridians" root="/meridians" :feedbackEnable="true" :crumbEnable="false">
+        <Breadcrumb name="经脉模拟器" slug="meridians" root="/macro/meridians" :feedbackEnable="true" :crumbEnable="false">
             <img slot="logo" svg-inline :src="getIcon('meridians')" />
         </Breadcrumb>
         <Main :withoutRight="true" :withoutLeft="true">

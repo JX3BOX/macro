@@ -9,7 +9,7 @@
         </div>
 
         <!-- 筛选 -->
-        <div class="m-archive-filter">
+        <div class="m-archive-filter" v-if="canFilter">
             <div class="m-filter--left">
                 <!-- 版本过滤 -->
                 <clientBy @filter="filterImperceptibly" :type="client"></clientBy>
@@ -33,6 +33,12 @@ import { appKey } from "@/../setting.json";
 import { publishLink } from "@jx3box/jx3box-common/js/utils";
 export default {
     name: 'CommonHeader',
+    props: {
+        canFilter: {
+            type: Boolean,
+            default: true
+        }
+    },
     data() {
         return {
             search: "",

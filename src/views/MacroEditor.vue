@@ -1,10 +1,9 @@
 <template>
     <div id="app">
-        <Header></Header>
         <Breadcrumb
             name="宏编辑器"
             slug="macroeditor"
-            root="/app/macroeditor"
+            root="/macro/macroeditor"
             :feedbackEnable="true"
             :crumbEnable="true"
         >
