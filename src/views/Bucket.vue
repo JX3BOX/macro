@@ -1,82 +1,79 @@
 <template>
-        <div class="m-archive-box" v-loading="loading">
-            <!-- 已登录 -->
-            <div class="m-bucket" v-if="isLogin">
-                <!-- 搜索 -->
-                <common-header @filterImperceptibly="filterImperceptibly" @filterMeta="filterMeta" @search="onSearch"></common-header>
-                <!-- 提醒 -->
-                <el-alert
-                    title="自用宏将会被设置为仅私有，不论私有或公开游戏内均可以云端加载。"
-                    type="info"
-                    show-icon
-                ></el-alert>
-                <!-- 列表 -->
-                <div class="m-archive-list" v-if="data && data.length">
-                    <ul class="u-list">
-                        <list-item
-                            v-for="(item, i) in data"
-                            :key="i + item"
-                            :item="item"
-                            :order="order"
-                            @loadMacro="loadMacro"
-                        />
-                    </ul>
-                </div>
-
-                <!-- 空 -->
-                <el-alert
-                    v-else
-                    class="m-archive-null"
-                    title="没有找到相关条目"
-                    type="info"
-                    center
-                    show-icon
-                ></el-alert>
-
-                <!-- 下一页 -->
-                <el-button
-                    class="m-archive-more"
-                    v-show="hasNextPage"
-                    type="primary"
-                    @click="appendPage"
-                    :loading="loading"
-                    icon="el-icon-arrow-down"
-                    >加载更多</el-button
-                >
-
-                <!-- 分页 -->
-                <el-pagination
-                    class="m-archive-pages"
-                    background
-                    layout="total, prev, pager, next, jumper"
-                    :hide-on-single-page="true"
-                    :page-size="per"
-                    :total="total"
-                    :current-page.sync="page"
-                    @current-change="changePage"
-                ></el-pagination>
+    <div class="m-archive-box" v-loading="loading">
+        <!-- 已登录 -->
+        <div class="m-bucket" v-if="isLogin">
+            <!-- 搜索 -->
+            <common-header
+                @filterImperceptibly="filterImperceptibly"
+                @filterMeta="filterMeta"
+                @search="onSearch"
+            ></common-header>
+            <!-- 提醒 -->
+            <el-alert
+                title="自用宏将会被设置为仅私有，不论私有或公开游戏内均可以云端加载。"
+                type="info"
+                show-icon
+            ></el-alert>
+            <!-- 列表 -->
+            <div class="m-archive-list" v-if="data && data.length">
+                <ul class="u-list">
+                    <list-item
+                        v-for="(item, i) in data"
+                        :key="i + item"
+                        :item="item"
+                        :order="order"
+                        @loadMacro="loadMacro"
+                    />
+                </ul>
             </div>
-            <!-- 未登录 -->
-            <div class="m-archive-noright" v-else>
-                <div class="u-tip-login el-alert el-alert--warning is-light">
-                    <i class="el-alert__icon el-icon-warning"></i>
-                    <span>
-                        使用私有宏仓库，请先
-                        <a :href="login_url">登录</a>
-                    </span>
-                </div>
-            </div>
-            <!-- 快捷查看宏 -->
-            <el-drawer class="m-macro-drawer" title="云端宏" :visible.sync="drawer" :append-to-body="true">
-                <div class="u-box">
-                    <h2 class="u-title">{{ drawer_title }}</h2>
-                    <macro :ctx="drawer_content" :name="drawer_title" />
-                    <a :href="drawer_link" class="u-skip el-button el-button--primary">
-                        <i class="el-icon-copy-document"></i> 查看详情
-                    </a>
-                </div>
-            </el-drawer>
+
+            <!-- 空 -->
+            <el-alert v-else class="m-archive-null" title="没有找到相关条目" type="info" center show-icon></el-alert>
+
+            <!-- 下一页 -->
+            <el-button
+                class="m-archive-more"
+                v-show="hasNextPage"
+                type="primary"
+                @click="appendPage"
+                :loading="loading"
+                icon="el-icon-arrow-down"
+                >加载更多</el-button
+            >
+
+            <!-- 分页 -->
+            <el-pagination
+                class="m-archive-pages"
+                background
+                layout="total, prev, pager, next, jumper"
+                :hide-on-single-page="true"
+                :page-size="per"
+                :total="total"
+                :current-page.sync="page"
+                @current-change="changePage"
+            ></el-pagination>
         </div>
+        <!-- 未登录 -->
+        <div class="m-archive-noright" v-else>
+            <div class="u-tip-login el-alert el-alert--warning is-light">
+                <i class="el-alert__icon el-icon-warning"></i>
+                <span>
+                    使用私有宏仓库，请先
+                    <a :href="login_url">登录</a>
+                </span>
+            </div>
+        </div>
+        <!-- 快捷查看宏 -->
+        <el-drawer class="m-macro-drawer" title="云端宏" :visible.sync="drawer" :append-to-body="true">
+            <div class="u-box">
+                <h2 class="u-title">{{ drawer_title }}</h2>
+                <macro :ctx="drawer_content" :name="drawer_title" />
+                <a :href="drawer_link" class="u-skip el-button el-button--primary">
+                    <i class="el-icon-copy-document"></i> 查看详情
+                </a>
+            </div>
+        </el-drawer>
+    </div>
 </template>
 
 <script>

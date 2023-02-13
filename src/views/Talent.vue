@@ -12,13 +12,20 @@
                         <div class="m-talent-version">
                             <span class="u-label">选择版本</span>
                             <el-select v-model="version" placeholder="请选择游戏版本" @change="reload">
-                                <el-option v-for="item in versions" :key="item.version" :label="item.name" :value="item.version"></el-option>
+                                <el-option
+                                    v-for="item in versions"
+                                    :key="item.version"
+                                    :label="item.name"
+                                    :value="item.version"
+                                ></el-option>
                             </el-select>
                         </div>
                         <div class="u-toolbar" v-if="isLogin">
                             <!-- <el-button plain @click="showList = false" icon="el-icon-refresh-left" size="small" v-if="showList">返回</el-button> -->
                             <!-- <el-button type="primary" @click="showList = true" icon="el-icon-setting" size="small" v-else>我的预设</el-button> -->
-                            <el-button type="primary" @click="drawer = true" icon="el-icon-setting" size="small">我的预设</el-button>
+                            <el-button type="primary" @click="drawer = true" icon="el-icon-setting" size="small"
+                                >我的预设</el-button
+                            >
                         </div>
                     </div>
                 </div>
@@ -51,8 +58,21 @@
                         </el-input>
                     </div>
                     <div class="m-talent-op" v-if="isLogin">
-                        <el-button type="primary" :icon="currentSchema ? 'el-icon-check' : 'el-icon-document-add'" @click="save">{{ currentSchema ? "保存" : "保存为预设" }}</el-button>
-                        <el-button v-if="isEditing" type="success" icon="el-icon-document-add" class="u-btn" @click="saveAs" plain>另存为</el-button>
+                        <el-button
+                            type="primary"
+                            :icon="currentSchema ? 'el-icon-check' : 'el-icon-document-add'"
+                            @click="save"
+                            >{{ currentSchema ? "保存" : "保存为预设" }}</el-button
+                        >
+                        <el-button
+                            v-if="isEditing"
+                            type="success"
+                            icon="el-icon-document-add"
+                            class="u-btn"
+                            @click="saveAs"
+                            plain
+                            >另存为</el-button
+                        >
                     </div>
                 </div>
 
@@ -77,7 +97,7 @@ import { copy } from "@/utils/clipboard";
 export default {
     name: "Talent",
     props: [],
-    data: function() {
+    data: function () {
         return {
             activeName: "common",
             xf: "其它",
@@ -99,16 +119,16 @@ export default {
         };
     },
     computed: {
-        schema_group: function() {
+        schema_group: function () {
             return schemas[this.xf];
         },
-        client: function() {
+        client: function () {
             return location.href.includes("origin") ? "origin" : "std";
         },
-        mount: function() {
+        mount: function () {
             return xfmap[this.xf]?.id;
         },
-        params: function() {
+        params: function () {
             const { client, mount, version, code, pzcode, xf } = this;
             return {
                 client,
@@ -120,23 +140,23 @@ export default {
                 xf,
             };
         },
-        xfMaps: function() {
+        xfMaps: function () {
             const xfMaps = cloneDeep(xfmap);
             delete xfMaps["山居剑意"];
             return xfMaps;
         },
-        isEditing: function() {
+        isEditing: function () {
             return !!this.currentSchema;
         },
     },
     methods: {
-        updateDrawer: function(val) {
+        updateDrawer: function (val) {
             this.drawer = val;
         },
         getIcon(key) {
             return __imgPath + "image/box/" + key + ".svg";
         },
-        parseSchema: function() {
+        parseSchema: function () {
             this.driver.then((talent) => {
                 // 为空不操作
                 if (!this.code) return;
@@ -154,7 +174,7 @@ export default {
                 }
             });
         },
-        reload: function(schema) {
+        reload: function (schema) {
             this.currentSchema = "";
             this.driver.then((talent) => {
                 talent.load({
@@ -165,12 +185,12 @@ export default {
                 });
             });
         },
-        copy: function (val){
+        copy: function (val) {
             copy(val, { success_message: "复制奇穴编码成功" });
         },
 
         // 预设方案
-        save: function() {
+        save: function () {
             if (!this.mount) {
                 this.$notify({
                     type: "warning",
@@ -215,7 +235,7 @@ export default {
                 });
             }
         },
-        saveAs: function() {
+        saveAs: function () {
             this.$prompt("方案另存为", "提示", {
                 confirmButtonText: "确定",
                 cancelButtonText: "取消",
@@ -240,7 +260,7 @@ export default {
                 });
             });
         },
-        use: function(item) {
+        use: function (item) {
             this.code = JSON.stringify(item.code);
             this.pzcode = JSON.stringify(item.pzcode);
 
@@ -252,7 +272,7 @@ export default {
 
             this.parseSchema();
         },
-        init: function() {
+        init: function () {
             getTalentVersions().then((res) => {
                 this.versions = res.data;
                 this.version = this.versions && this.versions.length && this.versions[0]["version"];
@@ -262,7 +282,7 @@ export default {
                     editable: true,
                 });
                 const vm = this;
-                $(document).on("JX3_QIXUE_Change", function(e, ins) {
+                $(document).on("JX3_QIXUE_Change", function (e, ins) {
                     let __data = {};
                     __data.version = ins.version;
                     __data.xf = ins.xf;
@@ -274,16 +294,16 @@ export default {
                 });
             });
         },
-        xficon: function(id) {
+        xficon: function (id) {
             return __imgPath + "image/xf/" + id + ".png";
         },
     },
-    mounted: function() {
+    mounted: function () {
         this.init();
         this.isAdmin = User.isAdmin();
     },
     watch: {
-        page: function() {
+        page: function () {
             this.isLogin && this.loadList();
         },
     },

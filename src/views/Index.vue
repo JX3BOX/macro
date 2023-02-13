@@ -1,6 +1,10 @@
 <template>
     <div class="m-archive-box" v-loading="loading">
-        <common-header @filterImperceptibly="filterImperceptibly" @filterMeta="filterMeta" @search="onSearch"></common-header>
+        <common-header
+            @filterImperceptibly="filterImperceptibly"
+            @filterMeta="filterMeta"
+            @search="onSearch"
+        ></common-header>
 
         <!-- 推荐 -->
         <rec-table v-if="!search && !subtype" />

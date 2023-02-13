@@ -12,18 +12,32 @@
                         <div class="m-talent-version">
                             <span class="u-label">选择版本</span>
                             <el-select v-model="version" placeholder="请选择游戏版本" @change="reload">
-                                <el-option v-for="item in versions" :key="item.version" :label="item.name" :value="item.version"></el-option>
+                                <el-option
+                                    v-for="item in versions"
+                                    :key="item.version"
+                                    :label="item.name"
+                                    :value="item.version"
+                                ></el-option>
                             </el-select>
                         </div>
                         <div class="u-toolbar" v-if="isLogin">
-                            <el-button type="primary" @click="drawer = true" icon="el-icon-setting" size="small">我的预设</el-button>
+                            <el-button type="primary" @click="drawer = true" icon="el-icon-setting" size="small"
+                                >我的预设</el-button
+                            >
                         </div>
                     </div>
                 </div>
                 <div class="m-talent-wrapper">
                     <h2 class="m-talent-subtitle">选择心法</h2>
                     <div class="m-talent-xf">
-                        <el-radio v-for="(item, i) in xfMaps" v-model="xf" :label="item.name" :key="i" @change="reload" v-show="isOrigin(item)">
+                        <el-radio
+                            v-for="(item, i) in xfMaps"
+                            v-model="xf"
+                            :label="item.name"
+                            :key="i"
+                            @change="reload"
+                            v-show="isOrigin(item)"
+                        >
                             <img class="u-pic" :src="xficon(item.id)" :alt="item.name" />
                             <span class="u-txt">{{ item.name }}</span>
                         </el-radio>
@@ -32,7 +46,10 @@
                     <div class="m-talent2-box">
                         <div class="m-talent2-main-title">镇派经脉模拟器</div>
                         <template v-if="xf">
-                            <div class="m-talent2-surplus" :class="[total - totalCount > 0 ? '' : 'm-talent2-surplus-empty']">
+                            <div
+                                class="m-talent2-surplus"
+                                :class="[total - totalCount > 0 ? '' : 'm-talent2-surplus-empty']"
+                            >
                                 剩余点数 :
                                 <span>{{ surplus }}</span>
                             </div>
@@ -50,16 +67,22 @@
                                             <span class="m-talent2-title-count">{{ lCount }}</span>
                                             <span class="m-talent2-title-name">{{ l_name }}</span>
                                         </div>
-                                        <div class="m-talent2-content-row" v-for="(row, index) in talentContent.left" :key="'l' + index">
+                                        <div
+                                            class="m-talent2-content-row"
+                                            v-for="(row, index) in talentContent.left"
+                                            :key="'l' + index"
+                                        >
                                             <template v-for="(item, i) in row">
                                                 <div
                                                     v-if="item"
-                                                    class=" m-talent2-content-item"
+                                                    class="m-talent2-content-item"
                                                     :class="[
                                                         {
                                                             'm-talent2-content-item-skill': item.type === 'skill',
                                                         },
-                                                        canOperate(index, 'left') ? '' : 'm-talent2-content-item-disabled',
+                                                        canOperate(index, 'left')
+                                                            ? ''
+                                                            : 'm-talent2-content-item-disabled',
                                                         item.pretab ? 'm-talent2-pretab' : '',
                                                     ]"
                                                     :key="i"
@@ -70,22 +93,37 @@
                                                         @click="leftTalentAdd(item, index, i)"
                                                         @click.right.prevent="leftTalentDecrease(index, i)"
                                                         :class="[
-                                                            !canLeftItemOperate(index, i) ? (item.type === 'skill' ? 'm-talent2-skill-unselected' : 'm-talent2-unselected') : 'm-talent2-selected',
+                                                            !canLeftItemOperate(index, i)
+                                                                ? item.type === 'skill'
+                                                                    ? 'm-talent2-skill-unselected'
+                                                                    : 'm-talent2-unselected'
+                                                                : 'm-talent2-selected',
                                                             item.type === 'skill' ? '' : 'm-talent2-talent',
-                                                            !surplus && !Number(l_data[index][i]) ? (item.type === 'skill' ? 'm-talent2-skill-unselected' : 'm-talent2-unselected') : '',
+                                                            !surplus && !Number(l_data[index][i])
+                                                                ? item.type === 'skill'
+                                                                    ? 'm-talent2-skill-unselected'
+                                                                    : 'm-talent2-unselected'
+                                                                : '',
                                                         ]"
                                                     >
                                                         <!-- HAS PARENT -->
                                                         <span
-                                                            v-if="item.pretab && !isLeftParentAdd(index, i) && canLeftItemOperate(index, i)"
+                                                            v-if="
+                                                                item.pretab &&
+                                                                !isLeftParentAdd(index, i) &&
+                                                                canLeftItemOperate(index, i)
+                                                            "
                                                             :class="item.type === 'skill' ? 'is-add-skill' : 'is-add'"
                                                         ></span>
                                                         <!-- TOTAL ZERO -->
-                                                        <span v-if="!surplus && !Number(l_data[index][i])" :class="item.type === 'skill' ? 'is-add-skill' : 'is-add'"></span>
+                                                        <span
+                                                            v-if="!surplus && !Number(l_data[index][i])"
+                                                            :class="item.type === 'skill' ? 'is-add-skill' : 'is-add'"
+                                                        ></span>
 
                                                         <img
                                                             class="talent-img"
-                                                            :class="{'skill-img': item.type === 'skill',}"
+                                                            :class="{ 'skill-img': item.type === 'skill' }"
                                                             :src="talentIcon(item.icon)"
                                                             :alt="item.name"
                                                         />
@@ -94,7 +132,11 @@
                                                     <span
                                                         v-if="Number(l_data[index][i])"
                                                         class="m-talent2-content-item-count"
-                                                        :class="[Number(l_data[index][i]) < item.max ? 'm-talent2-content-item-count-under' : '']"
+                                                        :class="[
+                                                            Number(l_data[index][i]) < item.max
+                                                                ? 'm-talent2-content-item-count-under'
+                                                                : '',
+                                                        ]"
                                                     >
                                                         {{ l_data[index][i] }}
                                                     </span>
@@ -104,7 +146,9 @@
                                                         <b class="m-talent2-name">
                                                             <span>
                                                                 {{ item.name }}
-                                                                <small class="u-talent2-id" v-if="item.id">(ID: {{ item.id }})</small>
+                                                                <small class="u-talent2-id" v-if="item.id"
+                                                                    >(ID: {{ item.id }})</small
+                                                                >
                                                             </span>
                                                             <span class="m-talent2-number">
                                                                 第{{ Number(l_data[index][i]) + "/" + item.max }}重
@@ -113,21 +157,32 @@
                                                         <!-- <b class="m-talent2-type">
                                                             {{ item.type === 'talent' ? '被动招式': '主动招式' }}
                                                         </b>-->
-                                                        <span class=" m-talent2-desc" v-html="!Number(l_data[index][i]) || xf === '通用' ? item.desc[0] : item.desc[l_data[index][i] - 1]">
+                                                        <span
+                                                            class="m-talent2-desc"
+                                                            v-html="
+                                                                !Number(l_data[index][i]) || xf === '通用'
+                                                                    ? item.desc[0]
+                                                                    : item.desc[l_data[index][i] - 1]
+                                                            "
+                                                        >
                                                         </span>
                                                         <span
-                                                            v-if="Number(l_data[index][i]) && Number(l_data[index][i]) < item.max"
+                                                            v-if="
+                                                                Number(l_data[index][i]) &&
+                                                                Number(l_data[index][i]) < item.max
+                                                            "
                                                             class="m-talent2-desc-next"
                                                         >
-                                                            <span
-                                                                v-if="xf !== '通用'"
-                                                                class="m-next-text"
-                                                                >下一重：</span>
+                                                            <span v-if="xf !== '通用'" class="m-next-text"
+                                                                >下一重：</span
+                                                            >
                                                             <span>
                                                                 {{ item.desc[l_data[index][i]] }}
                                                             </span>
                                                         </span>
-                                                        <span v-if="Number(l_data[index][i]) === item.max" class="m-max">该招式已练至最高境界</span>
+                                                        <span v-if="Number(l_data[index][i]) === item.max" class="m-max"
+                                                            >该招式已练至最高境界</span
+                                                        >
                                                         <span
                                                             class="m-talent-retrogress"
                                                             v-if="Number(l_data[index][i])"
@@ -135,11 +190,7 @@
                                                         >
                                                     </span>
                                                 </div>
-                                                <div
-                                                    v-else
-                                                    class="m-talent2-content-item-empty"
-                                                    :key="i"
-                                                ></div>
+                                                <div v-else class="m-talent2-content-item-empty" :key="i"></div>
                                             </template>
                                         </div>
                                     </div>
@@ -158,7 +209,11 @@
                                             <span class="m-talent2-title-count">{{ rCount }}</span>
                                             <span class="m-talent2-title-name">{{ r_name }}</span>
                                         </div>
-                                        <div class="m-talent2-content-row" v-for="(row, index) in talentContent.right" :key="'r' + index">
+                                        <div
+                                            class="m-talent2-content-row"
+                                            v-for="(row, index) in talentContent.right"
+                                            :key="'r' + index"
+                                        >
                                             <template v-for="(item, i) in row">
                                                 <div
                                                     v-if="item"
@@ -167,7 +222,9 @@
                                                         {
                                                             'm-talent2-content-item-skill': item.type === 'skill',
                                                         },
-                                                        !canOperate(index, 'right') ? 'm-talent2-content-item-disabled' : '',
+                                                        !canOperate(index, 'right')
+                                                            ? 'm-talent2-content-item-disabled'
+                                                            : '',
                                                         item.pretab ? 'm-talent2-pretab' : '',
                                                     ]"
                                                     :key="i"
@@ -178,18 +235,33 @@
                                                         @click="rightTalentAdd(item, index, i)"
                                                         @click.right.prevent="rightTalentDecrease(index, i)"
                                                         :class="[
-                                                            !canRightItemOperate(index, i) ? (item.type === 'skill' ? 'm-talent2-skill-unselected' : 'm-talent2-unselected') : 'm-talent2-selected',
+                                                            !canRightItemOperate(index, i)
+                                                                ? item.type === 'skill'
+                                                                    ? 'm-talent2-skill-unselected'
+                                                                    : 'm-talent2-unselected'
+                                                                : 'm-talent2-selected',
                                                             item.type === 'skill' ? '' : 'm-talent2-talent',
-                                                            !surplus && !Number(r_data[index][i]) ? (item.type === 'skill' ? 'm-talent2-skill-unselected' : 'm-talent2-unselected') : '',
+                                                            !surplus && !Number(r_data[index][i])
+                                                                ? item.type === 'skill'
+                                                                    ? 'm-talent2-skill-unselected'
+                                                                    : 'm-talent2-unselected'
+                                                                : '',
                                                         ]"
                                                     >
                                                         <!-- HAS PARENT -->
                                                         <span
-                                                            v-if="item.pretab && !isRightParentAdd(index, i) && canRightItemOperate(index, i)"
+                                                            v-if="
+                                                                item.pretab &&
+                                                                !isRightParentAdd(index, i) &&
+                                                                canRightItemOperate(index, i)
+                                                            "
                                                             :class="item.type === 'skill' ? 'is-add-skill' : 'is-add'"
                                                         ></span>
                                                         <!-- TOTAL ZERO -->
-                                                        <span v-if="!surplus && !Number(r_data[index][i])" :class="item.type === 'skill' ? 'is-add-skill' : 'is-add'"></span>
+                                                        <span
+                                                            v-if="!surplus && !Number(r_data[index][i])"
+                                                            :class="item.type === 'skill' ? 'is-add-skill' : 'is-add'"
+                                                        ></span>
 
                                                         <img
                                                             class="talent-img"
@@ -204,7 +276,11 @@
                                                     <span
                                                         v-if="Number(r_data[index][i])"
                                                         class="m-talent2-content-item-count"
-                                                        :class="[Number(r_data[index][i]) < item.max ? 'm-talent2-content-item-count-under' : '']"
+                                                        :class="[
+                                                            Number(r_data[index][i]) < item.max
+                                                                ? 'm-talent2-content-item-count-under'
+                                                                : '',
+                                                        ]"
                                                     >
                                                         {{ r_data[index][i] }}
                                                     </span>
@@ -214,7 +290,9 @@
                                                         <b class="m-talent2-name">
                                                             <span>
                                                                 {{ item.name }}
-                                                                <small class="u-talent2-id" v-if="item.id">(ID: {{ item.id }})</small>
+                                                                <small class="u-talent2-id" v-if="item.id"
+                                                                    >(ID: {{ item.id }})</small
+                                                                >
                                                             </span>
                                                             <span class="m-talent2-number">
                                                                 第{{ Number(r_data[index][i]) + "/" + item.max }}重
@@ -225,23 +303,30 @@
                                                         </b>-->
                                                         <span
                                                             class="m-talent2-desc"
-                                                            v-html="!Number(r_data[index][i]) || xf === '通用' ? item.desc[0] : item.desc[r_data[index][i] - 1]"
+                                                            v-html="
+                                                                !Number(r_data[index][i]) || xf === '通用'
+                                                                    ? item.desc[0]
+                                                                    : item.desc[r_data[index][i] - 1]
+                                                            "
                                                         >
                                                         </span>
                                                         <span
-                                                            v-if="Number(r_data[index][i]) && Number(r_data[index][i]) < item.max"
+                                                            v-if="
+                                                                Number(r_data[index][i]) &&
+                                                                Number(r_data[index][i]) < item.max
+                                                            "
                                                             class="m-talent2-desc-next"
                                                         >
-                                                            <span
-                                                                v-if="xf !== '通用'"
-                                                                class="m-next-text"
+                                                            <span v-if="xf !== '通用'" class="m-next-text"
                                                                 >下一重：</span
                                                             >
                                                             <span>
                                                                 {{ item.desc[r_data[index][i]] }}
                                                             </span>
                                                         </span>
-                                                        <span v-if="Number(r_data[index][i]) === item.max" class="m-max">该招式已练至最高境界</span>
+                                                        <span v-if="Number(r_data[index][i]) === item.max" class="m-max"
+                                                            >该招式已练至最高境界</span
+                                                        >
                                                         <span
                                                             class="m-talent-retrogress"
                                                             v-if="Number(r_data[index][i])"
@@ -249,11 +334,7 @@
                                                         >
                                                     </span>
                                                 </div>
-                                                <div
-                                                    v-else
-                                                    class="m-talent2-content-item-empty"
-                                                    :key="i"
-                                                ></div>
+                                                <div v-else class="m-talent2-content-item-empty" :key="i"></div>
                                             </template>
                                         </div>
                                     </div>
@@ -261,7 +342,11 @@
                             </div>
 
                             <div class="m-talent2-actions">
-                                <div class="rest-btn" :class="!totalCount ? 'm-talent2-actions-btn-disabled' : 'm-talent2-actions-btn'" @click="reload">
+                                <div
+                                    class="rest-btn"
+                                    :class="!totalCount ? 'm-talent2-actions-btn-disabled' : 'm-talent2-actions-btn'"
+                                    @click="reload"
+                                >
                                     重置
                                 </div>
                             </div>
@@ -286,12 +371,32 @@
                         </el-input>
                     </template>
                     <div class="m-talent-op" v-if="isLogin">
-                        <el-button type="primary" :icon="currentSchema ? 'el-icon-check' : 'el-icon-document-add'" @click="save">{{ currentSchema ? "保存" : "保存为预设" }}</el-button>
-                        <el-button v-if="isEditing" type="success" icon="el-icon-document-add" class="u-btn" @click="saveAs" plain>另存为</el-button>
+                        <el-button
+                            type="primary"
+                            :icon="currentSchema ? 'el-icon-check' : 'el-icon-document-add'"
+                            @click="save"
+                            >{{ currentSchema ? "保存" : "保存为预设" }}</el-button
+                        >
+                        <el-button
+                            v-if="isEditing"
+                            type="success"
+                            icon="el-icon-document-add"
+                            class="u-btn"
+                            @click="saveAs"
+                            plain
+                            >另存为</el-button
+                        >
                     </div>
                 </div>
 
-                <talent-drawer v-if="isLogin" :drawer="drawer" type="talent2" :client="client" @update-drawer="updateDrawer" @use="use"></talent-drawer>
+                <talent-drawer
+                    v-if="isLogin"
+                    :drawer="drawer"
+                    type="talent2"
+                    :client="client"
+                    @update-drawer="updateDrawer"
+                    @use="use"
+                ></talent-drawer>
             </div>
             <Footer></Footer>
         </Main>
@@ -311,7 +416,7 @@ import { iconLink } from "@jx3box/jx3box-common/js/utils";
 import { copy } from "@/utils/clipboard";
 export default {
     name: "Talent2",
-    data: function() {
+    data: function () {
         return {
             activeName: "common",
             xf: "",
@@ -350,7 +455,7 @@ export default {
         };
     },
     computed: {
-        lCount: function() {
+        lCount: function () {
             return this.l_data.length
                 ? this.l_data
                       .map((l) => l.split(""))
@@ -358,7 +463,7 @@ export default {
                       .reduce((prev, current) => Number(prev) + Number(current))
                 : 0;
         },
-        rCount: function() {
+        rCount: function () {
             return this.r_data.length
                 ? this.r_data
                       .map((l) => l.split(""))
@@ -366,7 +471,7 @@ export default {
                       .reduce((prev, current) => Number(prev) + Number(current))
                 : 0;
         },
-        leftLastIndex: function() {
+        leftLastIndex: function () {
             let index = 0;
             for (let i = this.l_data.length - 1; i > 0; i--) {
                 if (Number(this.l_data[i])) {
@@ -376,7 +481,7 @@ export default {
             }
             return index;
         },
-        rightLastIndex: function() {
+        rightLastIndex: function () {
             let index = 0;
             for (let i = this.r_data.length - 1; i > 0; i--) {
                 if (Number(this.r_data[i])) {
@@ -386,23 +491,25 @@ export default {
             }
             return index;
         },
-        totalCount: function() {
+        totalCount: function () {
             return this.lCount + this.rCount;
         },
-        talent2Data: function() {
-            return this.begin === "left" ? this.l_data.concat(this.r_data).join(",") : this.r_data.concat(this.l_data).join(",");
+        talent2Data: function () {
+            return this.begin === "left"
+                ? this.l_data.concat(this.r_data).join(",")
+                : this.r_data.concat(this.l_data).join(",");
         },
-        surplus: function() {
+        surplus: function () {
             return this.total - this.totalCount;
         },
 
-        client: function() {
+        client: function () {
             return location.href.includes("origin") ? "origin" : "std";
         },
-        mount: function() {
+        mount: function () {
             return xfmap[this.xf]?.id;
         },
-        params: function() {
+        params: function () {
             const { mount, version, code, pzcode, xf } = this;
             return {
                 // 保证在正式服创建的镇派也是只在怀旧服使用
@@ -415,30 +522,30 @@ export default {
                 xf,
             };
         },
-        xfMaps: function() {
+        xfMaps: function () {
             const xfMaps = cloneDeep(xfmap);
             // delete xfMaps["山居剑意"];
             return xfMaps;
         },
-        isEditing: function() {
+        isEditing: function () {
             return !!this.currentSchema;
         },
     },
     methods: {
-        updateDrawer: function(val) {
+        updateDrawer: function (val) {
             this.drawer = val;
         },
         getIcon(key) {
             return __imgPath + "image/box/" + key + ".svg";
         },
-        reload: function(schema) {
+        reload: function (schema) {
             this.currentSchema = "";
             this.l_data = ["0000", "0000", "0000", "0000", "0000", "0000"];
             this.r_data = ["0000", "0000", "0000", "0000", "0000", "0000"];
         },
-        reset: function() {},
+        reset: function () {},
         // 生成code
-        renderCode: function() {
+        renderCode: function () {
             const { version, xf, talent2Data, l_data, r_data, talentContent } = this;
             const _code = {
                 version,
@@ -488,12 +595,12 @@ export default {
             this.pzcode = JSON.stringify(_pzcode);
         },
         copy(val) {
-            copy(val, { success_message: "编码复制成功" })
+            copy(val, { success_message: "编码复制成功" });
         },
-        isOrigin: function(item) {
+        isOrigin: function (item) {
             return item["client"].includes("origin");
         },
-        parseSchema: function() {
+        parseSchema: function () {
             try {
                 const _code = JSON.parse(this.code);
                 this.version = _code.version;
@@ -530,7 +637,7 @@ export default {
          * @param {string} target 左右区域
          * @returns {boolean} true表示可以编辑
          */
-        canOperate: function(rowIndex, target) {
+        canOperate: function (rowIndex, target) {
             if (target === "left") {
                 return this.lCount >= rowIndex * 5;
             } else {
@@ -544,7 +651,7 @@ export default {
          * @param {string} target 左右区域
          * @returns {boolean} 是否可以修改
          */
-        canLeftItemOperate: function(rowIndex, colIndex) {
+        canLeftItemOperate: function (rowIndex, colIndex) {
             let canOperate = false;
             // 初始为left的第一行点亮
             if (this.begin === "left") {
@@ -564,7 +671,7 @@ export default {
         /**
          * 判断left该项父项是否加点
          */
-        isLeftParentAdd: function(rowIndex, colIndex) {
+        isLeftParentAdd: function (rowIndex, colIndex) {
             return Number(this.l_data[rowIndex - 1][colIndex]);
         },
         /**
@@ -574,7 +681,7 @@ export default {
          * @param {number} colIndex 列号
          * @param {Array} target 操作对象
          */
-        leftTalentAdd: function(item, rowIndex, colIndex) {
+        leftTalentAdd: function (item, rowIndex, colIndex) {
             if (!this.canOperate(rowIndex, "left")) return;
             // 当父项有层数，才可以进行增加层数操作
             if (item?.pretab && !this.isLeftParentAdd(rowIndex, colIndex)) {
@@ -641,7 +748,7 @@ export default {
          * @param {number} colIndex 列号
          * @param {Array} target 操作对象
          */
-        leftTalentDecrease: function(rowIndex, colIndex) {
+        leftTalentDecrease: function (rowIndex, colIndex) {
             let current = Number(this.l_data[rowIndex][colIndex]);
 
             if (current > 0) {
@@ -685,7 +792,7 @@ export default {
          * @param {string} target 左右区域
          * @returns {boolean} 是否可以修改
          */
-        canRightItemOperate: function(rowIndex, colIndex) {
+        canRightItemOperate: function (rowIndex, colIndex) {
             let canOperate = false;
             // 初始为left的第一行点亮
             if (this.begin === "right") {
@@ -705,7 +812,7 @@ export default {
         /**
          * 判断right该项父项是否加点
          */
-        isRightParentAdd: function(rowIndex, colIndex) {
+        isRightParentAdd: function (rowIndex, colIndex) {
             return Number(this.r_data[rowIndex - 1][colIndex]);
         },
         /**
@@ -715,7 +822,7 @@ export default {
          * @param {number} colIndex 列号
          * @param {Array} target 操作对象
          */
-        rightTalentAdd: function(item, rowIndex, colIndex) {
+        rightTalentAdd: function (item, rowIndex, colIndex) {
             if (!this.canOperate(rowIndex, "right")) return;
 
             // 当父项有层数，才可以进行增加层数操作
@@ -784,7 +891,7 @@ export default {
          * @param {number} colIndex 列号
          * @param {Array} target 操作对象
          */
-        rightTalentDecrease: function(rowIndex, colIndex) {
+        rightTalentDecrease: function (rowIndex, colIndex) {
             let current = Number(this.r_data[rowIndex][colIndex]);
 
             if (current > 0) {
@@ -825,7 +932,7 @@ export default {
          * @param {string} pos 位置信息
          * @param {number|string} num 图片编号
          */
-        talentBg: function(pos, num) {
+        talentBg: function (pos, num) {
             if (!pos) return;
             if (pos === "left") {
                 return __imgPath + `image/talent/${this.xfContent[0]}_${num}.png`;
@@ -839,7 +946,7 @@ export default {
         // 请求逻辑
         // ---------------------
         // 获取版本列表
-        getVersions: function() {
+        getVersions: function () {
             fetch(__ossRoot + "data/talent2/index.json")
                 .then((res) => res.json())
                 .then((response) => {
@@ -847,7 +954,7 @@ export default {
                     this.version = this.versions[0]?.version;
                 });
         },
-        getTalents: function() {
+        getTalents: function () {
             fetch(__ossRoot + "data/talent2/" + this.version + ".json")
                 .then((res) => res.json())
                 .then((response) => {
@@ -861,7 +968,7 @@ export default {
         },
 
         // 预设方案
-        save: function() {
+        save: function () {
             if (!this.mount) {
                 this.$notify({
                     type: "warning",
@@ -906,7 +1013,7 @@ export default {
                 });
             }
         },
-        saveAs: function() {
+        saveAs: function () {
             this.$prompt("方案另存为", "提示", {
                 confirmButtonText: "确定",
                 cancelButtonText: "取消",
@@ -930,7 +1037,7 @@ export default {
                 });
             });
         },
-        use: function(item) {
+        use: function (item) {
             const parseCode = item.code;
             this.currentSchema = item;
 
@@ -942,16 +1049,16 @@ export default {
                 this.parseSchema();
             });
         },
-        talentIcon: function(id) {
-            if (this.xf == '通用') return iconLink(id)
-            return iconLink(id, 'origin');
+        talentIcon: function (id) {
+            if (this.xf == "通用") return iconLink(id);
+            return iconLink(id, "origin");
         },
-        xficon: function(id) {
+        xficon: function (id) {
             return __imgPath + "image/xf/" + id + ".png";
         },
     },
     watch: {
-        version: function(val) {
+        version: function (val) {
             if (val) {
                 this.getTalents();
             }
@@ -993,11 +1100,11 @@ export default {
                 }
             },
         },
-        talent2Data: function() {
+        talent2Data: function () {
             this.renderCode();
         },
     },
-    mounted: function() {
+    mounted: function () {
         this.getVersions();
         this.series_open_need = defaultConfigs.series_open_need;
 
