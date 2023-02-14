@@ -1,257 +1,245 @@
 <template>
-    <div id="app">
-        <Breadcrumb
-            name="经脉模拟器"
-            slug="meridians"
-            root="/macro/meridians"
-            :feedbackEnable="true"
-            :crumbEnable="false"
-        >
-            <img slot="logo" svg-inline :src="getIcon('meridians')" />
-        </Breadcrumb>
-        <Main :withoutRight="true" :withoutLeft="true">
-            <div class="m-meridians">
-                <header class="m-meridians-header">
-                    <h1 class="m-meridians-title">经脉模拟器</h1>
-                    <div class="m-meridians-desc">
-                        <span class="u-meta">
-                            <em>❤️ 使用小贴士</em>
-                            <b>左键点通节点、右键回退</b>
-                        </span>
-                        <a class="u-link" href="https://jq.qq.com/?_wv=1027&k=s6eiK59S" target="_blank">
-                            <span>【怀旧服交流群】</span>
-                            <b>590349918</b>
-                        </a>
+    <app-layout slug="meridians">
+        <div class="m-meridians">
+            <header class="m-meridians-header">
+                <h1 class="m-meridians-title">经脉模拟器</h1>
+                <div class="m-meridians-desc">
+                    <span class="u-meta">
+                        <em>❤️ 使用小贴士</em>
+                        <b>左键点通节点、右键回退</b>
+                    </span>
+                    <a class="u-link" href="https://jq.qq.com/?_wv=1027&k=s6eiK59S" target="_blank">
+                        <span>【怀旧服交流群】</span>
+                        <b>590349918</b>
+                    </a>
+                </div>
+            </header>
+            <div class="m-meridians-content">
+                <div
+                    class="m-meridians-operation"
+                    @contextmenu.prevent="
+                        () => {
+                            return false;
+                        }
+                    "
+                >
+                    <detail :detailData="detailData"></detail>
+                    <div class="left">
+                        <div class="qixue-bg"></div>
+                        <div
+                            v-for="(item, index) in zhumai"
+                            :key="item.id"
+                            :class="['mai', item.class, item.nowLevel > 0 ? 'mai_act' : '']"
+                        >
+                            <div :class="'ap ap' + item.id">
+                                <h5>{{ item.name }}</h5>
+                                <em :class="'level' + item.nowLevel">0</em>
+                                <a
+                                    href="javascript:void(0)"
+                                    :class="
+                                        item.id === hover
+                                            ? 'jm_mouse'
+                                            : item.nowLevel === item.maxLevel
+                                            ? 'jm_full'
+                                            : item.requireSuccess
+                                            ? 'jm_opened'
+                                            : ''
+                                    "
+                                    ref="left"
+                                    @click="leftAction(item)"
+                                    @contextmenu.prevent="leftReduce(item)"
+                                    @mouseover="leftDetail(item, index)"
+                                    @mouseout="leftOutDetail"
+                                ></a>
+                            </div>
+                        </div>
+                        <a
+                            v-for="(item, index) in mai"
+                            :key="index"
+                            @click="switchJingmai(item)"
+                            @mouseover="maiDetail(item, index)"
+                            @mouseout="maiOutDetail"
+                            ref="mai"
+                            :class="`state${item.state} idx-ap idx-ap-act ${item.class}`"
+                            href="javascript:void(0)"
+                            >{{ item.title }}</a
+                        >
                     </div>
-                </header>
-                <div class="m-meridians-content">
-                    <div
-                        class="m-meridians-operation"
-                        @contextmenu.prevent="
-                            () => {
-                                return false;
-                            }
-                        "
-                    >
-                        <detail :detailData="detailData"></detail>
-                        <div class="left">
-                            <div class="qixue-bg"></div>
-                            <div
-                                v-for="(item, index) in zhumai"
-                                :key="item.id"
-                                :class="['mai', item.class, item.nowLevel > 0 ? 'mai_act' : '']"
-                            >
-                                <div :class="'ap ap' + item.id">
-                                    <h5>{{ item.name }}</h5>
-                                    <em :class="'level' + item.nowLevel">0</em>
-                                    <a
-                                        href="javascript:void(0)"
-                                        :class="
-                                            item.id === hover
-                                                ? 'jm_mouse'
-                                                : item.nowLevel === item.maxLevel
-                                                ? 'jm_full'
-                                                : item.requireSuccess
-                                                ? 'jm_opened'
-                                                : ''
-                                        "
-                                        ref="left"
-                                        @click="leftAction(item)"
-                                        @contextmenu.prevent="leftReduce(item)"
-                                        @mouseover="leftDetail(item, index)"
-                                        @mouseout="leftOutDetail"
-                                    ></a>
-                                </div>
-                            </div>
-                            <a
-                                v-for="(item, index) in mai"
-                                :key="index"
-                                @click="switchJingmai(item)"
-                                @mouseover="maiDetail(item, index)"
-                                @mouseout="maiOutDetail"
-                                ref="mai"
-                                :class="`state${item.state} idx-ap idx-ap-act ${item.class}`"
-                                href="javascript:void(0)"
-                                >{{ item.title }}</a
-                            >
-                        </div>
-                        <div class="right">
-                            <div class="jinmai home" v-if="previewType == 0"></div>
-                            <!-- 任脉 玉堂 -->
-                            <yutang
-                                v-if="previewType == 1"
-                                ref="jingmai"
-                                @showDetail="showDetail"
-                                @outDetail="outDetail"
-                                @action="action"
-                                @reduce="reduce"
-                            ></yutang>
-                            <!-- 任脉 曲骨 -->
-                            <qugu
-                                v-if="previewType == 2"
-                                ref="jingmai"
-                                @showDetail="showDetail"
-                                @outDetail="outDetail"
-                                @action="action"
-                                @reduce="reduce"
-                            ></qugu>
-                            <!-- 督脉 悬枢 -->
-                            <xuanshu
-                                v-if="previewType == 3"
-                                ref="jingmai"
-                                @showDetail="showDetail"
-                                @outDetail="outDetail"
-                                @action="action"
-                                @reduce="reduce"
-                            ></xuanshu>
-                            <!-- 督脉 命门 -->
-                            <mingmen
-                                v-if="previewType == 4"
-                                ref="jingmai"
-                                @showDetail="showDetail"
-                                @outDetail="outDetail"
-                                @action="action"
-                                @reduce="reduce"
-                            ></mingmen>
-                            <!-- 督脉 腰俞 -->
-                            <yaoshu
-                                v-if="previewType == 5"
-                                ref="jingmai"
-                                @showDetail="showDetail"
-                                @outDetail="outDetail"
-                                @action="action"
-                                @reduce="reduce"
-                            ></yaoshu>
-                            <!-- 带脉 天冲 -->
-                            <tianchong
-                                v-if="previewType == 6"
-                                ref="jingmai"
-                                @showDetail="showDetail"
-                                @outDetail="outDetail"
-                                @action="action"
-                                @reduce="reduce"
-                            ></tianchong>
-                            <!-- 带脉 维道 -->
-                            <weidao
-                                v-if="previewType == 7"
-                                ref="jingmai"
-                                @showDetail="showDetail"
-                                @outDetail="outDetail"
-                                @action="action"
-                                @reduce="reduce"
-                            ></weidao>
-                            <!-- 冲脉 大赫 -->
-                            <dahe
-                                v-if="previewType == 8"
-                                ref="jingmai"
-                                @showDetail="showDetail"
-                                @outDetail="outDetail"
-                                @action="action"
-                                @reduce="reduce"
-                            ></dahe>
-                            <!-- 冲脉 横骨 -->
-                            <henggu
-                                v-if="previewType == 9"
-                                ref="jingmai"
-                                @showDetail="showDetail"
-                                @outDetail="outDetail"
-                                @action="action"
-                                @reduce="reduce"
-                            ></henggu>
-                            <!-- 奇穴 -->
-                            <qixue
-                                v-if="previewType == 10"
-                                ref="jingmai"
-                                @showDetail="showDetail"
-                                @outDetail="outDetail"
-                                @action="action"
-                                @reduce="reduce"
-                            ></qixue>
-                        </div>
-                        <div class="dantian" :style="dantian > 100000 ? 'color: red' : ''">
-                            {{ dantian }}/100000
-                            <span style="color: red">{{ dantian > 100000 ? "丹田已满" : "" }}</span>
-                        </div>
+                    <div class="right">
+                        <div class="jinmai home" v-if="previewType == 0"></div>
+                        <!-- 任脉 玉堂 -->
+                        <yutang
+                            v-if="previewType == 1"
+                            ref="jingmai"
+                            @showDetail="showDetail"
+                            @outDetail="outDetail"
+                            @action="action"
+                            @reduce="reduce"
+                        ></yutang>
+                        <!-- 任脉 曲骨 -->
+                        <qugu
+                            v-if="previewType == 2"
+                            ref="jingmai"
+                            @showDetail="showDetail"
+                            @outDetail="outDetail"
+                            @action="action"
+                            @reduce="reduce"
+                        ></qugu>
+                        <!-- 督脉 悬枢 -->
+                        <xuanshu
+                            v-if="previewType == 3"
+                            ref="jingmai"
+                            @showDetail="showDetail"
+                            @outDetail="outDetail"
+                            @action="action"
+                            @reduce="reduce"
+                        ></xuanshu>
+                        <!-- 督脉 命门 -->
+                        <mingmen
+                            v-if="previewType == 4"
+                            ref="jingmai"
+                            @showDetail="showDetail"
+                            @outDetail="outDetail"
+                            @action="action"
+                            @reduce="reduce"
+                        ></mingmen>
+                        <!-- 督脉 腰俞 -->
+                        <yaoshu
+                            v-if="previewType == 5"
+                            ref="jingmai"
+                            @showDetail="showDetail"
+                            @outDetail="outDetail"
+                            @action="action"
+                            @reduce="reduce"
+                        ></yaoshu>
+                        <!-- 带脉 天冲 -->
+                        <tianchong
+                            v-if="previewType == 6"
+                            ref="jingmai"
+                            @showDetail="showDetail"
+                            @outDetail="outDetail"
+                            @action="action"
+                            @reduce="reduce"
+                        ></tianchong>
+                        <!-- 带脉 维道 -->
+                        <weidao
+                            v-if="previewType == 7"
+                            ref="jingmai"
+                            @showDetail="showDetail"
+                            @outDetail="outDetail"
+                            @action="action"
+                            @reduce="reduce"
+                        ></weidao>
+                        <!-- 冲脉 大赫 -->
+                        <dahe
+                            v-if="previewType == 8"
+                            ref="jingmai"
+                            @showDetail="showDetail"
+                            @outDetail="outDetail"
+                            @action="action"
+                            @reduce="reduce"
+                        ></dahe>
+                        <!-- 冲脉 横骨 -->
+                        <henggu
+                            v-if="previewType == 9"
+                            ref="jingmai"
+                            @showDetail="showDetail"
+                            @outDetail="outDetail"
+                            @action="action"
+                            @reduce="reduce"
+                        ></henggu>
+                        <!-- 奇穴 -->
+                        <qixue
+                            v-if="previewType == 10"
+                            ref="jingmai"
+                            @showDetail="showDetail"
+                            @outDetail="outDetail"
+                            @action="action"
+                            @reduce="reduce"
+                        ></qixue>
                     </div>
-                    <div class="m-meridians-preview">
-                        <div class="content">
-                            <div class="content_sort">
-                                <template v-for="(item, index) of preview">
-                                    <p v-if="item.type === 1 && item.desc" class="jichu" :key="index">
-                                        {{ item.desc }}
-                                    </p>
-                                </template>
-                            </div>
-                            <div class="content_sort">
-                                <template v-for="(item, index) of preview">
-                                    <p v-if="item.type === 2 && item.desc" class="fuzhu" :key="index">
-                                        {{ item.desc }}
-                                    </p>
-                                </template>
-                            </div>
-                            <div class="content_sort">
-                                <template v-for="(item, index) of preview">
-                                    <p v-if="item.type === 3 && item.desc" class="waigong" :key="index">
-                                        {{ item.desc }}
-                                    </p>
-                                </template>
-                            </div>
-                            <div class="content_sort">
-                                <template v-for="(item, index) of preview">
-                                    <p v-if="item.type === 4 && item.desc" class="neigong" :key="index">
-                                        {{ item.desc }}
-                                    </p>
-                                </template>
-                            </div>
-                        </div>
-                        <div class="preview_desc">
-                            <p class="jichu">基础</p>
-                            <p class="fuzhu">辅助</p>
-                            <p class="waigong">外功</p>
-                            <p class="neigong">内功</p>
-                        </div>
-                        <div class="reset" @click="reset">重置经脉点数</div>
+                    <div class="dantian" :style="dantian > 100000 ? 'color: red' : ''">
+                        {{ dantian }}/100000
+                        <span style="color: red">{{ dantian > 100000 ? "丹田已满" : "" }}</span>
                     </div>
                 </div>
-                <footer class="m-meridians-footer">
-                    <el-checkbox class="u-extend" v-model="isEfficient">
-                        下极俞
-                        <span>(消耗修为减少10%)</span>
-                    </el-checkbox>
-                    <el-button type="primary" @click="readBox" class="u-save" style="right: 110px" size="mini">
-                        <i class="el-icon-download"></i>导入方案
-                    </el-button>
-                    <el-button type="warning" @click="generate" class="u-save" size="mini">
-                        <img svg-inline src="@/assets/img/meridians/save.svg" />保存方案
-                    </el-button>
-                </footer>
-                <Footer class="meridians_footer"></Footer>
-                <div class="diglogShow" @click="myMeridians" v-if="isLogin">我的经脉</div>
-                <el-dialog title="我的方案" :visible.sync="dialogVisible" width="40%" v-if="isLogin">
-                    <el-table :data="list" style="width: 100%">
-                        <el-table-column prop="id" width="70" align="center" label="方案ID">
-                            <template slot-scope="scope">
-                                <b style="color: #4caf50">{{ scope.row.id }}</b>
+                <div class="m-meridians-preview">
+                    <div class="content">
+                        <div class="content_sort">
+                            <template v-for="(item, index) of preview">
+                                <p v-if="item.type === 1 && item.desc" class="jichu" :key="index">
+                                    {{ item.desc }}
+                                </p>
                             </template>
-                        </el-table-column>
-                        <el-table-column prop="name" label="方案名称"></el-table-column>
-                        <el-table-column label="操作" width="200">
-                            <template slot-scope="scope">
-                                <el-button type="primary" size="mini" @click="restore(scope.row.id)">加载</el-button>
-                                <el-button type="danger" size="mini" @click="remove(scope.row.id)">删除</el-button>
+                        </div>
+                        <div class="content_sort">
+                            <template v-for="(item, index) of preview">
+                                <p v-if="item.type === 2 && item.desc" class="fuzhu" :key="index">
+                                    {{ item.desc }}
+                                </p>
                             </template>
-                        </el-table-column>
-                    </el-table>
-                </el-dialog>
-                <el-alert
-                    :title="`经脉方案保存成功，方案ID：${tempId}`"
-                    type="success"
-                    v-show="tempId"
-                    show-icon
-                ></el-alert>
+                        </div>
+                        <div class="content_sort">
+                            <template v-for="(item, index) of preview">
+                                <p v-if="item.type === 3 && item.desc" class="waigong" :key="index">
+                                    {{ item.desc }}
+                                </p>
+                            </template>
+                        </div>
+                        <div class="content_sort">
+                            <template v-for="(item, index) of preview">
+                                <p v-if="item.type === 4 && item.desc" class="neigong" :key="index">
+                                    {{ item.desc }}
+                                </p>
+                            </template>
+                        </div>
+                    </div>
+                    <div class="preview_desc">
+                        <p class="jichu">基础</p>
+                        <p class="fuzhu">辅助</p>
+                        <p class="waigong">外功</p>
+                        <p class="neigong">内功</p>
+                    </div>
+                    <div class="reset" @click="reset">重置经脉点数</div>
+                </div>
             </div>
-        </Main>
-    </div>
+            <footer class="m-meridians-footer">
+                <el-checkbox class="u-extend" v-model="isEfficient">
+                    下极俞
+                    <span>(消耗修为减少10%)</span>
+                </el-checkbox>
+                <el-button type="primary" @click="readBox" class="u-save" style="right: 110px" size="mini">
+                    <i class="el-icon-download"></i>导入方案
+                </el-button>
+                <el-button type="warning" @click="generate" class="u-save" size="mini" v-if="isLogin">
+                    <img svg-inline src="@/assets/img/meridians/save.svg" />保存方案
+                </el-button>
+            </footer>
+            <div class="diglogShow" @click="myMeridians" v-if="isLogin">我的经脉</div>
+            <el-dialog title="我的方案" :visible.sync="dialogVisible" width="40%" v-if="isLogin">
+                <el-table :data="list" style="width: 100%">
+                    <el-table-column prop="id" width="70" align="center" label="方案ID">
+                        <template slot-scope="scope">
+                            <b style="color: #4caf50">{{ scope.row.id }}</b>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="name" label="方案名称"></el-table-column>
+                    <el-table-column label="操作" width="200">
+                        <template slot-scope="scope">
+                            <el-button type="primary" size="mini" @click="restore(scope.row.id)">加载</el-button>
+                            <el-button type="danger" size="mini" @click="remove(scope.row.id)">删除</el-button>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </el-dialog>
+            <el-alert
+                :title="`经脉方案保存成功，方案ID：${tempId}`"
+                type="success"
+                v-show="tempId"
+                show-icon
+            ></el-alert>
+        </div>
+    </app-layout>
 </template>
 
 <script>
@@ -266,6 +254,7 @@ import Weidao from "@/components/meridians/weidao";
 import Dahe from "@/components/meridians/dahe";
 import Henggu from "@/components/meridians/henggu";
 import Qixue from "@/components/meridians/qixue";
+import AppLayout from "@/layout/AppLayout";
 
 import constDefine from "@/assets/data/v1";
 import User from "@jx3box/jx3box-common/js/user.js";
@@ -396,6 +385,8 @@ export default {
         Dahe,
         Henggu,
         Qixue,
+
+        AppLayout,
     },
     computed: {
         dantian() {
@@ -821,12 +812,7 @@ export default {
                         this.tempId = res.data.data.id;
                     }
                 })
-                .catch(() => {
-                    this.$message({
-                        type: "info",
-                        message: "取消输入",
-                    });
-                });
+                .catch(() => {});
         },
         async generateFun(name) {
             let select = this.$store.state.selectMeridians;

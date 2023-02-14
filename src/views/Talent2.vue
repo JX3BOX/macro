@@ -1,406 +1,389 @@
 <template>
-    <div id="app">
-        <Breadcrumb name="镇派模拟器" slug="talent2" root="/macro/talent2" :feedbackEnable="true" :crumbEnable="true">
-            <img slot="logo" svg-inline :src="getIcon('talent2')" />
-            <div class="m-info"></div>
-        </Breadcrumb>
-        <Main :withoutRight="true" :withoutLeft="true">
-            <div class="m-talent m-talent2">
-                <div class="m-talent-header">
-                    <h1 class="m-talent-title">镇派模拟器</h1>
-                    <div class="m-talent-panel">
-                        <div class="m-talent-version">
-                            <span class="u-label">选择版本</span>
-                            <el-select v-model="version" placeholder="请选择游戏版本" @change="reload">
-                                <el-option
-                                    v-for="item in versions"
-                                    :key="item.version"
-                                    :label="item.name"
-                                    :value="item.version"
-                                ></el-option>
-                            </el-select>
-                        </div>
-                        <div class="u-toolbar" v-if="isLogin">
-                            <el-button type="primary" @click="drawer = true" icon="el-icon-setting" size="small"
-                                >我的预设</el-button
-                            >
-                        </div>
+    <app-layout slug="talent2">
+        <div class="m-talent m-talent2">
+            <div class="m-talent-header">
+                <h1 class="m-talent-title">镇派模拟器</h1>
+                <div class="m-talent-panel">
+                    <div class="m-talent-version">
+                        <span class="u-label">选择版本</span>
+                        <el-select v-model="version" placeholder="请选择游戏版本" @change="reload">
+                            <el-option
+                                v-for="item in versions"
+                                :key="item.version"
+                                :label="item.name"
+                                :value="item.version"
+                            ></el-option>
+                        </el-select>
                     </div>
-                </div>
-                <div class="m-talent-wrapper">
-                    <h2 class="m-talent-subtitle">选择心法</h2>
-                    <div class="m-talent-xf">
-                        <el-radio
-                            v-for="(item, i) in xfMaps"
-                            v-model="xf"
-                            :label="item.name"
-                            :key="i"
-                            @change="reload"
-                            v-show="isOrigin(item)"
-                        >
-                            <img class="u-pic" :src="xficon(item.id)" :alt="item.name" />
-                            <span class="u-txt">{{ item.name }}</span>
-                        </el-radio>
-                    </div>
-                    <h2 class="m-talent-subtitle">配置镇派</h2>
-                    <div class="m-talent2-box">
-                        <div class="m-talent2-main-title">镇派经脉模拟器</div>
-                        <template v-if="xf">
-                            <div
-                                class="m-talent2-surplus"
-                                :class="[total - totalCount > 0 ? '' : 'm-talent2-surplus-empty']"
-                            >
-                                剩余点数 :
-                                <span>{{ surplus }}</span>
-                            </div>
-                            <div class="m-talent2-main">
-                                <!-- LEFT -->
-                                <div class="m-talent2-left">
-                                    <div
-                                        class="m-talent2-content"
-                                        :style="{
-                                            'background-image': xf ? `url(${talentBg('left', 1)})` : '',
-                                        }"
-                                    >
-                                        <div class="m-talent2-title">
-                                            <img class="m-talent2-xf-icon" :src="xficon(xfContent[0])" />
-                                            <span class="m-talent2-title-count">{{ lCount }}</span>
-                                            <span class="m-talent2-title-name">{{ l_name }}</span>
-                                        </div>
-                                        <div
-                                            class="m-talent2-content-row"
-                                            v-for="(row, index) in talentContent.left"
-                                            :key="'l' + index"
-                                        >
-                                            <template v-for="(item, i) in row">
-                                                <div
-                                                    v-if="item"
-                                                    class="m-talent2-content-item"
-                                                    :class="[
-                                                        {
-                                                            'm-talent2-content-item-skill': item.type === 'skill',
-                                                        },
-                                                        canOperate(index, 'left')
-                                                            ? ''
-                                                            : 'm-talent2-content-item-disabled',
-                                                        item.pretab ? 'm-talent2-pretab' : '',
-                                                    ]"
-                                                    :key="i"
-                                                    @mouseover="$set(item, 'on', true)"
-                                                    @mouseleave="$set(item, 'on', false)"
-                                                >
-                                                    <div
-                                                        @click="leftTalentAdd(item, index, i)"
-                                                        @click.right.prevent="leftTalentDecrease(index, i)"
-                                                        :class="[
-                                                            !canLeftItemOperate(index, i)
-                                                                ? item.type === 'skill'
-                                                                    ? 'm-talent2-skill-unselected'
-                                                                    : 'm-talent2-unselected'
-                                                                : 'm-talent2-selected',
-                                                            item.type === 'skill' ? '' : 'm-talent2-talent',
-                                                            !surplus && !Number(l_data[index][i])
-                                                                ? item.type === 'skill'
-                                                                    ? 'm-talent2-skill-unselected'
-                                                                    : 'm-talent2-unselected'
-                                                                : '',
-                                                        ]"
-                                                    >
-                                                        <!-- HAS PARENT -->
-                                                        <span
-                                                            v-if="
-                                                                item.pretab &&
-                                                                !isLeftParentAdd(index, i) &&
-                                                                canLeftItemOperate(index, i)
-                                                            "
-                                                            :class="item.type === 'skill' ? 'is-add-skill' : 'is-add'"
-                                                        ></span>
-                                                        <!-- TOTAL ZERO -->
-                                                        <span
-                                                            v-if="!surplus && !Number(l_data[index][i])"
-                                                            :class="item.type === 'skill' ? 'is-add-skill' : 'is-add'"
-                                                        ></span>
-
-                                                        <img
-                                                            class="talent-img"
-                                                            :class="{ 'skill-img': item.type === 'skill' }"
-                                                            :src="talentIcon(item.icon)"
-                                                            :alt="item.name"
-                                                        />
-                                                    </div>
-                                                    <!-- COUNT -->
-                                                    <span
-                                                        v-if="Number(l_data[index][i])"
-                                                        class="m-talent2-content-item-count"
-                                                        :class="[
-                                                            Number(l_data[index][i]) < item.max
-                                                                ? 'm-talent2-content-item-count-under'
-                                                                : '',
-                                                        ]"
-                                                    >
-                                                        {{ l_data[index][i] }}
-                                                    </span>
-
-                                                    <!-- DESC -->
-                                                    <span class="m-talent2-pop" :class="item.on ? 'on' : ''">
-                                                        <b class="m-talent2-name">
-                                                            <span>
-                                                                {{ item.name }}
-                                                                <small class="u-talent2-id" v-if="item.id"
-                                                                    >(ID: {{ item.id }})</small
-                                                                >
-                                                            </span>
-                                                            <span class="m-talent2-number">
-                                                                第{{ Number(l_data[index][i]) + "/" + item.max }}重
-                                                            </span>
-                                                        </b>
-                                                        <!-- <b class="m-talent2-type">
-                                                            {{ item.type === 'talent' ? '被动招式': '主动招式' }}
-                                                        </b>-->
-                                                        <span
-                                                            class="m-talent2-desc"
-                                                            v-html="
-                                                                !Number(l_data[index][i]) || xf === '通用'
-                                                                    ? item.desc[0]
-                                                                    : item.desc[l_data[index][i] - 1]
-                                                            "
-                                                        >
-                                                        </span>
-                                                        <span
-                                                            v-if="
-                                                                Number(l_data[index][i]) &&
-                                                                Number(l_data[index][i]) < item.max
-                                                            "
-                                                            class="m-talent2-desc-next"
-                                                        >
-                                                            <span v-if="xf !== '通用'" class="m-next-text"
-                                                                >下一重：</span
-                                                            >
-                                                            <span>
-                                                                {{ item.desc[l_data[index][i]] }}
-                                                            </span>
-                                                        </span>
-                                                        <span v-if="Number(l_data[index][i]) === item.max" class="m-max"
-                                                            >该招式已练至最高境界</span
-                                                        >
-                                                        <span
-                                                            class="m-talent-retrogress"
-                                                            v-if="Number(l_data[index][i])"
-                                                            >右键点击遗忘</span
-                                                        >
-                                                    </span>
-                                                </div>
-                                                <div v-else class="m-talent2-content-item-empty" :key="i"></div>
-                                            </template>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- RIGHT -->
-                                <div class="m-talent2-right">
-                                    <div
-                                        class="m-talent2-content"
-                                        :style="{
-                                            'background-image': xf ? `url(${talentBg('right', 1)})` : '',
-                                        }"
-                                    >
-                                        <div class="m-talent2-title">
-                                            <img class="m-talent2-xf-icon" :src="xficon(xfContent[1])" />
-                                            <span class="m-talent2-title-count">{{ rCount }}</span>
-                                            <span class="m-talent2-title-name">{{ r_name }}</span>
-                                        </div>
-                                        <div
-                                            class="m-talent2-content-row"
-                                            v-for="(row, index) in talentContent.right"
-                                            :key="'r' + index"
-                                        >
-                                            <template v-for="(item, i) in row">
-                                                <div
-                                                    v-if="item"
-                                                    class="m-talent2-content-item"
-                                                    :class="[
-                                                        {
-                                                            'm-talent2-content-item-skill': item.type === 'skill',
-                                                        },
-                                                        !canOperate(index, 'right')
-                                                            ? 'm-talent2-content-item-disabled'
-                                                            : '',
-                                                        item.pretab ? 'm-talent2-pretab' : '',
-                                                    ]"
-                                                    :key="i"
-                                                    @mouseover="$set(item, 'on', true)"
-                                                    @mouseleave="$set(item, 'on', false)"
-                                                >
-                                                    <div
-                                                        @click="rightTalentAdd(item, index, i)"
-                                                        @click.right.prevent="rightTalentDecrease(index, i)"
-                                                        :class="[
-                                                            !canRightItemOperate(index, i)
-                                                                ? item.type === 'skill'
-                                                                    ? 'm-talent2-skill-unselected'
-                                                                    : 'm-talent2-unselected'
-                                                                : 'm-talent2-selected',
-                                                            item.type === 'skill' ? '' : 'm-talent2-talent',
-                                                            !surplus && !Number(r_data[index][i])
-                                                                ? item.type === 'skill'
-                                                                    ? 'm-talent2-skill-unselected'
-                                                                    : 'm-talent2-unselected'
-                                                                : '',
-                                                        ]"
-                                                    >
-                                                        <!-- HAS PARENT -->
-                                                        <span
-                                                            v-if="
-                                                                item.pretab &&
-                                                                !isRightParentAdd(index, i) &&
-                                                                canRightItemOperate(index, i)
-                                                            "
-                                                            :class="item.type === 'skill' ? 'is-add-skill' : 'is-add'"
-                                                        ></span>
-                                                        <!-- TOTAL ZERO -->
-                                                        <span
-                                                            v-if="!surplus && !Number(r_data[index][i])"
-                                                            :class="item.type === 'skill' ? 'is-add-skill' : 'is-add'"
-                                                        ></span>
-
-                                                        <img
-                                                            class="talent-img"
-                                                            :class="{
-                                                                'skill-img': item.type === 'skill',
-                                                            }"
-                                                            :src="talentIcon(item.icon)"
-                                                            :alt="item.name"
-                                                        />
-                                                    </div>
-                                                    <!-- COUNT -->
-                                                    <span
-                                                        v-if="Number(r_data[index][i])"
-                                                        class="m-talent2-content-item-count"
-                                                        :class="[
-                                                            Number(r_data[index][i]) < item.max
-                                                                ? 'm-talent2-content-item-count-under'
-                                                                : '',
-                                                        ]"
-                                                    >
-                                                        {{ r_data[index][i] }}
-                                                    </span>
-
-                                                    <!-- DESC -->
-                                                    <span class="m-talent2-pop" :class="item.on ? 'on' : ''">
-                                                        <b class="m-talent2-name">
-                                                            <span>
-                                                                {{ item.name }}
-                                                                <small class="u-talent2-id" v-if="item.id"
-                                                                    >(ID: {{ item.id }})</small
-                                                                >
-                                                            </span>
-                                                            <span class="m-talent2-number">
-                                                                第{{ Number(r_data[index][i]) + "/" + item.max }}重
-                                                            </span>
-                                                        </b>
-                                                        <!-- <b class="m-talent2-type">
-                                                            {{ item.type === 'talent' ? '被动招式': '主动招式' }}
-                                                        </b>-->
-                                                        <span
-                                                            class="m-talent2-desc"
-                                                            v-html="
-                                                                !Number(r_data[index][i]) || xf === '通用'
-                                                                    ? item.desc[0]
-                                                                    : item.desc[r_data[index][i] - 1]
-                                                            "
-                                                        >
-                                                        </span>
-                                                        <span
-                                                            v-if="
-                                                                Number(r_data[index][i]) &&
-                                                                Number(r_data[index][i]) < item.max
-                                                            "
-                                                            class="m-talent2-desc-next"
-                                                        >
-                                                            <span v-if="xf !== '通用'" class="m-next-text"
-                                                                >下一重：</span
-                                                            >
-                                                            <span>
-                                                                {{ item.desc[r_data[index][i]] }}
-                                                            </span>
-                                                        </span>
-                                                        <span v-if="Number(r_data[index][i]) === item.max" class="m-max"
-                                                            >该招式已练至最高境界</span
-                                                        >
-                                                        <span
-                                                            class="m-talent-retrogress"
-                                                            v-if="Number(r_data[index][i])"
-                                                            >右键点击遗忘</span
-                                                        >
-                                                    </span>
-                                                </div>
-                                                <div v-else class="m-talent2-content-item-empty" :key="i"></div>
-                                            </template>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="m-talent2-actions">
-                                <div
-                                    class="rest-btn"
-                                    :class="!totalCount ? 'm-talent2-actions-btn-disabled' : 'm-talent2-actions-btn'"
-                                    @click="reload"
-                                >
-                                    重置
-                                </div>
-                            </div>
-                        </template>
-                    </div>
-                    <h2 class="m-talent-subtitle">镇派编码</h2>
-                    <div class="m-talent-code">
-                        <el-input placeholder="粘贴编码亦可自动解析奇穴" v-model="code" @change="parseSchema">
-                            <span slot="prepend" @click="copy(code)" class="u-copy">
-                                <i class="el-icon-document-copy"></i>
-                                点击复制
-                            </span>
-                        </el-input>
-                    </div>
-                    <template v-if="isAdmin">
-                        <h2 class="m-talent-subtitle">配装编码</h2>
-                        <el-input placeholder="配装器编码" v-model="pzcode">
-                            <span slot="prepend" @click="copy(pzcode)" class="u-copy">
-                                <i class="el-icon-document-copy"></i>
-                                点击复制
-                            </span>
-                        </el-input>
-                    </template>
-                    <div class="m-talent-op" v-if="isLogin">
-                        <el-button
-                            type="primary"
-                            :icon="currentSchema ? 'el-icon-check' : 'el-icon-document-add'"
-                            @click="save"
-                            >{{ currentSchema ? "保存" : "保存为预设" }}</el-button
-                        >
-                        <el-button
-                            v-if="isEditing"
-                            type="success"
-                            icon="el-icon-document-add"
-                            class="u-btn"
-                            @click="saveAs"
-                            plain
-                            >另存为</el-button
+                    <div class="u-toolbar" v-if="isLogin">
+                        <el-button type="primary" @click="drawer = true" icon="el-icon-setting" size="small"
+                            >我的预设</el-button
                         >
                     </div>
                 </div>
-
-                <talent-drawer
-                    v-if="isLogin"
-                    :drawer="drawer"
-                    type="talent2"
-                    :client="client"
-                    @update-drawer="updateDrawer"
-                    @use="use"
-                ></talent-drawer>
             </div>
-            <Footer></Footer>
-        </Main>
-    </div>
+            <div class="m-talent-wrapper">
+                <h2 class="m-talent-subtitle">选择心法</h2>
+                <div class="m-talent-xf">
+                    <el-radio
+                        v-for="(item, i) in xfMaps"
+                        v-model="xf"
+                        :label="item.name"
+                        :key="i"
+                        @change="reload"
+                        v-show="isOrigin(item)"
+                    >
+                        <img class="u-pic" :src="xficon(item.id)" :alt="item.name" />
+                        <span class="u-txt">{{ item.name }}</span>
+                    </el-radio>
+                </div>
+                <h2 class="m-talent-subtitle">配置镇派</h2>
+                <div class="m-talent2-box">
+                    <div class="m-talent2-main-title">镇派经脉模拟器</div>
+                    <template v-if="xf">
+                        <div
+                            class="m-talent2-surplus"
+                            :class="[total - totalCount > 0 ? '' : 'm-talent2-surplus-empty']"
+                        >
+                            剩余点数 :
+                            <span>{{ surplus }}</span>
+                        </div>
+                        <div class="m-talent2-main">
+                            <!-- LEFT -->
+                            <div class="m-talent2-left">
+                                <div
+                                    class="m-talent2-content"
+                                    :style="{
+                                        'background-image': xf ? `url(${talentBg('left', 1)})` : '',
+                                    }"
+                                >
+                                    <div class="m-talent2-title">
+                                        <img class="m-talent2-xf-icon" :src="xficon(xfContent[0])" />
+                                        <span class="m-talent2-title-count">{{ lCount }}</span>
+                                        <span class="m-talent2-title-name">{{ l_name }}</span>
+                                    </div>
+                                    <div
+                                        class="m-talent2-content-row"
+                                        v-for="(row, index) in talentContent.left"
+                                        :key="'l' + index"
+                                    >
+                                        <template v-for="(item, i) in row">
+                                            <div
+                                                v-if="item"
+                                                class="m-talent2-content-item"
+                                                :class="[
+                                                    {
+                                                        'm-talent2-content-item-skill': item.type === 'skill',
+                                                    },
+                                                    canOperate(index, 'left') ? '' : 'm-talent2-content-item-disabled',
+                                                    item.pretab ? 'm-talent2-pretab' : '',
+                                                ]"
+                                                :key="i"
+                                                @mouseover="$set(item, 'on', true)"
+                                                @mouseleave="$set(item, 'on', false)"
+                                            >
+                                                <div
+                                                    @click="leftTalentAdd(item, index, i)"
+                                                    @click.right.prevent="leftTalentDecrease(index, i)"
+                                                    :class="[
+                                                        !canLeftItemOperate(index, i)
+                                                            ? item.type === 'skill'
+                                                                ? 'm-talent2-skill-unselected'
+                                                                : 'm-talent2-unselected'
+                                                            : 'm-talent2-selected',
+                                                        item.type === 'skill' ? '' : 'm-talent2-talent',
+                                                        !surplus && !Number(l_data[index][i])
+                                                            ? item.type === 'skill'
+                                                                ? 'm-talent2-skill-unselected'
+                                                                : 'm-talent2-unselected'
+                                                            : '',
+                                                    ]"
+                                                >
+                                                    <!-- HAS PARENT -->
+                                                    <span
+                                                        v-if="
+                                                            item.pretab &&
+                                                            !isLeftParentAdd(index, i) &&
+                                                            canLeftItemOperate(index, i)
+                                                        "
+                                                        :class="item.type === 'skill' ? 'is-add-skill' : 'is-add'"
+                                                    ></span>
+                                                    <!-- TOTAL ZERO -->
+                                                    <span
+                                                        v-if="!surplus && !Number(l_data[index][i])"
+                                                        :class="item.type === 'skill' ? 'is-add-skill' : 'is-add'"
+                                                    ></span>
+
+                                                    <img
+                                                        class="talent-img"
+                                                        :class="{ 'skill-img': item.type === 'skill' }"
+                                                        :src="talentIcon(item.icon)"
+                                                        :alt="item.name"
+                                                    />
+                                                </div>
+                                                <!-- COUNT -->
+                                                <span
+                                                    v-if="Number(l_data[index][i])"
+                                                    class="m-talent2-content-item-count"
+                                                    :class="[
+                                                        Number(l_data[index][i]) < item.max
+                                                            ? 'm-talent2-content-item-count-under'
+                                                            : '',
+                                                    ]"
+                                                >
+                                                    {{ l_data[index][i] }}
+                                                </span>
+
+                                                <!-- DESC -->
+                                                <span class="m-talent2-pop" :class="item.on ? 'on' : ''">
+                                                    <b class="m-talent2-name">
+                                                        <span>
+                                                            {{ item.name }}
+                                                            <small class="u-talent2-id" v-if="item.id"
+                                                                >(ID: {{ item.id }})</small
+                                                            >
+                                                        </span>
+                                                        <span class="m-talent2-number">
+                                                            第{{ Number(l_data[index][i]) + "/" + item.max }}重
+                                                        </span>
+                                                    </b>
+                                                    <!-- <b class="m-talent2-type">
+                                                            {{ item.type === 'talent' ? '被动招式': '主动招式' }}
+                                                        </b>-->
+                                                    <span
+                                                        class="m-talent2-desc"
+                                                        v-html="
+                                                            !Number(l_data[index][i]) || xf === '通用'
+                                                                ? item.desc[0]
+                                                                : item.desc[l_data[index][i] - 1]
+                                                        "
+                                                    >
+                                                    </span>
+                                                    <span
+                                                        v-if="
+                                                            Number(l_data[index][i]) &&
+                                                            Number(l_data[index][i]) < item.max
+                                                        "
+                                                        class="m-talent2-desc-next"
+                                                    >
+                                                        <span v-if="xf !== '通用'" class="m-next-text">下一重：</span>
+                                                        <span>
+                                                            {{ item.desc[l_data[index][i]] }}
+                                                        </span>
+                                                    </span>
+                                                    <span v-if="Number(l_data[index][i]) === item.max" class="m-max"
+                                                        >该招式已练至最高境界</span
+                                                    >
+                                                    <span class="m-talent-retrogress" v-if="Number(l_data[index][i])"
+                                                        >右键点击遗忘</span
+                                                    >
+                                                </span>
+                                            </div>
+                                            <div v-else class="m-talent2-content-item-empty" :key="i"></div>
+                                        </template>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- RIGHT -->
+                            <div class="m-talent2-right">
+                                <div
+                                    class="m-talent2-content"
+                                    :style="{
+                                        'background-image': xf ? `url(${talentBg('right', 1)})` : '',
+                                    }"
+                                >
+                                    <div class="m-talent2-title">
+                                        <img class="m-talent2-xf-icon" :src="xficon(xfContent[1])" />
+                                        <span class="m-talent2-title-count">{{ rCount }}</span>
+                                        <span class="m-talent2-title-name">{{ r_name }}</span>
+                                    </div>
+                                    <div
+                                        class="m-talent2-content-row"
+                                        v-for="(row, index) in talentContent.right"
+                                        :key="'r' + index"
+                                    >
+                                        <template v-for="(item, i) in row">
+                                            <div
+                                                v-if="item"
+                                                class="m-talent2-content-item"
+                                                :class="[
+                                                    {
+                                                        'm-talent2-content-item-skill': item.type === 'skill',
+                                                    },
+                                                    !canOperate(index, 'right')
+                                                        ? 'm-talent2-content-item-disabled'
+                                                        : '',
+                                                    item.pretab ? 'm-talent2-pretab' : '',
+                                                ]"
+                                                :key="i"
+                                                @mouseover="$set(item, 'on', true)"
+                                                @mouseleave="$set(item, 'on', false)"
+                                            >
+                                                <div
+                                                    @click="rightTalentAdd(item, index, i)"
+                                                    @click.right.prevent="rightTalentDecrease(index, i)"
+                                                    :class="[
+                                                        !canRightItemOperate(index, i)
+                                                            ? item.type === 'skill'
+                                                                ? 'm-talent2-skill-unselected'
+                                                                : 'm-talent2-unselected'
+                                                            : 'm-talent2-selected',
+                                                        item.type === 'skill' ? '' : 'm-talent2-talent',
+                                                        !surplus && !Number(r_data[index][i])
+                                                            ? item.type === 'skill'
+                                                                ? 'm-talent2-skill-unselected'
+                                                                : 'm-talent2-unselected'
+                                                            : '',
+                                                    ]"
+                                                >
+                                                    <!-- HAS PARENT -->
+                                                    <span
+                                                        v-if="
+                                                            item.pretab &&
+                                                            !isRightParentAdd(index, i) &&
+                                                            canRightItemOperate(index, i)
+                                                        "
+                                                        :class="item.type === 'skill' ? 'is-add-skill' : 'is-add'"
+                                                    ></span>
+                                                    <!-- TOTAL ZERO -->
+                                                    <span
+                                                        v-if="!surplus && !Number(r_data[index][i])"
+                                                        :class="item.type === 'skill' ? 'is-add-skill' : 'is-add'"
+                                                    ></span>
+
+                                                    <img
+                                                        class="talent-img"
+                                                        :class="{
+                                                            'skill-img': item.type === 'skill',
+                                                        }"
+                                                        :src="talentIcon(item.icon)"
+                                                        :alt="item.name"
+                                                    />
+                                                </div>
+                                                <!-- COUNT -->
+                                                <span
+                                                    v-if="Number(r_data[index][i])"
+                                                    class="m-talent2-content-item-count"
+                                                    :class="[
+                                                        Number(r_data[index][i]) < item.max
+                                                            ? 'm-talent2-content-item-count-under'
+                                                            : '',
+                                                    ]"
+                                                >
+                                                    {{ r_data[index][i] }}
+                                                </span>
+
+                                                <!-- DESC -->
+                                                <span class="m-talent2-pop" :class="item.on ? 'on' : ''">
+                                                    <b class="m-talent2-name">
+                                                        <span>
+                                                            {{ item.name }}
+                                                            <small class="u-talent2-id" v-if="item.id"
+                                                                >(ID: {{ item.id }})</small
+                                                            >
+                                                        </span>
+                                                        <span class="m-talent2-number">
+                                                            第{{ Number(r_data[index][i]) + "/" + item.max }}重
+                                                        </span>
+                                                    </b>
+                                                    <!-- <b class="m-talent2-type">
+                                                            {{ item.type === 'talent' ? '被动招式': '主动招式' }}
+                                                        </b>-->
+                                                    <span
+                                                        class="m-talent2-desc"
+                                                        v-html="
+                                                            !Number(r_data[index][i]) || xf === '通用'
+                                                                ? item.desc[0]
+                                                                : item.desc[r_data[index][i] - 1]
+                                                        "
+                                                    >
+                                                    </span>
+                                                    <span
+                                                        v-if="
+                                                            Number(r_data[index][i]) &&
+                                                            Number(r_data[index][i]) < item.max
+                                                        "
+                                                        class="m-talent2-desc-next"
+                                                    >
+                                                        <span v-if="xf !== '通用'" class="m-next-text">下一重：</span>
+                                                        <span>
+                                                            {{ item.desc[r_data[index][i]] }}
+                                                        </span>
+                                                    </span>
+                                                    <span v-if="Number(r_data[index][i]) === item.max" class="m-max"
+                                                        >该招式已练至最高境界</span
+                                                    >
+                                                    <span class="m-talent-retrogress" v-if="Number(r_data[index][i])"
+                                                        >右键点击遗忘</span
+                                                    >
+                                                </span>
+                                            </div>
+                                            <div v-else class="m-talent2-content-item-empty" :key="i"></div>
+                                        </template>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="m-talent2-actions">
+                            <div
+                                class="rest-btn"
+                                :class="!totalCount ? 'm-talent2-actions-btn-disabled' : 'm-talent2-actions-btn'"
+                                @click="reload"
+                            >
+                                重置
+                            </div>
+                        </div>
+                    </template>
+                </div>
+                <h2 class="m-talent-subtitle">镇派编码</h2>
+                <div class="m-talent-code">
+                    <el-input placeholder="粘贴编码亦可自动解析奇穴" v-model="code" @change="parseSchema">
+                        <span slot="prepend" @click="copy(code)" class="u-copy">
+                            <i class="el-icon-document-copy"></i>
+                            点击复制
+                        </span>
+                    </el-input>
+                </div>
+                <template v-if="isAdmin">
+                    <h2 class="m-talent-subtitle">配装编码</h2>
+                    <el-input placeholder="配装器编码" v-model="pzcode">
+                        <span slot="prepend" @click="copy(pzcode)" class="u-copy">
+                            <i class="el-icon-document-copy"></i>
+                            点击复制
+                        </span>
+                    </el-input>
+                </template>
+                <div class="m-talent-op" v-if="isLogin">
+                    <el-button
+                        type="primary"
+                        :icon="currentSchema ? 'el-icon-check' : 'el-icon-document-add'"
+                        @click="save"
+                        >{{ currentSchema ? "保存" : "保存为预设" }}</el-button
+                    >
+                    <el-button
+                        v-if="isEditing"
+                        type="success"
+                        icon="el-icon-document-add"
+                        class="u-btn"
+                        @click="saveAs"
+                        plain
+                        >另存为</el-button
+                    >
+                </div>
+            </div>
+
+            <talent-drawer
+                v-if="isLogin"
+                :drawer="drawer"
+                type="talent2"
+                :client="client"
+                @update-drawer="updateDrawer"
+                @use="use"
+            ></talent-drawer>
+        </div>
+    </app-layout>
 </template>
 
 <script>
@@ -410,10 +393,12 @@ import { xfConfigs } from "@jx3box/jx3box-talent2/src/talent2.json";
 import { defaultXf, defaultConfigs } from "@jx3box/jx3box-talent2/src/default.json";
 import User from "@jx3box/jx3box-common/js/user";
 import cloneDeep from "lodash/cloneDeep";
-import talentDrawer from "@/components/talent/talent_drawer.vue";
 import { addTalent, putTalent } from "@/service/talent.js";
 import { iconLink } from "@jx3box/jx3box-common/js/utils";
 import { copy } from "@/utils/clipboard";
+
+import talentDrawer from "@/components/talent/talent_drawer.vue";
+import AppLayout from "@/layout/AppLayout.vue";
 export default {
     name: "Talent2",
     data: function () {
@@ -1112,6 +1097,7 @@ export default {
     },
     components: {
         talentDrawer,
+        AppLayout,
     },
 };
 </script>

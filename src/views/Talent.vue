@@ -1,86 +1,79 @@
 <template>
-    <div id="app">
-        <Breadcrumb name="奇穴模拟器" slug="talent" root="/macro/talent" :feedbackEnable="true" :crumbEnable="true">
-            <img slot="logo" svg-inline :src="getIcon('talent')" />
-            <div class="m-info"></div>
-        </Breadcrumb>
-        <Main :withoutRight="true" :withoutLeft="true">
-            <div class="m-talent">
-                <div class="m-talent-header">
-                    <h1 class="m-talent-title">奇穴模拟器</h1>
-                    <div class="m-talent-panel">
-                        <div class="m-talent-version">
-                            <span class="u-label">选择版本</span>
-                            <el-select v-model="version" placeholder="请选择游戏版本" @change="reload">
-                                <el-option
-                                    v-for="item in versions"
-                                    :key="item.version"
-                                    :label="item.name"
-                                    :value="item.version"
-                                ></el-option>
-                            </el-select>
-                        </div>
-                        <div class="u-toolbar" v-if="isLogin">
-                            <!-- <el-button plain @click="showList = false" icon="el-icon-refresh-left" size="small" v-if="showList">返回</el-button> -->
-                            <!-- <el-button type="primary" @click="showList = true" icon="el-icon-setting" size="small" v-else>我的预设</el-button> -->
-                            <el-button type="primary" @click="drawer = true" icon="el-icon-setting" size="small"
-                                >我的预设</el-button
-                            >
-                        </div>
+    <app-layout slug="talent">
+        <div class="m-talent">
+            <div class="m-talent-header">
+                <h1 class="m-talent-title">奇穴模拟器</h1>
+                <div class="m-talent-panel">
+                    <div class="m-talent-version">
+                        <span class="u-label">选择版本</span>
+                        <el-select v-model="version" placeholder="请选择游戏版本" @change="reload">
+                            <el-option
+                                v-for="item in versions"
+                                :key="item.version"
+                                :label="item.name"
+                                :value="item.version"
+                            ></el-option>
+                        </el-select>
                     </div>
-                </div>
-                <div class="m-talent-wrapper">
-                    <h2 class="m-talent-subtitle">选择心法</h2>
-                    <div class="m-talent-xf">
-                        <el-radio v-for="(item, i) in xfMaps" v-model="xf" :label="item.name" :key="i" @change="reload">
-                            <img class="u-pic" :src="xficon(item.id)" :alt="item.name" />
-                            <span class="u-txt">{{ item.name }}</span>
-                        </el-radio>
-                    </div>
-                    <h2 class="m-talent-subtitle">配置奇穴</h2>
-                    <div class="qx-container"></div>
-                    <h2 class="m-talent-subtitle">奇穴编码</h2>
-                    <div class="m-talent-code">
-                        <el-input placeholder="粘贴编码亦可自动解析奇穴" v-model="code" @change="parseSchema">
-                            <span slot="prepend" @click="copy(code)" class="u-copy">
-                                <i class="el-icon-document-copy"></i>
-                                点击复制
-                            </span>
-                        </el-input>
-                    </div>
-                    <div class="m-talent-code" v-if="isAdmin">
-                        <h2 class="m-talent-subtitle">配装编码</h2>
-                        <el-input placeholder="配装器编码" v-model="pzcode">
-                            <span slot="prepend" @click="copy(pzcode)" class="u-copy">
-                                <i class="el-icon-document-copy"></i>
-                                点击复制
-                            </span>
-                        </el-input>
-                    </div>
-                    <div class="m-talent-op" v-if="isLogin">
-                        <el-button
-                            type="primary"
-                            :icon="currentSchema ? 'el-icon-check' : 'el-icon-document-add'"
-                            @click="save"
-                            >{{ currentSchema ? "保存" : "保存为预设" }}</el-button
-                        >
-                        <el-button
-                            v-if="isEditing"
-                            type="success"
-                            icon="el-icon-document-add"
-                            class="u-btn"
-                            @click="saveAs"
-                            plain
-                            >另存为</el-button
+                    <div class="u-toolbar" v-if="isLogin">
+                        <!-- <el-button plain @click="showList = false" icon="el-icon-refresh-left" size="small" v-if="showList">返回</el-button> -->
+                        <!-- <el-button type="primary" @click="showList = true" icon="el-icon-setting" size="small" v-else>我的预设</el-button> -->
+                        <el-button type="primary" @click="drawer = true" icon="el-icon-setting" size="small"
+                            >我的预设</el-button
                         >
                     </div>
                 </div>
-
-                <talent-drawer v-if="isLogin" :drawer="drawer" @update-drawer="updateDrawer" @use="use"></talent-drawer>
             </div>
-            <Footer></Footer>
-        </Main>
-    </div>
+            <div class="m-talent-wrapper">
+                <h2 class="m-talent-subtitle">选择心法</h2>
+                <div class="m-talent-xf">
+                    <el-radio v-for="(item, i) in xfMaps" v-model="xf" :label="item.name" :key="i" @change="reload">
+                        <img class="u-pic" :src="xficon(item.id)" :alt="item.name" />
+                        <span class="u-txt">{{ item.name }}</span>
+                    </el-radio>
+                </div>
+                <h2 class="m-talent-subtitle">配置奇穴</h2>
+                <div class="qx-container"></div>
+                <h2 class="m-talent-subtitle">奇穴编码</h2>
+                <div class="m-talent-code">
+                    <el-input placeholder="粘贴编码亦可自动解析奇穴" v-model="code" @change="parseSchema">
+                        <span slot="prepend" @click="copy(code)" class="u-copy">
+                            <i class="el-icon-document-copy"></i>
+                            点击复制
+                        </span>
+                    </el-input>
+                </div>
+                <div class="m-talent-code" v-if="isAdmin">
+                    <h2 class="m-talent-subtitle">配装编码</h2>
+                    <el-input placeholder="配装器编码" v-model="pzcode">
+                        <span slot="prepend" @click="copy(pzcode)" class="u-copy">
+                            <i class="el-icon-document-copy"></i>
+                            点击复制
+                        </span>
+                    </el-input>
+                </div>
+                <div class="m-talent-op" v-if="isLogin">
+                    <el-button
+                        type="primary"
+                        :icon="currentSchema ? 'el-icon-check' : 'el-icon-document-add'"
+                        @click="save"
+                        >{{ currentSchema ? "保存" : "保存为预设" }}</el-button
+                    >
+                    <el-button
+                        v-if="isEditing"
+                        type="success"
+                        icon="el-icon-document-add"
+                        class="u-btn"
+                        @click="saveAs"
+                        plain
+                        >另存为</el-button
+                    >
+                </div>
+            </div>
+
+            <talent-drawer v-if="isLogin" :drawer="drawer" @update-drawer="updateDrawer" @use="use"></talent-drawer>
+        </div>
+    </app-layout>
 </template>
 
 <script>
@@ -94,6 +87,7 @@ import { getTalentVersions, getTalents, addTalent, putTalent, removeTalent } fro
 import User from "@jx3box/jx3box-common/js/user";
 import talentDrawer from "@/components/talent/talent_drawer.vue";
 import { copy } from "@/utils/clipboard";
+import AppLayout from "@/layout/AppLayout.vue";
 export default {
     name: "Talent",
     props: [],
@@ -153,9 +147,6 @@ export default {
         updateDrawer: function (val) {
             this.drawer = val;
         },
-        getIcon(key) {
-            return __imgPath + "image/box/" + key + ".svg";
-        },
         parseSchema: function () {
             this.driver.then((talent) => {
                 // 为空不操作
@@ -186,6 +177,7 @@ export default {
             });
         },
         copy: function (val) {
+            if (!val) return;
             copy(val, { success_message: "复制奇穴编码成功" });
         },
 
@@ -309,6 +301,7 @@ export default {
     },
     components: {
         talentDrawer,
+        AppLayout
     },
 };
 </script>
