@@ -157,7 +157,7 @@ export default {
 
 <style lang="less">
 .m-macro-inner {
-    // .pr;
+    .pr;
     .u-empty-text {
         margin-top: -2px;
     }
@@ -172,16 +172,9 @@ export default {
     }
 }
 @media screen and (max-width: @phone) {
-    .m-macro-drawer .m-macro-inner {
-        .u-count {
-            .ps;
-            .x;
-            .mt(10px);
-        }
-    }
     .m-macro-inner .u-count {
         .pa;
-        .rt(0,-8px);
+        .rt(0,-68px);
         background-color: #fff;
         bottom: auto;
         padding: 0 5px;
