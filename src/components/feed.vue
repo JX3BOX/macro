@@ -5,7 +5,7 @@
             :value="name"
             BGL="#24292e"
             :BGR="color"
-            @click="copy(author + '#' + name)"
+            @click.native="copy(author + '#' + name)"
         />
     </div>
 </template>
@@ -26,7 +26,7 @@ export default {
     },
     methods: {
         copy: function (val) {
-            copy(val, "云端宏复制成功");
+            copy(val, { success_title: "云端宏复制成功" });
         },
     },
     mounted: function () {},
