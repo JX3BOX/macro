@@ -61,6 +61,7 @@
                 :row-class-name="highlight"
                 key="alltable"
                 border
+                stripe
             >
                 <el-table-column type="index" label="" width="40">
                     <template slot-scope="scope">
