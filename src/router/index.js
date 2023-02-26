@@ -62,7 +62,6 @@ const routes = [
     },
 
     // 应用
-
     {
         name: "macroeditor",
         path: "/macroeditor",

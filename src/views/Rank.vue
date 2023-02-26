@@ -8,6 +8,7 @@
                 :fit="true"
                 key="mounttable"
                 border
+                stripe
             >
                 <el-table-column type="index" label="" width="40">
                     <template slot-scope="scope">

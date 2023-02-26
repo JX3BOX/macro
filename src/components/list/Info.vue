@@ -25,39 +25,5 @@ export default {
 </script>
 
 <style lang="less">
-.m-info {
-    .fl;
-    white-space: nowrap;
-    overflow-x: auto;
-}
-@media screen and (max-width: @ipad) {
-    .m-info {
-        float: none;
-    }
-}
-.m-info-router {
-    .fr;
-    .fz(1rem);
-    a {
-        .mr(10px);
-        color: @darkblue;
-        &:hover {
-            color: @pink;
-        }
-    }
-    .router-link-exact-active,
-    .on {
-        color: @pink;
-    }
-    .none;
-}
-
-@media screen and (max-width: @phone) {
-    .m-info-router {
-        .db;
-        float: none;
-        .x(right);
-    }
-}
-
+@import "~@/assets/css/info.less";
 </style>
