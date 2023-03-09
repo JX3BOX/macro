@@ -53,7 +53,7 @@ export default {
             return this.$store.state.post?.post_subtype || "通用";
         },
         author : function (){
-            return this.$store.state.post?.author
+            return this.$store.state.post?.author_info?.display_name || this.$store.state.post?.author
         }
     },
 };
