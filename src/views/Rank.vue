@@ -18,7 +18,7 @@
                 <el-table-column prop="downloadStr" label="云端宏" sortable>
                     <template slot-scope="scope">
                         <div class="u-cell-feed">
-                            <img class="u-icon-xf" :src="xficon(kungfuid)" />
+                            <img class="u-icon-xf" :src="xficon(scope.row.xf)" />
                             <a
                                 class="u-feed"
                                 :href="getMacroLink(scope.row.pid, scope.row.item_version)"
@@ -183,7 +183,8 @@ export default {
             return "";
         },
         xficon: function (id) {
-            return __imgPath + "image/xf/" + id + ".png";
+            const xf = xfmap[id];
+            return __imgPath + "image/xf/" + xf.id + ".png";
         },
     },
     watch: {
