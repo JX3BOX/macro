@@ -160,7 +160,7 @@
     // 标题
     .u-post {
         margin: 0;
-        padding: 0;
+        padding: 0 50px 0 0;
         .nobreak;
         .mb(5px);
         .u-icon {
@@ -180,6 +180,7 @@
         .u-title {
             // color:@darkblue;
             font-weight: 400;
+            font-size: 14px;
             &:hover {
                 box-shadow: 0 1px 0 @primary;
             }
@@ -356,6 +357,7 @@
             word-break: break-all;
             .break(2);
             .fz(14px, 22px);
+            padding-right: 0;
         }
 
         .u-metalist,
@@ -368,8 +370,8 @@
         }
 
         .u-misc {
-            .ps;
-            .x(left);
+            .ps !important;
+            .x(left) !important;
         }
         .u-author-name {
             color: #555;
