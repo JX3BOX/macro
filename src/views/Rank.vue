@@ -70,7 +70,7 @@
                 </el-table-column>
                 <el-table-column prop="downloadStr" label="云端宏" sortable>
                     <template slot-scope="scope">
-                        <img class="u-icon-xf" :src="xficon(scope.row.xf)" />
+                        <img class="u-icon-xf" v-if="scope.row" :src="xficon(scope.row.xf)" />
                         <a
                             class="u-feed"
                             :href="getMacroLink(scope.row.pid, scope.row.downloadStr.split('#')[1])"
@@ -119,9 +119,9 @@ export default {
         subtype: function () {
             return this.$route.query.subtype || "";
         },
-        kungfuid: function () {
-            return this.subtype ? xfmap[this.subtype]["id"] : 0;
-        },
+        // kungfuid: function () {
+        //     return this.subtype ? xfmap[this.subtype]["id"] : 0;
+        // },
         client: function () {
             return this.$store.state.client;
         },
@@ -152,9 +152,9 @@ export default {
         },
         loadRank: function () {
             this.loading = true;
-            getRank(this.kungfuid, this.client)
+            getRank(this.subtype, this.client)
                 .then((data) => {
-                    this.mount_data = data;
+                    this.mount_data = data.filter(item => item.xf);
                     this.$forceUpdate();
                 })
                 .finally(() => {
@@ -184,6 +184,7 @@ export default {
         },
         xficon: function (id) {
             const xf = xfmap[id];
+            console.log(xf, id)
             return __imgPath + "image/xf/" + xf.id + ".png";
         },
     },

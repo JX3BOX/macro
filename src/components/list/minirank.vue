@@ -49,9 +49,9 @@ export default {
         subtype: function () {
             return this.$route.query.subtype || "";
         },
-        kungfuid: function () {
-            return this.subtype ? xfmap[this.subtype]["id"] : -1;
-        },
+        // kungfuid: function () {
+        //     return this.subtype ? xfmap[this.subtype]["id"] : -1;
+        // },
         client: function () {
             return this.$store.state.client;
         },
@@ -77,7 +77,7 @@ export default {
             handler: function (subtype) {
                 this.loading = true;
                 if (subtype) {
-                    getRank(this.kungfuid, this.client, 10)
+                    getRank(this.subtype, this.client, 10)
                         .then((data) => {
                             this.mount_data = data.slice(0, 10);
                         })
