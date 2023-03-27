@@ -1,5 +1,6 @@
 <template>
     <div class="m-single-side">
+        <PostTopic v-if="id" type="macro" :id="~~id" />
         <div class="m-single-macroindex">
             <!-- 云端宏 -->
             <h2 class="m-cloud-name">
@@ -21,6 +22,7 @@
 import feed from "@/components/feed.vue";
 import PostDirectory from '@jx3box/jx3box-common-ui/src/single/PostDirectory.vue'
 import PostCollection from '@jx3box/jx3box-common-ui/src/single/PostCollection.vue'
+import PostTopic from '@jx3box/jx3box-common-ui/src/single/PostTopic.vue'
 export default {
     name: "single_side",
     props: ['id'],
@@ -31,6 +33,7 @@ export default {
     components : {
         PostDirectory,
         PostCollection,
+        PostTopic,
         feed,
     },
     computed : {
