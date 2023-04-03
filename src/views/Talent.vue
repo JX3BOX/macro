@@ -43,7 +43,7 @@
                         </span>
                     </el-input>
                 </div>
-                <div class="m-talent-code" v-if="isAdmin">
+                <div class="m-talent-code" v-if="isEditor">
                     <h2 class="m-talent-subtitle">配装编码</h2>
                     <el-input placeholder="配装器编码" v-model="pzcode">
                         <span slot="prepend" @click="copy(pzcode)" class="u-copy">
@@ -105,7 +105,7 @@ export default {
             schemas,
 
             isLogin: User.isLogin(),
-            isAdmin: false,
+            isEditor: false,
             showList: false,
             drawer: false,
 
@@ -292,7 +292,7 @@ export default {
     },
     mounted: function () {
         this.init();
-        this.isAdmin = User.isAdmin();
+        this.isEditor = User.isEditor();
     },
     watch: {
         page: function () {
