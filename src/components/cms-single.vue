@@ -47,6 +47,7 @@
                 :userBoxcoinEnable="true"
                 :authors="authors"
                 :client="post_client"
+                :allowGift="allow_gift"
             />
 
             <!-- 评论 -->
@@ -163,6 +164,9 @@ export default {
         },
         post_client: function () {
             return this.post?.client || "all";
+        },
+        allow_gift: function () {
+            return this.post?.allow_gift;
         },
     },
     methods: {
