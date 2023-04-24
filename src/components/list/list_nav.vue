@@ -36,7 +36,7 @@
             </a>
             <a href="/macro/macroeditor" target="_blank">
                 <img class="u-icon" :src="getAppIcon('macroeditor', true)" />
-                <span>宏编辑器</span>
+                <span>云宏编辑器</span>
                 <em>Macro Editor</em>
             </a>
         </div>

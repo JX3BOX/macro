@@ -137,7 +137,7 @@ module.exports = {
                 Keywords: Setting.keys,
                 Description: Setting.desc
             };
-            args[0].title = Setting.title + SEO.title;  //------自动添加标题后缀
+            args[0].title = Setting.title + Setting.seoSuffix;  //------自动添加标题后缀
             return args;
         });
 
