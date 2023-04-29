@@ -1,9 +1,9 @@
 import axios from "axios";
-import { __ossRoot, __ossMirror } from "@jx3box/jx3box-common/data/jx3box.json";
+import { __dataPath } from "@jx3box/jx3box-common/data/jx3box.json";
 import { $cms } from "@jx3box/jx3box-common/js/https";
 
 function getTalentVersions() {
-    return axios.get(__ossRoot + "data/qixue/index.json");
+    return axios.get(__dataPath + "talent/index.json");
 }
 
 function getTalents(param) {

@@ -98,7 +98,7 @@ import { getPost } from "@/service/post.js";
 import { getStat, postStat } from "@jx3box/jx3box-common/js/stat";
 import xfmap from "@jx3box/jx3box-data/data/xf/xf.json";
 import { appKey } from "../../setting.json";
-import { __ossRoot, __ossMirror, __iconPath, __imgPath } from "@jx3box/jx3box-common/data/jx3box.json";
+import { __iconPath, __imgPath } from "@jx3box/jx3box-common/data/jx3box.json";
 
 export default {
     name: "single",

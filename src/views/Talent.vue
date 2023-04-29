@@ -78,7 +78,7 @@
 
 <script>
 import xfmap from "@jx3box/jx3box-data/data/xf/xf.json";
-import { __ossMirror, __imgPath, __ossRoot } from "@jx3box/jx3box-common/data/jx3box.json";
+import { __imgPath } from "@jx3box/jx3box-common/data/jx3box.json";
 import JX3_QIXUE from "@jx3box/jx3box-talent";
 import $ from "jquery";
 import schemas from "@/assets/data/schemas.json";

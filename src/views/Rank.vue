@@ -102,7 +102,7 @@
 <script>
 import { getRank, getOverview } from "../service/rank";
 import xfmap from "@jx3box/jx3box-data/data/xf/xf.json";
-import { __ossMirror, __imgPath, __ossRoot } from "@jx3box/jx3box-common/data/jx3box.json";
+import { __imgPath } from "@jx3box/jx3box-common/data/jx3box.json";
 import { getLink } from "@jx3box/jx3box-common/js/utils";
 import { getMacroLink } from "@/utils/misc.js";
 export default {

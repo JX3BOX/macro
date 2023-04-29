@@ -45,7 +45,7 @@
 
 <script>
 import xfmap from "@jx3box/jx3box-data/data/xf/xf.json";
-import { __ossMirror, __imgPath, __ossRoot } from "@jx3box/jx3box-common/data/jx3box.json";
+import { __imgPath } from "@jx3box/jx3box-common/data/jx3box.json";
 import { getAppIcon, showMountIcon } from "@jx3box/jx3box-common/js/utils";
 export default {
     name: "list_nav",

@@ -55,7 +55,7 @@
 <script>
 import { appKey } from "@/../setting.json";
 import { showAvatar, authorLink, buildTarget, iconLink } from "@jx3box/jx3box-common/js/utils";
-import { __ossMirror, __imgPath, __visibleMap } from "@jx3box/jx3box-common/data/jx3box";
+import { __imgPath, __visibleMap } from "@jx3box/jx3box-common/data/jx3box.json";
 import { cms as mark_map } from "@jx3box/jx3box-common/data/mark.json";
 import { showDate } from "@jx3box/jx3box-common/js/moment.js";
 import xfmap from "@jx3box/jx3box-data/data/xf/xf.json";
