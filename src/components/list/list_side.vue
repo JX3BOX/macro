@@ -3,8 +3,8 @@
         <!-- 群号 -->
         <RightSideMsg>
             <em>宏作者交流群</em> :
-            <strong>
-                <a href="https://jq.qq.com/?_wv=1027&k=ZAsOkzUq">297985102</a>
+            <strong @click="onQQClick" class="u-link" title="点击复制">
+                <a>{{ qq }}</a>
             </strong>
         </RightSideMsg>
 
@@ -63,6 +63,8 @@ export default {
             macro_newbie: [],
             macro_senior: [],
             macro_tools: [],
+
+            qq: "297985102",
         };
     },
     computed: {
@@ -70,7 +72,17 @@ export default {
             return this.$store.state.client;
         },
     },
-    methods: {},
+    methods: {
+        onQQClick() {
+            navigator.clipboard.writeText(this.qq).then(() => {
+                this.$notify({
+                    title: "复制成功",
+                    message: "内容：" + this.qq,
+                    type: "success",
+                });
+            })
+        }
+    },
     mounted: function () {
         getMenuGroups(["macro_newbie", "macro_senior", "macro_tools"]).then((res) => {
             let data = res.data.data.data || {};
