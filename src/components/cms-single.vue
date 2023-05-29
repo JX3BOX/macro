@@ -53,8 +53,11 @@
             <!-- 评论 -->
             <div ref="commentView" class="m-single-comment">
                 <el-divider content-position="left">评论</el-divider>
-                <Comment :id="id" category="post" v-if="id && allow_comment" />
-                <el-alert title="作者没有开启评论功能" type="warning" show-icon v-else></el-alert>
+                <template v-if="showComment">
+                    <Comment :id="id" category="post" v-if="id && allow_comment" />
+                    <el-alert title="作者没有开启评论功能" type="warning" show-icon v-else></el-alert>
+                </template>
+                <el-alert title="作者开启了评论仅自己可见" type="warning" show-icon v-else></el-alert>
             </div>
         </div>
 
@@ -84,6 +87,7 @@ import ArticleMarkdown from "@jx3box/jx3box-editor/src/ArticleMarkdown.vue";
 import Comment from "@jx3box/jx3box-comment-ui/src/Comment.vue";
 import { __visibleMap } from "@jx3box/jx3box-common/data/jx3box.json";
 import { getAppType } from "@jx3box/jx3box-common/js/utils";
+import User from "@jx3box/jx3box-common/js/user";
 export default {
     name: "cms-single",
     components: {
@@ -168,6 +172,16 @@ export default {
         allow_gift: function () {
             return this.post?.allow_gift;
         },
+        isEditor: function () {
+            return User.isEditor();
+        },
+        showComment: function (){
+            if (this.post?.comment_visible) {
+                // 仅自己和管理可见
+                return User.getInfo()?.uid == this.author_id || this.isEditor;
+            }
+            return true;
+        }
     },
     methods: {
         updateCollection: function (val) {

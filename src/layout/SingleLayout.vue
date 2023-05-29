@@ -6,9 +6,9 @@
         <LeftSidebar :uid="user_id">
             <Nav :id="id" class="m-nav" />
         </LeftSidebar>
-        <Main :withoutRight="false">
+        <Main :withoutRight="false" >
             <router-view />
-            <RightSidebar>
+            <RightSidebar :showToggle="true">
                 <Side :id="id" class="m-extend" />
             </RightSidebar>
             <Footer></Footer>
