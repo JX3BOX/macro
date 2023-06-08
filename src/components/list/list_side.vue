@@ -90,7 +90,6 @@ export default {
                 obj[item.name] = item;
                 return obj;
             }, {});
-            console.log(data);
             for (let key in data) {
                 this[key] = data[key]["menus"];
             }
