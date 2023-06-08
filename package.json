@@ -2,7 +2,7 @@
   "name": "macro",
   "private": true,
   "scripts": {
-    "dev": "env DEV_SERVER=true vue-cli-service serve",
+    "dev": "cross-env DEV_SERVER=true vue-cli-service serve",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
@@ -40,6 +40,7 @@
     "@vue/cli-plugin-vuex": "^4.0.0",
     "@vue/cli-service": "^4.1.2",
     "babel-eslint": "^10.0.3",
+    "cross-env": "^7.0.3",
     "csslab": "^4.0.3",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",

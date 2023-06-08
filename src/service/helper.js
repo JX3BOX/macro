@@ -1,4 +1,4 @@
-import { $helper} from "@jx3box/jx3box-common/js/https";
+import { $helper, $cms } from "@jx3box/jx3box-common/js/https";
 import axios from "axios";
 
 // 关联文档
@@ -18,18 +18,18 @@ function getNewDict() {
 
 // 公告
 function getBread(key) {
-    return $helper({ mute: true }).get(`/api/breadcrumb/${key}`);
+    return $cms({ mute: true }).get(`/api/cms/breadcrumb/${key}`);
 }
 
 
 // 边栏文档
 function getMenuGroup(name) {
-    return $helper({ mute: true }).get(`/api/menu_group/${name}`, {});
+    return $cms({ mute: true }).get(`/api/cms/menu-group/${name}`, {});
 }
 function getMenuGroups(keys) {
-    return $helper({ mute: true }).get(`/api/menu_groups`, {
+    return $cms({ mute: true }).get(`/api/cms/menu-group`, {
         params: {
-            names:keys
+            key: keys
         },
     });
 }

@@ -84,8 +84,13 @@ export default {
         }
     },
     mounted: function () {
-        getMenuGroups(["macro_newbie", "macro_senior", "macro_tools"]).then((res) => {
-            let data = res.data.data.data || {};
+        const keys = ["macro_newbie", "macro_senior", "macro_tools"].join(",");
+        getMenuGroups(keys).then((res) => {
+            let data = res.data.data.reduce((obj, item) => {
+                obj[item.name] = item;
+                return obj;
+            }, {});
+            console.log(data);
             for (let key in data) {
                 this[key] = data[key]["menus"];
             }
