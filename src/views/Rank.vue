@@ -23,6 +23,12 @@
                                 class="u-feed"
                                 :href="getMacroLink(scope.row.pid, scope.row.item_version)"
                                 target="_blank"
+                                v-reporter="{
+                                    data: {
+                                        href: getMacroLink(scope.row.pid, scope.row.item_version),
+                                    },
+                                    caller: 'macro_rank',
+                                }"
                             >
                                 {{ scope.row.author }}#{{ scope.row.item_version }}
                             </a>
@@ -75,6 +81,12 @@
                             class="u-feed"
                             :href="getMacroLink(scope.row.pid, scope.row.downloadStr.split('#')[1])"
                             target="_blank"
+                            v-reporter="{
+                                data: {
+                                    href: getMacroLink(scope.row.pid, scope.row.downloadStr.split('#')[1]),
+                                },
+                                caller: 'macro_rank',
+                            }"
                             >{{ scope.row.downloadStr }}</a
                         >
                     </template>
@@ -154,7 +166,7 @@ export default {
             this.loading = true;
             getRank(this.subtype, this.client)
                 .then((data) => {
-                    this.mount_data = data.filter(item => item.xf);
+                    this.mount_data = data.filter((item) => item.xf);
                     this.$forceUpdate();
                 })
                 .finally(() => {
@@ -184,7 +196,7 @@ export default {
         },
         xficon: function (id) {
             const xf = xfmap[id];
-            console.log(xf, id)
+            console.log(xf, id);
             return __imgPath + "image/xf/" + xf.id + ".png";
         },
     },

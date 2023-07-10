@@ -1,15 +1,22 @@
 <template>
     <div class="m-macro-rank-mini m-macro-rank" v-loading="loading">
         <h3 class="m-side-title">
-            <div class="u-title">
-                <img class="u-icon" svg-inline src="@/assets/img/side/rank.svg" />排行榜
-            </div>
+            <div class="u-title"><img class="u-icon" svg-inline src="@/assets/img/side/rank.svg" />排行榜</div>
             <span class="u-more" @click="viewRank">查看更多<i class="el-icon-d-arrow-right"></i></span>
         </h3>
         <ul class="u-list" v-if="subtype">
             <li v-for="(item, j) in mount_data" :key="j">
-                <a class="u-link" :href="getMacroLink(item.pid,item.item_version)">
-                    <span class="u-order" :class="highlight(j)">{{j + 1}}</span>
+                <a
+                    class="u-link"
+                    :href="getMacroLink(item.pid, item.item_version)"
+                    v-reporter="{
+                        data: {
+                            href: getMacroLink(item.pid, item.item_version),
+                        },
+                        caller: 'macro_rank_top',
+                    }"
+                >
+                    <span class="u-order" :class="highlight(j)">{{ j + 1 }}</span>
                     <span class="u-name">{{ item.author }}#{{ item.item_version }}</span>
                     <span class="u-per">
                         <em class="u-count"><i class="el-icon-sunny"></i> {{ item.value["7days"] }}</em>
@@ -19,7 +26,16 @@
         </ul>
         <ul class="u-list" v-else>
             <li v-for="(item, j) in data" :key="j">
-                <a class="u-link" :href="getMacroLink(item.pid,item.v)">
+                <a
+                    class="u-link"
+                    :href="getMacroLink(item.pid, item.v)"
+                    v-reporter="{
+                        data: {
+                            href: getMacroLink(item.pid, item.v),
+                        },
+                        caller: 'macro_rank_top',
+                    }"
+                >
                     <span class="u-order" :class="highlight(j)">{{ j + 1 }}</span>
                     <span class="u-name">{{ item.author }}#{{ item.v }}</span>
                     <span class="u-per">

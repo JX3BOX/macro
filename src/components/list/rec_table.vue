@@ -5,11 +5,21 @@
         </h5>
         <div class="u-ac" v-html="ac"></div>
         <el-row>
-            <el-col :span="6" v-for="(item,i) in data" :key="i">
+            <el-col :span="6" v-for="(item, i) in data" :key="i">
                 <div class="u-rec">
-                    <a :href="item.link" target="_blank" :style="highLight(item.color)">
+                    <a
+                        :href="item.link"
+                        target="_blank"
+                        :style="highLight(item.color)"
+                        v-reporter="{
+                            data: {
+                                href: item.link,
+                            },
+                            caller: 'macro_suggest',
+                        }"
+                    >
                         <img :src="iconLink(item.icon)" v-if="item.icon" />
-                        {{item.label}}
+                        {{ item.label }}
                     </a>
                 </div>
             </el-col>
@@ -64,9 +74,9 @@ export default {
             }
             return "";
         },
-        iconLink : function (val){
-            return __imgPath + 'image/xf/' + val + '.png'
-        }
+        iconLink: function (val) {
+            return __imgPath + "image/xf/" + val + ".png";
+        },
     },
     watch: {
         client: {
@@ -97,13 +107,13 @@ export default {
             color: #fff;
             background-color: #6f42c1;
             font-weight: normal;
-            padding:2px 5px;
+            padding: 2px 5px;
             .r(2px);
         }
     }
-    .u-ac{
+    .u-ac {
         border-bottom: 1px solid @border;
-        padding:10px;
+        padding: 10px;
         .fz(12px,2);
         .x;
         white-space: pre-wrap;
@@ -141,9 +151,8 @@ export default {
     .m-index-rec .el-col {
         .w(50%);
     }
-    .m-index-rec .el-col:nth-child(2n) .u-rec{
-        border-right:none;
+    .m-index-rec .el-col:nth-child(2n) .u-rec {
+        border-right: none;
     }
 }
-
 </style>

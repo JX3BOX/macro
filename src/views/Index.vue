@@ -18,6 +18,7 @@
                     :item="item"
                     :order="order"
                     @loadMacro="loadMacro"
+                    :aggregate="aggregate"
                 />
             </ul>
         </div>
@@ -62,6 +63,7 @@
 </template>
 <script>
 import { getPosts } from "@/service/post";
+import { appKey } from "@/../setting.json";
 
 import listItem from "@/components/list/list_item.vue";
 import macro from "@/components/macro.vue";
@@ -128,6 +130,9 @@ export default {
         reset_queries: function () {
             return [this.subtype, this.search];
         },
+        aggregate: function (){
+            return this.data.map(item => this.postLink(item.ID))
+        }
     },
     methods: {
         // 构建最终请求参数
@@ -211,6 +216,9 @@ export default {
             this.drawer_title = author + "#" + m.name;
             this.drawer_content = m.macro;
             this.drawer_link = "./" + id + "?tab=" + m.name;
+        },
+        postLink: function (val) {
+            return `/${appKey}/` + val;
         },
     },
     watch: {
