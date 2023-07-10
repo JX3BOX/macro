@@ -26,7 +26,7 @@
                 :target="target"
                 v-reporter="{
                     data: {
-                        href: postLink(item.ID),
+                        href: reporterLink(item.ID),
                         aggregate: aggregate
                     },
                     caller: 'macro_detail',
@@ -130,6 +130,9 @@ export default {
         },
         visibleTxt: function (val) {
             return __visibleMap[val];
+        },
+        reporterLink: function (val) {
+            return`/${appKey}/` + val;
         },
     },
     created: function () {},
