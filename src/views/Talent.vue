@@ -280,7 +280,6 @@ export default {
                     __data.xf = ins.xf;
                     __data.sq = ins.sq.join(",");
                     vm.code = JSON.stringify(__data);
-                    // console.log(ins)
 
                     vm.pzcode = JSON.stringify(ins.overview);
                 });

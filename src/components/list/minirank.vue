@@ -32,6 +32,7 @@
                     v-reporter="{
                         data: {
                             href: getMacroLink(item.pid, item.v),
+                            item_type: item.xf
                         },
                         caller: 'macro_rank_top',
                     }"

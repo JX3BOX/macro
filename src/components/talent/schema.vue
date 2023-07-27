@@ -22,7 +22,6 @@ export default {
                 xf: this.xf,
                 sq: this.config.sq,
             };
-            console.log(JSON.stringify(_code));
             return JSON.stringify(_code);
         },
     },
