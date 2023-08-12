@@ -13,7 +13,7 @@
                         :style="highLight(item.color)"
                         v-reporter="{
                             data: {
-                                href: item.link,
+                                href: macroLink(item.link),
                             },
                             caller: 'macro_suggest',
                         }"
@@ -52,6 +52,10 @@ export default {
         },
     },
     methods: {
+        macroLink(link) {
+            const prefix = this.client == 'std' ? 'www' : 'origin';
+            return `${prefix}:${link}`
+        },
         init: function () {
             let suffix = this.client == "origin" ? "-origin" : "";
             getMenuGroup("macro-rec" + suffix).then((res) => {

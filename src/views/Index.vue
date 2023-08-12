@@ -18,7 +18,6 @@
                     :item="item"
                     :order="order"
                     @loadMacro="loadMacro"
-                    :aggregate="aggregate"
                 />
             </ul>
         </div>
@@ -69,6 +68,8 @@ import listItem from "@/components/list/list_item.vue";
 import macro from "@/components/macro.vue";
 import recTable from "@/components/list/rec_table.vue";
 import CommonHeader from "@/components/common-header.vue";
+
+import { reportNow } from "@jx3box/jx3box-common/js/reporter";
 export default {
     name: "Index",
     props: [],
@@ -130,9 +131,6 @@ export default {
         reset_queries: function () {
             return [this.subtype, this.search];
         },
-        aggregate: function (){
-            return this.data.map(item => this.postLink(item.ID))
-        }
     },
     methods: {
         // 构建最终请求参数
@@ -177,6 +175,14 @@ export default {
                     } else {
                         this.data = res.data?.data?.list;
                     }
+
+                    reportNow({
+                        caller: "macro_index_load",
+                        data: {
+                            aggregate: res.data.data.list.map((item) => this.postLink(item.ID)),
+                        },
+                    });
+
                     this.total = res.data?.data?.total;
                     this.pages = res.data?.data?.pages;
                 })
@@ -218,7 +224,8 @@ export default {
             this.drawer_link = "./" + id + "?tab=" + m.name;
         },
         postLink: function (val) {
-            return `/${appKey}/` + val;
+            const prefix = this.client == "std" ? "www" : "origin";
+            return `${prefix}:/${appKey}/` + val;
         },
     },
     watch: {

@@ -31,7 +31,7 @@
                     :href="getMacroLink(item.pid, item.v)"
                     v-reporter="{
                         data: {
-                            href: getMacroLink(item.pid, item.v),
+                            href: macroLink(getMacroLink(item.pid, item.v)),
                             item_type: item.xf
                         },
                         caller: 'macro_rank_top',
@@ -87,6 +87,10 @@ export default {
             }
         },
         getMacroLink,
+        macroLink(link) {
+            const prefix = this.client == 'std' ? 'www' : 'origin';
+            return `${prefix}:${link}`
+        },
     },
     watch: {
         subtype: {

@@ -27,9 +27,8 @@
                 v-reporter="{
                     data: {
                         href: reporterLink(item.ID),
-                        aggregate: aggregate
                     },
-                    caller: 'macro_detail',
+                    caller: 'macro_index_click',
                 }"
                 >{{ item.post_title || "无标题" }}</a
             >
@@ -83,7 +82,7 @@ import { showDate } from "@jx3box/jx3box-common/js/moment.js";
 import xfmap from "@jx3box/jx3box-data/data/xf/xf.json";
 export default {
     name: "ListItem",
-    props: ["item", "order", "aggregate"],
+    props: ["item", "order"],
     components: {},
     data: function () {
         return {
@@ -97,6 +96,9 @@ export default {
         isMine: function () {
             return this.$route.name == "bucket";
         },
+        client: function (){
+            return this.item?.client || 'std'
+        }
     },
     watch: {},
     methods: {
@@ -132,7 +134,8 @@ export default {
             return __visibleMap[val];
         },
         reporterLink: function (val) {
-            return`/${appKey}/` + val;
+            const prefix = this.client == 'std' ? 'www' : 'origin'
+            return`${prefix}:/${appKey}/` + val;
         },
     },
     created: function () {},
