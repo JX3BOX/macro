@@ -26,7 +26,6 @@
                                 v-reporter="{
                                     data: {
                                         href: getMacroLink(scope.row.pid, scope.row.item_version),
-                                        item_type: scope.row.xf
                                     },
                                     caller: 'macro_rank',
                                 }"
@@ -85,7 +84,6 @@
                             v-reporter="{
                                 data: {
                                     href: getMacroLink(scope.row.pid, scope.row.downloadStr.split('#')[1]),
-                                    item_type: scope.row.xf
                                 },
                                 caller: 'macro_rank',
                             }"
