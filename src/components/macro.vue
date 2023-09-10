@@ -28,7 +28,7 @@
                     plain
                     type="primary"
                     size="mini"
-                    @click="copy(copyname)"
+                    @click="copy(copyname, 'cloud')"
                     >复制云端宏</el-button
                 >
                 <a
@@ -61,6 +61,7 @@ import "@jx3box/jx3box-macro/macro.css";
 import dict from "@jx3box/jx3box-dict/output/skill.json";
 import User from "@jx3box/jx3box-common/js/user";
 import { copy } from "@/utils/clipboard";
+import { reportNow } from "@jx3box/jx3box-common/js/reporter";
 export default {
     name: "macro",
     props: ["ctx", "lang", "name"],
@@ -83,6 +84,9 @@ export default {
         },
     },
     computed: {
+        id () {
+            return this.$route.params.id
+        },
         content: function () {
             return this.status ? this.code : this.code_tw;
         },
@@ -108,10 +112,23 @@ export default {
         isAuthor: function () {
             return User.isLogin() && User.getInfo().uid == this.$store.state.user_id;
         },
+        client: function () {
+            return this.$store.state.client;
+        },
+        prefix: function () {
+            return this.client == "std" ? "www" : "origin";
+        },
     },
     methods: {
-        copy: function (text) {
-            copy(text, { success_message: "复制宏成功" })
+        copy: function (text, type="") {
+            copy(text, { success_message: "复制宏成功" }).then(() => {
+                reportNow({
+                    caller: type ? "macro_copy_cloud" : "macro_copy",
+                    data: {
+                        href: `${this.prefix}:/macro/${this.id}`
+                    }
+                })
+            })
         },
         translate(data) {
             if (data && data.length) {
