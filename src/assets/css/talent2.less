@@ -93,16 +93,19 @@
     background-repeat: no-repeat;
     background-position: left bottom;
 
+    transform: rotate(90deg) translateY(150px) translateX(135px);
+
 
     .m-talent2-xf-icon {
         width: 30px;
+        transform: rotate(-90deg);
     }
 
     &-count {
         display: inline-block;
         position: absolute;
-        left: 48px;
-        bottom: -2px;
+        // left: 48px;
+        // bottom: -2px;
         text-align: center;
         width: 20px;
         font-size: 14px;
@@ -111,12 +114,19 @@
 
         background-image: url('../img/talent2/count_bg.png');
         background-repeat: no-repeat;
+
+        transform: rotate(-90deg);
+        left: 40px;
+        bottom: 15px;
     }
 
     &-name {
         color: #F3F50A;
         font-size: 15px;
         margin-left: 35px;
+
+        transform: rotate(-90deg);
+        writing-mode: vertical-rl;
     }
 }
 
@@ -126,6 +136,7 @@
     height: 76%;
     margin: 0 15px;
     margin-top: 82px;
+    position: relative;
 
     background-repeat: no-repeat;
     background-size: cover;
@@ -367,5 +378,31 @@
     }
     .on {
         display: block;
+    }
+}
+
+.is-single {
+    .m-talent2-content-row {
+        grid-template-columns: repeat(5, 1fr);
+        padding: 0 96px;
+    }
+
+    .m-talent2-title {
+        transform: unset;
+
+        .m-talent2-xf-icon {
+            transform: unset;
+        }
+
+        &-count {
+            transform: unset;
+            left: 48px;
+            bottom: -2px;
+        }
+
+        &-name {
+            transform: unset;
+            writing-mode: unset;
+        }
     }
 }

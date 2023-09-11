@@ -56,6 +56,7 @@
                                     :style="{
                                         'background-image': xf ? `url(${talentBg('left', 1)})` : '',
                                     }"
+                                     :class="{ 'is-single': isSingle }"
                                 >
                                     <div class="m-talent2-title">
                                         <img class="m-talent2-xf-icon" :src="xficon(xfContent[0])" />
@@ -186,7 +187,7 @@
                             </div>
 
                             <!-- RIGHT -->
-                            <div class="m-talent2-right">
+                            <div class="m-talent2-right" v-if="!isSingle">
                                 <div
                                     class="m-talent2-content"
                                     :style="{
@@ -440,6 +441,10 @@ export default {
         };
     },
     computed: {
+        // 是否为单心法
+        isSingle: function () {
+            return !this.talentContent.left || !this.talentContent.right;
+        },
         lCount: function () {
             return this.l_data.length
                 ? this.l_data
@@ -525,8 +530,8 @@ export default {
         },
         reload: function (schema) {
             this.currentSchema = "";
-            this.l_data = ["0000", "0000", "0000", "0000", "0000", "0000"];
-            this.r_data = ["0000", "0000", "0000", "0000", "0000", "0000"];
+            // this.l_data = ["0000", "0000", "0000", "0000", "0000", "0000"];
+            // this.r_data = ["0000", "0000", "0000", "0000", "0000", "0000"];
         },
         reset: function () {},
         // 生成code
@@ -932,12 +937,15 @@ export default {
         // ---------------------
         // 获取版本列表
         getVersions: function () {
-            fetch(__ossRoot + "data/talent2/index.json")
-                .then((res) => res.json())
-                .then((response) => {
-                    this.versions = response;
-                    this.version = this.versions[0]?.version;
-                });
+            // TODO: 从talent2.json中获取版本列表
+            // fetch(__ossRoot + "data/talent2/index.json")
+            //     .then((res) => res.json())
+            //     .then((response) => {
+            //         this.versions = response;
+            //         this.version = this.versions[0]?.version;
+            //     });
+            this.version = "v20230824"
+
         },
         getTalents: function () {
             fetch(__ossRoot + "data/talent2/" + this.version + ".json")
@@ -1065,6 +1073,17 @@ export default {
                     });
                     this.l_name = xfConfigs[val]?.talent[0];
 
+                    const col_len = Math.max(...this.talentContent.left.map((l) => l.length));
+                    const row_len = this.talentContent.left.length;
+
+                    console.log(col_len, row_len)
+
+                    this.l_data = Array(row_len)
+                        .fill(0)
+                        .map(() => {
+                            return Array(col_len).fill(0).join("");
+                        });
+
                     this.talentContent.right = this.talents[xfConfigs[val].talent?.[1]]?.map((right) => {
                         const _right = right.map((r) => {
                             if (r) this.$set(r, "on", false);
@@ -1073,6 +1092,12 @@ export default {
                         return _right;
                     });
                     this.r_name = xfConfigs[val]?.talent[1];
+
+                    this.r_data = Array(row_len)
+                        .fill(0)
+                        .map(() => {
+                            return Array(col_len).fill(0).join("");
+                        });
 
                     if (val === "通用") {
                         this.total = 66;
