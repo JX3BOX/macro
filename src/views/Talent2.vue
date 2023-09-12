@@ -56,7 +56,7 @@
                                     :style="{
                                         'background-image': xf ? `url(${talentBg('left', 1)})` : '',
                                     }"
-                                     :class="{ 'is-single': isSingle }"
+                                    :class="{ 'is-single': isSingle }"
                                 >
                                     <div class="m-talent2-title">
                                         <img class="m-talent2-xf-icon" :src="xficon(xfContent[0])" />
@@ -78,6 +78,7 @@
                                                     },
                                                     canOperate(index, 'left') ? '' : 'm-talent2-content-item-disabled',
                                                     item.pretab ? 'm-talent2-pretab' : '',
+                                                    isMutex(item, index, i, 'left') ? 'm-talent2-content-item-disabled' : '',
                                                 ]"
                                                 :key="i"
                                                 @mouseover="$set(item, 'on', true)"
@@ -85,7 +86,7 @@
                                             >
                                                 <div
                                                     @click="leftTalentAdd(item, index, i)"
-                                                    @click.right.prevent="leftTalentDecrease(index, i)"
+                                                    @click.right.prevent="leftTalentDecrease(index, i, item)"
                                                     :class="[
                                                         !canLeftItemOperate(index, i)
                                                             ? item.type === 'skill'
@@ -98,6 +99,7 @@
                                                                 ? 'm-talent2-skill-unselected'
                                                                 : 'm-talent2-unselected'
                                                             : '',
+                                                        isMutex(item, index, i, 'left') ? 'm-talent2-unselected' : '',
                                                     ]"
                                                 >
                                                     <!-- HAS PARENT -->
@@ -216,6 +218,7 @@
                                                         ? 'm-talent2-content-item-disabled'
                                                         : '',
                                                     item.pretab ? 'm-talent2-pretab' : '',
+                                                    isMutex(item, index, i, 'right') ? 'm-talent2-content-item-disabled' : '',
                                                 ]"
                                                 :key="i"
                                                 @mouseover="$set(item, 'on', true)"
@@ -223,7 +226,7 @@
                                             >
                                                 <div
                                                     @click="rightTalentAdd(item, index, i)"
-                                                    @click.right.prevent="rightTalentDecrease(index, i)"
+                                                    @click.right.prevent="rightTalentDecrease(index, i, item)"
                                                     :class="[
                                                         !canRightItemOperate(index, i)
                                                             ? item.type === 'skill'
@@ -236,6 +239,7 @@
                                                                 ? 'm-talent2-skill-unselected'
                                                                 : 'm-talent2-unselected'
                                                             : '',
+                                                        isMutex(item, index, i, 'right') ? 'm-talent2-unselected' : '',
                                                     ]"
                                                 >
                                                     <!-- HAS PARENT -->
@@ -327,9 +331,9 @@
                             </div>
                         </div>
 
-                        <div class="m-talent2-actions">
+                        <div class="m-talent2-actions" :class="{'is-single': isSingle}">
                             <div
-                                class="rest-btn"
+                                class="reset-btn"
                                 :class="!totalCount ? 'm-talent2-actions-btn-disabled' : 'm-talent2-actions-btn'"
                                 @click="reload"
                             >
@@ -427,6 +431,8 @@ export default {
                 left: [],
                 right: [],
             },
+            condition: [], // 激活条件
+            mutex: [], // 互斥关系
 
             isLogin: User.isLogin(),
             isAdmin: false,
@@ -520,6 +526,25 @@ export default {
         isEditing: function () {
             return !!this.currentSchema;
         },
+        mutexObj: function ({ mutex }){
+            const result = {};
+
+            // 遍历输入的二维数组
+            for (const subArr of mutex) {
+                for (const num of subArr) {
+                // 如果数字还不存在于结果对象中，就初始化为空数组
+                if (!result[num]) {
+                    result[num] = [];
+                }
+
+                // 将当前数字所在的子数组中的其他数字添加到结果对象的对应数组中
+                const otherNums = subArr.filter(item => item !== num);
+                result[num] = result[num].concat(otherNums);
+                }
+            }
+
+            return result;
+        }
     },
     methods: {
         updateDrawer: function (val) {
@@ -629,16 +654,15 @@ export default {
          */
         canOperate: function (rowIndex, target) {
             if (target === "left") {
-                return this.lCount >= rowIndex * 5;
+                return this.lCount >= this.condition[rowIndex];
             } else {
-                return this.rCount >= rowIndex * 5;
+                return this.rCount >= this.condition[rowIndex];
             }
         },
         /**
          * 判断left该项是否可点
          * @param {number} rowIndex 行号
-         * @param {number} index 列号
-         * @param {string} target 左右区域
+         * @param {number} colIndex 列号
          * @returns {boolean} 是否可以修改
          */
         canLeftItemOperate: function (rowIndex, colIndex) {
@@ -647,11 +671,11 @@ export default {
             if (this.begin === "left") {
                 if (!rowIndex) {
                     canOperate = true;
-                } else if (this.lCount > 0 && this.lCount >= rowIndex * 5) {
+                } else if (this.lCount > 0 && this.lCount >= this.condition[rowIndex]) {
                     canOperate = true;
                 }
             } else if (this.begin === "right") {
-                if (this.rCount >= this.series_open_need && this.lCount >= 0 && this.lCount >= rowIndex * 5) {
+                if (this.rCount >= this.series_open_need && this.lCount >= 0 && this.lCount >= this.condition[rowIndex]) {
                     canOperate = true;
                 }
             }
@@ -669,10 +693,10 @@ export default {
          * @param {Object} item talent
          * @param {number} rowIndex 行号
          * @param {number} colIndex 列号
-         * @param {Array} target 操作对象
          */
         leftTalentAdd: function (item, rowIndex, colIndex) {
             if (!this.canOperate(rowIndex, "left")) return;
+            if (this.isMutex(item, rowIndex, colIndex, "left")) return;
             // 当父项有层数，才可以进行增加层数操作
             if (item?.pretab && !this.isLeftParentAdd(rowIndex, colIndex)) {
                 this.$message.warning({
@@ -725,6 +749,7 @@ export default {
                 row[colIndex] = String(current);
 
                 this.l_data.splice(rowIndex, 1, row.join(""));
+                item.count = current;
             } else {
                 this.$message({
                     type: "warning",
@@ -736,9 +761,9 @@ export default {
          * talent left 减少层数
          * @param {number} rowIndex 行号
          * @param {number} colIndex 列号
-         * @param {Array} target 操作对象
+         * @param {Array} item 操作对象
          */
-        leftTalentDecrease: function (rowIndex, colIndex) {
+        leftTalentDecrease: function (rowIndex, colIndex, item) {
             let current = Number(this.l_data[rowIndex][colIndex]);
 
             if (current > 0) {
@@ -758,7 +783,7 @@ export default {
                         .flat()
                         .reduce((prev, current) => Number(prev) + Number(current));
 
-                    if (currentCount <= this.leftLastIndex * 5 && targetCount > currentCount) {
+                    if (currentCount <= this.condition[this.leftLastIndex] && targetCount > currentCount) {
                         this.$message.warning({
                             title: "提醒",
                             message: "不能再减啦",
@@ -767,10 +792,12 @@ export default {
                     }
                 }
                 current--;
-                // 替换指定talent的层数
+                // 替换指定talent的层数9
                 const row = this.l_data[rowIndex].split("");
 
                 row[colIndex] = String(current);
+
+                item.count = current;
 
                 this.l_data.splice(rowIndex, 1, row.join(""));
             }
@@ -779,7 +806,6 @@ export default {
          * 判断right该项是否可点
          * @param {number} rowIndex 行号
          * @param {number} index 列号
-         * @param {string} target 左右区域
          * @returns {boolean} 是否可以修改
          */
         canRightItemOperate: function (rowIndex, colIndex) {
@@ -788,11 +814,11 @@ export default {
             if (this.begin === "right") {
                 if (!rowIndex) {
                     canOperate = true;
-                } else if (this.rCount > 0 && this.rCount >= rowIndex * 5) {
+                } else if (this.rCount > 0 && this.rCount >= this.condition[rowIndex]) {
                     canOperate = true;
                 }
             } else if (this.begin === "left") {
-                if (this.lCount >= this.series_open_need && this.rCount >= 0 && this.rCount >= rowIndex * 5) {
+                if (this.lCount >= this.series_open_need && this.rCount >= 0 && this.rCount >= this.condition[rowIndex]) {
                     canOperate = true;
                 }
             }
@@ -810,10 +836,10 @@ export default {
          * @param {Object} item talent
          * @param {number} rowIndex 行号
          * @param {number} colIndex 列号
-         * @param {Array} target 操作对象
          */
         rightTalentAdd: function (item, rowIndex, colIndex) {
             if (!this.canOperate(rowIndex, "right")) return;
+            if (this.isMutex(item, rowIndex, colIndex, "right")) return;
 
             // 当父项有层数，才可以进行增加层数操作
             if (item?.pretab && !this.isRightParentAdd(rowIndex, colIndex)) {
@@ -867,6 +893,8 @@ export default {
 
                 row[colIndex] = String(current);
 
+                item.count = current;
+
                 this.r_data.splice(rowIndex, 1, row.join(""));
             } else {
                 this.$message({
@@ -879,9 +907,9 @@ export default {
          * talent right 减少层数
          * @param {number} rowIndex 行号
          * @param {number} colIndex 列号
-         * @param {Array} target 操作对象
+         * @param {Array} item 操作对象
          */
-        rightTalentDecrease: function (rowIndex, colIndex) {
+        rightTalentDecrease: function (rowIndex, colIndex, item) {
             let current = Number(this.r_data[rowIndex][colIndex]);
 
             if (current > 0) {
@@ -900,7 +928,7 @@ export default {
                         .flat()
                         .reduce((prev, current) => Number(prev) + Number(current));
 
-                    if (currentCount <= this.rightLastIndex * 5 && targetCount > currentCount) {
+                    if (currentCount <= this.condition[this.rightLastIndex] && targetCount > currentCount) {
                         this.$message.warning({
                             title: "提醒",
                             message: "不能再减啦",
@@ -913,6 +941,8 @@ export default {
                 const row = this.r_data[rowIndex].split("");
 
                 row[colIndex] = String(current);
+
+                item.count = current;
 
                 this.r_data.splice(rowIndex, 1, row.join(""));
             }
@@ -944,7 +974,7 @@ export default {
             //         this.versions = response;
             //         this.version = this.versions[0]?.version;
             //     });
-            this.version = "v20230824"
+            this.version = "v20230912"
 
         },
         getTalents: function () {
@@ -1049,6 +1079,22 @@ export default {
         xficon: function (id) {
             return __imgPath + "image/xf/" + id + ".png";
         },
+
+        // 判断互斥关系
+        isMutex(item, rowIndex, colIndex, key) {
+            const arr = this.mutexObj[item.id];
+
+            if (!arr) return false;
+
+            const _item = this.talentContent[key][rowIndex].find(i => i?.count);
+
+            // _item存在，证明该项已经加点，那么arr中的项就不能加点
+            if (_item) {
+                return arr.includes(_item.id);
+            }
+
+            return false;
+        },
     },
     watch: {
         version: function (val) {
@@ -1066,7 +1112,10 @@ export default {
                     // 新增pop显示控制
                     this.talentContent.left = this.talents[xfConfigs[val].talent?.[0]]?.map((left) => {
                         const _left = left.map((l) => {
-                            if (l) this.$set(l, "on", false);
+                            if (l) {
+                                this.$set(l, "on", false);
+                                this.$set(l, 'count', 0);
+                            }
                             return l;
                         });
                         return _left;
@@ -1076,8 +1125,6 @@ export default {
                     const col_len = Math.max(...this.talentContent.left.map((l) => l.length));
                     const row_len = this.talentContent.left.length;
 
-                    console.log(col_len, row_len)
-
                     this.l_data = Array(row_len)
                         .fill(0)
                         .map(() => {
@@ -1086,7 +1133,10 @@ export default {
 
                     this.talentContent.right = this.talents[xfConfigs[val].talent?.[1]]?.map((right) => {
                         const _right = right.map((r) => {
-                            if (r) this.$set(r, "on", false);
+                            if (r) {
+                                this.$set(r, "on", false);
+                                this.$set(r, 'count', 0);
+                            }
                             return r;
                         });
                         return _right;
@@ -1104,6 +1154,10 @@ export default {
                     } else {
                         this.total = defaultConfigs.total;
                     }
+
+                    // 激活条件
+                    this.condition = xfConfigs[val]?.condition || [0,5,10,15,20,25];
+                    this.mutex = xfConfigs[val]?.mutex || [];
 
                     // 初始化code
                     this.renderCode();

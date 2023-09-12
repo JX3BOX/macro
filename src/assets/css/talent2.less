@@ -50,18 +50,19 @@
     .m-talent2-actions {
         padding: 6px 14px;
         text-align: right;
-        .rest-btn {
+        .reset-btn {
             display: inline-block;
+            position: relative;
             cursor: pointer;
             width: 92px;
             height: 26px;
-            display: inline-block;
             color: #D7E6DF;
             font-size: 14px;
             text-align: center;
             padding-top: 2px;
             background-repeat: no-repeat;
             background-position: center;
+            bottom: 24px;
         }
         &-btn {
             background-image: url('../img/talent2/1-1.png');
@@ -116,8 +117,8 @@
         background-repeat: no-repeat;
 
         transform: rotate(-90deg);
-        left: 40px;
-        bottom: 15px;
+        left: 36px;
+        bottom: 18px;
     }
 
     &-name {
@@ -147,6 +148,9 @@
         justify-items: center;
         padding: 0 12px;
         height: 52px;
+        position: relative;
+        top: -32px;
+        left: 16px;
 
         &-disabled {
             cursor: not-allowed;
@@ -385,6 +389,8 @@
     .m-talent2-content-row {
         grid-template-columns: repeat(5, 1fr);
         padding: 0 96px;
+        top: unset;
+        left: unset;
     }
 
     .m-talent2-title {
@@ -396,13 +402,17 @@
 
         &-count {
             transform: unset;
-            left: 48px;
-            bottom: -2px;
+            left: 40px;
+            bottom: -5px;
         }
 
         &-name {
             transform: unset;
             writing-mode: unset;
         }
+    }
+
+    .reset-btn {
+        bottom: 0 !important;
     }
 }
