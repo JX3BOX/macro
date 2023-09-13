@@ -26,7 +26,7 @@
             </a>
             <a href="/macro/talent" target="_blank" v-if="client == 'std'">
                 <img class="u-icon" :src="getAppIcon('talent', true)" />
-                <span>奇穴模拟器</span>
+                <span></span>
                 <em>Talent Simulator</em>
             </a>
             <a href="/macro/talent2" target="_blank" v-else>
