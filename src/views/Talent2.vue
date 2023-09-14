@@ -99,7 +99,9 @@
                                                                 ? 'm-talent2-skill-unselected'
                                                                 : 'm-talent2-unselected'
                                                             : '',
-                                                        isMutex(item, index, i, 'left') ? 'm-talent2-unselected' : '',
+                                                        isMutex(item, index, i, 'left') ? item.type === 'skill'
+                                                                ? 'm-talent2-skill-unselected'
+                                                                : 'm-talent2-unselected' : '',
                                                     ]"
                                                 >
                                                     <!-- HAS PARENT -->
@@ -123,6 +125,8 @@
                                                         :src="talentIcon(item.icon)"
                                                         :alt="item.name"
                                                     />
+
+                                                    <img v-if="isMutex(item, index, i, 'left')" class="u-mutex-img" src="../assets/img/talent2/mutex.png" alt="">
                                                 </div>
                                                 <!-- COUNT -->
                                                 <span
@@ -967,13 +971,13 @@ export default {
         // ---------------------
         // 获取版本列表
         getVersions: function () {
-            fetch(__ossRoot + "data/talent2/index.json")
-                .then((res) => res.json())
-                .then((response) => {
-                    this.versions = response;
-                    this.version = this.versions[0]?.version;
-                });
-            // this.version = "v20230912"
+            // fetch(__ossRoot + "data/talent2/index.json")
+            //     .then((res) => res.json())
+            //     .then((response) => {
+            //         this.versions = response;
+            //         this.version = this.versions[0]?.version;
+            //     });
+            this.version = "v20230912"
 
         },
         getTalents: function () {
