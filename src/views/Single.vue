@@ -27,7 +27,7 @@
                     <el-divider content-position="left" v-if="item.macro">宏</el-divider>
                     <div class="u-usage" v-if="item.desc">{{ item.desc }}</div>
                     <div class="u-macro macro-box" :class="{ withUsage: item.desc }" v-if="item.macro">
-                        <macro :ctx="item.macro" :lang="lang" :name="author_info.display_name + '#' + item.name" />
+                        <macro :ctx="item.macro" :lang="lang" :name="author_info.display_name + '#' + item.name" :id="id" />
                     </div>
                     <!-- 奇穴 镇派 -->
                     <template v-if="item.talent">

@@ -64,7 +64,7 @@ import { copy } from "@/utils/clipboard";
 import { reportNow } from "@jx3box/jx3box-common/js/reporter";
 export default {
     name: "macro",
-    props: ["ctx", "lang", "name"],
+    props: ["ctx", "lang", "name", "id"],
     data: function () {
         return {
             data: "",
@@ -84,9 +84,6 @@ export default {
         },
     },
     computed: {
-        id () {
-            return this.$route.params.id
-        },
         content: function () {
             return this.status ? this.code : this.code_tw;
         },

@@ -64,7 +64,7 @@
         <el-drawer class="m-macro-drawer" title="云端宏" :visible.sync="drawer" :append-to-body="true">
             <div class="u-box">
                 <h2 class="u-title">{{ drawer_title }}</h2>
-                <macro :ctx="drawer_content" :name="drawer_title" />
+                <macro :ctx="drawer_content" :name="drawer_title" :id="drawer_id" />
                 <a :href="drawer_link" class="u-skip el-button el-button--primary">
                     <i class="el-icon-copy-document"></i> 查看详情
                 </a>
@@ -75,7 +75,6 @@
 
 <script>
 import { getFriendsPosts as getPosts } from "@/service/post";
-import xfmap from "@jx3box/jx3box-data/data/xf/xf.json";
 import User from "@jx3box/jx3box-common/js/user";
 import { __Links } from "@jx3box/jx3box-common/data/jx3box.json";
 
@@ -107,6 +106,7 @@ export default {
             drawer_title: "",
             drawer_content: "",
             drawer_link: "",
+            drawer_id: "",
 
             langs: {
                 cn: "简体中文",
@@ -226,6 +226,7 @@ export default {
             this.drawer_title = author + "#" + m.name;
             this.drawer_content = m.macro;
             this.drawer_link = "./" + id + "?tab=" + m.name;
+            this.drawer_id = id;
         },
     },
     watch: {
