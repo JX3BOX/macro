@@ -56,7 +56,7 @@ export default {
             return `${__Root}pz/iframe.html?id=${this.id}&mode=horizontal`;
         },
         url: function () {
-            return `/pz/#/view/${this.id}`;
+            return `/pz/view/${this.id}`;
         },
         name() {
             return this.data?.[~~this.key]["name"];
@@ -88,6 +88,11 @@ export default {
         .mb(5px);
         &:hover {
             color: @pink;
+        }
+    }
+    .el-tabs {
+        .el-tabs__item {
+            padding: 0 30px !important;
         }
     }
 }
