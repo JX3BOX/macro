@@ -971,13 +971,13 @@ export default {
         // ---------------------
         // 获取版本列表
         getVersions: function () {
-            // fetch(__ossRoot + "data/talent2/index.json")
-            //     .then((res) => res.json())
-            //     .then((response) => {
-            //         this.versions = response;
-            //         this.version = this.versions[0]?.version;
-            //     });
-            this.version = "v20230912"
+            fetch(__ossRoot + "data/talent2/index.json")
+                .then((res) => res.json())
+                .then((response) => {
+                    this.versions = response;
+                    this.version = this.versions[0]?.version;
+                });
+            // this.version = "v20230912"
 
         },
         getTalents: function () {
