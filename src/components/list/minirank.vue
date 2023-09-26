@@ -11,7 +11,7 @@
                     :href="getMacroLink(item.pid, item.item_version)"
                     v-reporter="{
                         data: {
-                            href: getMacroLink(item.pid, item.item_version),
+                            href: macroLink(getMacroLink(item.pid, item.item_version)),
                         },
                         caller: 'macro_rank_top',
                     }"

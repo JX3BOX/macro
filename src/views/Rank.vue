@@ -25,7 +25,7 @@
                                 target="_blank"
                                 v-reporter="{
                                     data: {
-                                        href: getMacroLink(scope.row.pid, scope.row.item_version),
+                                        href: `${prefix}:` + getMacroLink(scope.row.pid, scope.row.item_version),
                                     },
                                     caller: 'macro_rank',
                                 }"
@@ -83,7 +83,7 @@
                             target="_blank"
                             v-reporter="{
                                 data: {
-                                    href: getMacroLink(scope.row.pid, scope.row.downloadStr.split('#')[1]),
+                                    href: `${prefix}:` +  getMacroLink(scope.row.pid, scope.row.downloadStr.split('#')[1]),
                                 },
                                 caller: 'macro_rank',
                             }"
@@ -137,6 +137,9 @@ export default {
         client: function () {
             return this.$store.state.client;
         },
+        prefix: function (){
+            return this.client == 'std' ? 'www' : 'origin'
+        }
     },
     methods: {
         getMacroLink,
