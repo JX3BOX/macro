@@ -21,7 +21,7 @@ export default {
     },
     computed: {
         color: function () {
-            return colors_by_mount_name[this.subtype];
+            return colors_by_mount_name?.[this.subtype] === '#FFFFFF' ? '#24292e' : colors_by_mount_name?.[this.subtype];
         },
     },
     methods: {
