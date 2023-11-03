@@ -6,13 +6,23 @@
                 <div class="m-talent-panel">
                     <div class="m-talent-version">
                         <span class="u-label">选择版本</span>
-                        <el-select v-model="version" placeholder="请选择游戏版本" @change="reload">
+                        <el-select
+                            v-model="version"
+                            placeholder="请选择游戏版本"
+                            @change="reload"
+                            popper-class="m-talent__pop"
+                        >
                             <el-option
                                 v-for="item in versions"
                                 :key="item.version"
                                 :label="item.name"
                                 :value="item.version"
-                            ></el-option>
+                            >
+                                <div class="m-talent__option">
+                                    <span class="u-label">{{ item.name }}</span>
+                                    <span class="u-version">{{ item.version }}</span>
+                                </div>
+                            </el-option>
                         </el-select>
                     </div>
                     <div class="u-toolbar" v-if="isLogin">
@@ -78,7 +88,9 @@
                                                     },
                                                     canOperate(index, 'left') ? '' : 'm-talent2-content-item-disabled',
                                                     item.pretab ? 'm-talent2-pretab' : '',
-                                                    isMutex(item, index, i, 'left') ? 'm-talent2-content-item-disabled' : '',
+                                                    isMutex(item, index, i, 'left')
+                                                        ? 'm-talent2-content-item-disabled'
+                                                        : '',
                                                 ]"
                                                 :key="i"
                                                 @mouseover="$set(item, 'on', true)"
@@ -99,9 +111,11 @@
                                                                 ? 'm-talent2-skill-unselected'
                                                                 : 'm-talent2-unselected'
                                                             : '',
-                                                        isMutex(item, index, i, 'left') ? item.type === 'skill'
+                                                        isMutex(item, index, i, 'left')
+                                                            ? item.type === 'skill'
                                                                 ? 'm-talent2-skill-unselected'
-                                                                : 'm-talent2-unselected' : '',
+                                                                : 'm-talent2-unselected'
+                                                            : '',
                                                     ]"
                                                 >
                                                     <!-- HAS PARENT -->
@@ -126,7 +140,12 @@
                                                         :alt="item.name"
                                                     />
 
-                                                    <img v-if="isMutex(item, index, i, 'left')" class="u-mutex-img" src="../assets/img/talent2/mutex.png" alt="">
+                                                    <img
+                                                        v-if="isMutex(item, index, i, 'left')"
+                                                        class="u-mutex-img"
+                                                        src="../assets/img/talent2/mutex.png"
+                                                        alt=""
+                                                    />
                                                 </div>
                                                 <!-- COUNT -->
                                                 <span
@@ -222,7 +241,9 @@
                                                         ? 'm-talent2-content-item-disabled'
                                                         : '',
                                                     item.pretab ? 'm-talent2-pretab' : '',
-                                                    isMutex(item, index, i, 'right') ? 'm-talent2-content-item-disabled' : '',
+                                                    isMutex(item, index, i, 'right')
+                                                        ? 'm-talent2-content-item-disabled'
+                                                        : '',
                                                 ]"
                                                 :key="i"
                                                 @mouseover="$set(item, 'on', true)"
@@ -335,7 +356,7 @@
                             </div>
                         </div>
 
-                        <div class="m-talent2-actions" :class="{'is-single': isSingle}">
+                        <div class="m-talent2-actions" :class="{ 'is-single': isSingle }">
                             <div
                                 class="reset-btn"
                                 :class="!totalCount ? 'm-talent2-actions-btn-disabled' : 'm-talent2-actions-btn'"
@@ -530,25 +551,25 @@ export default {
         isEditing: function () {
             return !!this.currentSchema;
         },
-        mutexObj: function ({ mutex }){
+        mutexObj: function ({ mutex }) {
             const result = {};
 
             // 遍历输入的二维数组
             for (const subArr of mutex) {
                 for (const num of subArr) {
-                // 如果数字还不存在于结果对象中，就初始化为空数组
-                if (!result[num]) {
-                    result[num] = [];
-                }
+                    // 如果数字还不存在于结果对象中，就初始化为空数组
+                    if (!result[num]) {
+                        result[num] = [];
+                    }
 
-                // 将当前数字所在的子数组中的其他数字添加到结果对象的对应数组中
-                const otherNums = subArr.filter(item => item !== num);
-                result[num] = result[num].concat(otherNums);
+                    // 将当前数字所在的子数组中的其他数字添加到结果对象的对应数组中
+                    const otherNums = subArr.filter((item) => item !== num);
+                    result[num] = result[num].concat(otherNums);
                 }
             }
 
             return result;
-        }
+        },
     },
     methods: {
         updateDrawer: function (val) {
@@ -679,7 +700,11 @@ export default {
                     canOperate = true;
                 }
             } else if (this.begin === "right") {
-                if (this.rCount >= this.series_open_need && this.lCount >= 0 && this.lCount >= this.condition[rowIndex]) {
+                if (
+                    this.rCount >= this.series_open_need &&
+                    this.lCount >= 0 &&
+                    this.lCount >= this.condition[rowIndex]
+                ) {
                     canOperate = true;
                 }
             }
@@ -822,7 +847,11 @@ export default {
                     canOperate = true;
                 }
             } else if (this.begin === "left") {
-                if (this.lCount >= this.series_open_need && this.rCount >= 0 && this.rCount >= this.condition[rowIndex]) {
+                if (
+                    this.lCount >= this.series_open_need &&
+                    this.rCount >= 0 &&
+                    this.rCount >= this.condition[rowIndex]
+                ) {
                     canOperate = true;
                 }
             }
@@ -978,7 +1007,6 @@ export default {
                     this.version = this.versions[0]?.version;
                 });
             // this.version = "v20230912"
-
         },
         getTalents: function () {
             fetch(__ossRoot + "data/talent2/" + this.version + ".json")
@@ -1089,7 +1117,7 @@ export default {
 
             if (!arr) return false;
 
-            const _item = this.talentContent[key][rowIndex].find(i => i?.count);
+            const _item = this.talentContent[key][rowIndex].find((i) => i?.count);
 
             // _item存在，证明该项已经加点，那么arr中的项就不能加点
             if (_item) {
@@ -1117,7 +1145,7 @@ export default {
                         const _left = left.map((l) => {
                             if (l) {
                                 this.$set(l, "on", false);
-                                this.$set(l, 'count', 0);
+                                this.$set(l, "count", 0);
                             }
                             return l;
                         });
@@ -1138,7 +1166,7 @@ export default {
                         const _right = right.map((r) => {
                             if (r) {
                                 this.$set(r, "on", false);
-                                this.$set(r, 'count', 0);
+                                this.$set(r, "count", 0);
                             }
                             return r;
                         });
@@ -1159,7 +1187,7 @@ export default {
                     }
 
                     // 激活条件
-                    this.condition = xfConfigs[val]?.condition || [0,5,10,15,20,25];
+                    this.condition = xfConfigs[val]?.condition || [0, 5, 10, 15, 20, 25];
                     this.mutex = xfConfigs[val]?.mutex || [];
 
                     // 初始化code

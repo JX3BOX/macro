@@ -6,13 +6,23 @@
                 <div class="m-talent-panel">
                     <div class="m-talent-version">
                         <span class="u-label">选择版本</span>
-                        <el-select v-model="version" placeholder="请选择游戏版本" @change="reload">
+                        <el-select
+                            v-model="version"
+                            placeholder="请选择游戏版本"
+                            @change="reload"
+                            popper-class="m-talent__pop"
+                        >
                             <el-option
                                 v-for="item in versions"
                                 :key="item.version"
                                 :label="item.name"
                                 :value="item.version"
-                            ></el-option>
+                            >
+                                <div class="m-talent__option">
+                                    <span class="u-label">{{ item.name }}</span>
+                                    <span class="u-version">{{ item.version }}</span>
+                                </div>
+                            </el-option>
                         </el-select>
                     </div>
                     <div class="u-toolbar" v-if="isLogin">
@@ -300,7 +310,7 @@ export default {
     },
     components: {
         talentDrawer,
-        AppLayout
+        AppLayout,
     },
 };
 </script>
