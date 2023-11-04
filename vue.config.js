@@ -71,49 +71,13 @@ module.exports = {
         },
     },
 
-    //webpack配置
-    // configureWebpack: (config) => {
-    //     // 开启分离js
-    //     config.optimization = {
-    //         runtimeChunk: "single",
-    //         splitChunks: {
-    //             chunks: "all",
-    //             maxInitialRequests: Infinity,
-    //             minSize: 200000,
-    //             cacheGroups: {
-    //                 vendor: {
-    //                     test: /[\\/]node_modules[\\/]/,
-    //                     name(module) {
-    //                         // get the name. E.g. node_modules/packageName/not/this/part.js
-    //                         // or node_modules/packageName
-    //                         const packageName = module.context.match(
-    //                             /[\\/]node_modules[\\/](.*?)([\\/]|$)/
-    //                         )[1];
-    //                         // npm package names are URL-safe, but some servers don't like @ symbols
-    //                         return `npm.${packageName.replace("@", "")}`;
-    //                     },
-    //                 },
-    //             },
-    //         },
-    //     };
-    //     // 取消webpack警告的性能提示
-    //     config.performance = {
-    //         hints: "warning",
-    //         //入口起点的最大体积
-    //         maxEntrypointSize: 50000000,
-    //         //生成文件的最大体积
-    //         maxAssetSize: 30000000,
-    //         //只给出 js 文件的性能提示
-    //         assetFilter: function(assetFilename) {
-    //             return assetFilename.endsWith(".js");
-    //         },
-    //     };
-    // },
+    outputDir: process.env["BUILD_MODE"] == "preview" ? path.resolve(__dirname, pkg.name) : 'dist', // 指定构建输出的目录
 
     //❤️ define path for static files ~
     publicPath:
         //FOR Localhost => development
         (process.env.NODE_ENV === "development" && "/") ||
+        process.env.BUILD_MODE == "preview" && `/${pkg.name}/` ||
         //BY origin
         (process.env.STATIC_PATH === "origin" && `${JX3BOX.__staticPath["origin"]}${pkg.name}/`) ||
         //BY github
