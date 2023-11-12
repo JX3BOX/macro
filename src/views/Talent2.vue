@@ -93,25 +93,25 @@
                                                         : '',
                                                 ]"
                                                 :key="i"
-                                                @mouseover="$set(item, 'on', true)"
-                                                @mouseleave="$set(item, 'on', false)"
+                                                @mouseover="item && $set(item, 'on', true)"
+                                                @mouseleave="item && $set(item, 'on', false)"
                                             >
                                                 <div
                                                     @click="leftTalentAdd(item, index, i)"
                                                     @click.right.prevent="leftTalentDecrease(index, i, item)"
                                                     :class="[
                                                         !canLeftItemOperate(index, i)
-                                                            ? item.type === 'skill'
+                                                            ? item && item.type === 'skill'
                                                                 ? 'm-talent2-skill-unselected'
                                                                 : 'm-talent2-unselected'
                                                             : 'm-talent2-selected',
-                                                        item.type === 'skill' ? '' : 'm-talent2-talent',
-                                                        !surplus && !Number(l_data[index][i])
+                                                        item && item.type === 'skill' ? '' : 'm-talent2-talent',
+                                                        !surplus && item && !Number(l_data[index][i])
                                                             ? item.type === 'skill'
                                                                 ? 'm-talent2-skill-unselected'
                                                                 : 'm-talent2-unselected'
                                                             : '',
-                                                        isMutex(item, index, i, 'left')
+                                                        isMutex(item, index, i, 'left') && item
                                                             ? item.type === 'skill'
                                                                 ? 'm-talent2-skill-unselected'
                                                                 : 'm-talent2-unselected'
@@ -125,17 +125,21 @@
                                                             !isLeftParentAdd(index, i) &&
                                                             canLeftItemOperate(index, i)
                                                         "
-                                                        :class="item.type === 'skill' ? 'is-add-skill' : 'is-add'"
+                                                        :class="
+                                                            item && item.type === 'skill' ? 'is-add-skill' : 'is-add'
+                                                        "
                                                     ></span>
                                                     <!-- TOTAL ZERO -->
                                                     <span
                                                         v-if="!surplus && !Number(l_data[index][i])"
-                                                        :class="item.type === 'skill' ? 'is-add-skill' : 'is-add'"
+                                                        :class="
+                                                            item && item.type === 'skill' ? 'is-add-skill' : 'is-add'
+                                                        "
                                                     ></span>
 
                                                     <img
                                                         class="talent-img"
-                                                        :class="{ 'skill-img': item.type === 'skill' }"
+                                                        :class="{ 'skill-img': item && item.type === 'skill' }"
                                                         :src="talentIcon(item.icon)"
                                                         :alt="item.name"
                                                     />
@@ -160,8 +164,8 @@
                                                     {{ l_data[index][i] }}
                                                 </span>
 
-                                                <!-- DESC -->
-                                                <span class="m-talent2-pop" :class="item.on ? 'on' : ''">
+                                                <!-- DESC popover -->
+                                                <span class="m-talent2-pop" :class="item && item.on ? 'on' : ''">
                                                     <b class="m-talent2-name">
                                                         <span>
                                                             {{ item.name }}
@@ -176,6 +180,7 @@
                                                     <!-- <b class="m-talent2-type">
                                                             {{ item.type === 'talent' ? '被动招式': '主动招式' }}
                                                         </b>-->
+
                                                     <span
                                                         class="m-talent2-desc"
                                                         v-html="
@@ -246,8 +251,8 @@
                                                         : '',
                                                 ]"
                                                 :key="i"
-                                                @mouseover="$set(item, 'on', true)"
-                                                @mouseleave="$set(item, 'on', false)"
+                                                @mouseover="item && $set(item, 'on', true)"
+                                                @mouseleave="item && $set(item, 'on', false)"
                                             >
                                                 <div
                                                     @click="rightTalentAdd(item, index, i)"
@@ -305,7 +310,7 @@
                                                 </span>
 
                                                 <!-- DESC -->
-                                                <span class="m-talent2-pop" :class="item.on ? 'on' : ''">
+                                                <span class="m-talent2-pop" :class="item && item.on ? 'on' : ''">
                                                     <b class="m-talent2-name">
                                                         <span>
                                                             {{ item.name }}
@@ -472,6 +477,9 @@ export default {
         };
     },
     computed: {
+        client() {
+            return "origin";
+        },
         // 是否为单心法
         isSingle: function () {
             return !this.talentContent.left || !this.talentContent.right;
@@ -522,10 +530,6 @@ export default {
         },
         surplus: function () {
             return this.total - this.totalCount;
-        },
-
-        client: function () {
-            return location.href.includes("origin") ? "origin" : "std";
         },
         mount: function () {
             return xfmap[this.xf]?.id;
@@ -600,17 +604,15 @@ export default {
                 const leftCode = l.split("").map((c) => parseInt(c));
 
                 leftCode.forEach((code, codeIndex) => {
-                    if (code) {
-                        const talent = talentContent.left[lIndex][codeIndex];
-                        const _talent = {
-                            id: talent.id,
-                            icon: talent.icon,
-                            level: code,
-                            name: talent.name,
-                        };
+                    const talent = talentContent.left?.[lIndex]?.[codeIndex];
+                    let _talent = {
+                        id: talent?.id || 0,
+                        icon: talent?.icon || "",
+                        level: code,
+                        name: talent?.name || "",
+                    };
 
-                        _pzcode.push(_talent);
-                    }
+                    _pzcode.push(_talent);
                 });
             });
 
@@ -618,17 +620,15 @@ export default {
                 const rightCode = r.split("").map((c) => parseInt(c));
 
                 rightCode.forEach((code, codeIndex) => {
-                    if (code) {
-                        const talent = talentContent.right[rIndex][codeIndex];
-                        const _talent = {
-                            id: talent.id,
-                            icon: talent.icon,
-                            level: code,
-                            name: talent.name,
-                        };
+                    const talent = talentContent.right?.[rIndex]?.[codeIndex];
+                    let _talent = {
+                        id: talent?.id || 0,
+                        icon: talent?.icon || "",
+                        level: code,
+                        name: talent?.name || "",
+                    };
 
-                        _pzcode.push(_talent);
-                    }
+                    _pzcode.push(_talent);
                 });
             });
 
@@ -658,12 +658,14 @@ export default {
 
                 const _sq = _code.sq.split(",");
 
+                const row_len = this.talentContent.left.length;
+
                 if (this.begin === "left") {
-                    this.l_data = [].concat(_sq.slice(0, 6));
-                    this.r_data = _sq.slice(6, _sq.length);
-                } else {
-                    this.r_data = _sq.slice(0, 6);
-                    this.l_data = _sq.slice(6, _sq.length);
+                    this.l_data = _sq.slice(0, row_len);
+                    this.r_data = _sq.slice(row_len, _sq.length);
+                } else if (this.begin === "right") {
+                    this.r_data = _sq.slice(0, row_len);
+                    this.l_data = _sq.slice(row_len, _sq.length);
                 }
             } catch (e) {
                 this.$message.error("编码格式错误");
@@ -679,9 +681,9 @@ export default {
          */
         canOperate: function (rowIndex, target) {
             if (target === "left") {
-                return this.lCount >= this.condition[rowIndex];
+                return this.lCount >= this.condition?.[rowIndex];
             } else {
-                return this.rCount >= this.condition[rowIndex];
+                return this.rCount >= this.condition?.[rowIndex];
             }
         },
         /**
@@ -696,14 +698,14 @@ export default {
             if (this.begin === "left") {
                 if (!rowIndex) {
                     canOperate = true;
-                } else if (this.lCount > 0 && this.lCount >= this.condition[rowIndex]) {
+                } else if (this.lCount > 0 && this.lCount >= (this.condition?.[rowIndex] || 0)) {
                     canOperate = true;
                 }
             } else if (this.begin === "right") {
                 if (
                     this.rCount >= this.series_open_need &&
                     this.lCount >= 0 &&
-                    this.lCount >= this.condition[rowIndex]
+                    this.lCount >= (this.condition?.[rowIndex] || 0)
                 ) {
                     canOperate = true;
                 }
@@ -715,7 +717,7 @@ export default {
          * 判断left该项父项是否加点
          */
         isLeftParentAdd: function (rowIndex, colIndex) {
-            return Number(this.l_data[rowIndex - 1][colIndex]);
+            return Number(this.l_data?.[rowIndex - 1]?.[colIndex]);
         },
         /**
          * talent left 增加层数
@@ -843,14 +845,15 @@ export default {
             if (this.begin === "right") {
                 if (!rowIndex) {
                     canOperate = true;
-                } else if (this.rCount > 0 && this.rCount >= this.condition[rowIndex]) {
+                } else if (this.rCount > 0 && this.rCount >= (this.condition?.[rowIndex] || 0)) {
                     canOperate = true;
                 }
             } else if (this.begin === "left") {
                 if (
-                    this.lCount >= this.series_open_need &&
-                    this.rCount >= 0 &&
-                    this.rCount >= this.condition[rowIndex]
+                    (this.lCount >= this.series_open_need &&
+                        this.rCount >= 0 &&
+                        this.rCount >= this.condition?.[rowIndex]) ||
+                    0
                 ) {
                     canOperate = true;
                 }
@@ -1095,6 +1098,8 @@ export default {
             const parseCode = item.code;
             this.currentSchema = item;
 
+            this.version = item.version;
+
             this.xf = parseCode.xf;
             setTimeout(() => {
                 this.code = JSON.stringify(item.code);
@@ -1117,7 +1122,7 @@ export default {
 
             if (!arr) return false;
 
-            const _item = this.talentContent[key][rowIndex].find((i) => i?.count);
+            const _item = this.talentContent?.[key]?.[rowIndex]?.find((i) => i?.count);
 
             // _item存在，证明该项已经加点，那么arr中的项就不能加点
             if (_item) {

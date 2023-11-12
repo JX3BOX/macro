@@ -126,16 +126,13 @@ export default {
         schema_group: function () {
             return schemas[this.xf];
         },
-        client: function () {
-            return location.href.includes("origin") ? "origin" : "std";
-        },
         mount: function () {
             return xfmap[this.xf]?.id;
         },
         params: function () {
-            const { client, mount, version, code, pzcode, xf } = this;
+            const { mount, version, code, pzcode, xf } = this;
             return {
-                client,
+                client: 'std',
                 type: "talent",
                 mount,
                 version,
