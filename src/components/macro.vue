@@ -40,7 +40,16 @@
                 >
                     <i class="el-icon-video-play"></i> 云端同步刷新
                 </a>
-                <el-checkbox v-model="auto_thx" size="mini" class="u-auto-thx" border :true-label="1" :false-label="0" @change="onAuthThxChange">自动感谢</el-checkbox>
+                <el-checkbox
+                    v-model="auto_thx"
+                    size="mini"
+                    class="u-auto-thx"
+                    border
+                    :true-label="1"
+                    :false-label="0"
+                    @change="onAuthThxChange"
+                    >自动感谢</el-checkbox
+                >
             </div>
             <div class="u-count">
                 字数：
@@ -120,23 +129,23 @@ export default {
             return this.client == "std" ? "www" : "origin";
         },
         baseAPI() {
-            return `/api/comment/post/article/${this.id}`
-        }
+            return `/api/comment/post/article/${this.id}`;
+        },
     },
     methods: {
-        copy: function (text, type="") {
+        copy: function (text, type = "") {
             copy(text, { success_message: "复制宏成功" }).then(() => {
                 reportNow({
                     caller: type ? "macro_copy_cloud" : "macro_copy",
                     data: {
-                        href: `${this.prefix}:/macro/${this.id}`
-                    }
+                        href: `${this.prefix}:/macro/${this.id}`,
+                    },
                 });
 
                 if (this.auto_thx) {
                     this.autoReply();
                 }
-            })
+            });
         },
         translate(data) {
             if (data && data.length) {
@@ -173,11 +182,13 @@ export default {
         onAuthThxChange() {
             localStorage.setItem("auto_thx", this.auto_thx);
         },
-        autoReply: function (){
+        autoReply: function () {
             POST(`${this.baseAPI}/comment`, null, {
                 attachmentList: [],
-                content: "抱走，谢谢楼主，么么哒#嘴"
-            }).then((responseJSON) => {
+                content: "抱走，谢谢楼主，么么哒#嘴",
+                is_template: 1,
+            })
+                .then((responseJSON) => {
                     if (responseJSON && ~~responseJSON.code > 0) {
                         this.$notify({
                             title: "评论失败",
@@ -197,7 +208,7 @@ export default {
                     });
                 })
                 .catch(() => {});
-        }
+        },
     },
     created: function () {
         this.data = this.ctx;
@@ -230,6 +241,12 @@ export default {
     }
     .u-auto-thx {
         margin-left: 10px;
+        .flex;
+        align-items: center;
+        .el-checkbox__input {
+            .pr;
+            top: 1.5px;
+        }
     }
 }
 @media screen and (max-width: @phone) {
