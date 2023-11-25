@@ -40,6 +40,7 @@
                 >
                     <i class="el-icon-video-play"></i> 云端同步刷新
                 </a>
+                <el-checkbox v-model="auto_thx" size="mini" class="u-auto-thx" border :true-label="1" :false-label="0" @change="onAuthThxChange">自动感谢</el-checkbox>
             </div>
             <div class="u-count">
                 字数：
@@ -62,6 +63,7 @@ import dict from "@jx3box/jx3box-dict/output/skill.json";
 import User from "@jx3box/jx3box-common/js/user";
 import { copy } from "@/utils/clipboard";
 import { reportNow } from "@jx3box/jx3box-common/js/reporter";
+import { POST } from "@jx3box/jx3box-comment-ui/src/service";
 export default {
     name: "macro",
     props: ["ctx", "lang", "name", "id"],
@@ -74,6 +76,8 @@ export default {
             status: true, //默认简体
             dict,
             isSuperAdmin: User.isSuperAdmin(),
+
+            auto_thx: 0,
         };
     },
     watch: {
@@ -115,6 +119,9 @@ export default {
         prefix: function () {
             return this.client == "std" ? "www" : "origin";
         },
+        baseAPI() {
+            return `/api/comment/post/article/${this.id}`
+        }
     },
     methods: {
         copy: function (text, type="") {
@@ -124,7 +131,11 @@ export default {
                     data: {
                         href: `${this.prefix}:/macro/${this.id}`
                     }
-                })
+                });
+
+                if (this.auto_thx) {
+                    this.autoReply();
+                }
             })
         },
         translate(data) {
@@ -159,11 +170,41 @@ export default {
         run: function () {
             this.status = !this.status;
         },
+        onAuthThxChange() {
+            localStorage.setItem("auto_thx", this.auto_thx);
+        },
+        autoReply: function (){
+            POST(`${this.baseAPI}/comment`, null, {
+                attachmentList: [],
+                content: "抱走，谢谢楼主，么么哒#嘴"
+            }).then((responseJSON) => {
+                    if (responseJSON && ~~responseJSON.code > 0) {
+                        this.$notify({
+                            title: "评论失败",
+                            message: responseJSON.msg || "",
+                            type: "error",
+                            duration: 3000,
+                            position: "bottom-right",
+                        });
+                        return;
+                    }
+                    this.$notify({
+                        title: "",
+                        message: "评论成功!",
+                        type: "success",
+                        duration: 3000,
+                        position: "bottom-right",
+                    });
+                })
+                .catch(() => {});
+        }
     },
     created: function () {
         this.data = this.ctx;
         this.code = this.parse(this.ctx);
         this.callTranslator();
+
+        this.auto_thx = ~~localStorage.getItem("auto_thx") || 0;
     },
     components: {},
 };
@@ -183,6 +224,12 @@ export default {
         b {
             color: @color-link;
         }
+    }
+    .u-macro-panel {
+        .flex;
+    }
+    .u-auto-thx {
+        margin-left: 10px;
     }
 }
 @media screen and (max-width: @phone) {
