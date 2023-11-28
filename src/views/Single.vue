@@ -27,7 +27,7 @@
                     <el-divider content-position="left" v-if="item.macro">宏</el-divider>
                     <div class="u-usage" v-if="item.desc">{{ item.desc }}</div>
                     <div class="u-macro macro-box" :class="{ withUsage: item.desc }" v-if="item.macro">
-                        <macro :ctx="item.macro" :lang="lang" :name="author_info.display_name + '#' + item.name" :id="id" />
+                        <macro :ctx="item.macro" :lang="lang" :name="author_info.display_name + '#' + item.name" :id="id" :can-comment="canComment" />
                     </div>
                     <!-- 奇穴 镇派 -->
                     <template v-if="item.talent">
@@ -148,6 +148,9 @@ export default {
         author_info: function () {
             return this.post?.author_info;
         },
+        canComment() {
+            return !this.post?.comment // 0开启 1关闭
+        }
     },
     methods: {
         copy,

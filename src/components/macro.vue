@@ -41,6 +41,7 @@
                     <i class="el-icon-video-play"></i> 云端同步刷新
                 </a>
                 <el-checkbox
+                    v-if="isLogin"
                     v-model="auto_thx"
                     size="mini"
                     class="u-auto-thx"
@@ -75,7 +76,7 @@ import { reportNow } from "@jx3box/jx3box-common/js/reporter";
 import { POST } from "@jx3box/jx3box-comment-ui/src/service";
 export default {
     name: "macro",
-    props: ["ctx", "lang", "name", "id"],
+    props: ["ctx", "lang", "name", "id", "canComment"],
     data: function () {
         return {
             data: "",
@@ -131,6 +132,9 @@ export default {
         baseAPI() {
             return `/api/comment/post/article/${this.id}`;
         },
+        isLogin() {
+            return User.isLogin();
+        },
     },
     methods: {
         copy: function (text, type = "") {
@@ -142,7 +146,7 @@ export default {
                     },
                 });
 
-                if (this.auto_thx) {
+                if (this.auto_thx && User.isLogin() && this.canComment) {
                     this.autoReply();
                 }
             });
