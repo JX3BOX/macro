@@ -20,7 +20,7 @@
                 <tabs />
                 <router-view />
             </div>
-            <RightSidebar class="m-macro-right-side">
+            <RightSidebar class="m-macro-right-side" :showToggle="true">
                 <Side class="m-extend" />
             </RightSidebar>
             <Footer></Footer>
@@ -50,10 +50,10 @@ export default {
 </script>
 
 <style lang="less">
-.m-macro-right-side {
-    &.c-sidebar-right.is-close {
-        transform: translateX(0) !important;
-    }
-}
+//.m-macro-right-side {
+    //&.c-sidebar-right.is-close {
+        //transform: translateX(0) !important;
+    //}
+//}
 @import "~@/assets/css/list.less";
 </style>
