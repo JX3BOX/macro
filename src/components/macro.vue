@@ -40,7 +40,7 @@
                 >
                     <i class="el-icon-video-play"></i> 云端同步刷新
                 </a>
-                <el-checkbox
+                <!-- <el-checkbox
                     v-if="isLogin"
                     v-model="auto_thx"
                     size="mini"
@@ -50,7 +50,7 @@
                     :false-label="0"
                     @change="onAuthThxChange"
                     >自动感谢</el-checkbox
-                >
+                > -->
             </div>
             <div class="u-count">
                 字数：
@@ -74,6 +74,7 @@ import User from "@jx3box/jx3box-common/js/user";
 import { copy } from "@/utils/clipboard";
 import { reportNow } from "@jx3box/jx3box-common/js/reporter";
 import { POST } from "@jx3box/jx3box-comment-ui/src/service";
+import { postStat } from "@jx3box/jx3box-common/js/stat";
 export default {
     name: "macro",
     props: ["ctx", "lang", "name", "id", "canComment"],
@@ -87,7 +88,7 @@ export default {
             dict,
             isSuperAdmin: User.isSuperAdmin(),
 
-            auto_thx: 0,
+            // auto_thx: 0,
         };
     },
     watch: {
@@ -146,9 +147,10 @@ export default {
                     },
                 });
 
-                if (this.auto_thx && User.isLogin() && this.canComment) {
-                    this.autoReply();
-                }
+                // if (this.auto_thx && User.isLogin() && this.canComment) {
+                //     this.autoReply();
+                // }
+                this.autoLike();
             });
         },
         translate(data) {
@@ -183,35 +185,39 @@ export default {
         run: function () {
             this.status = !this.status;
         },
-        onAuthThxChange() {
-            localStorage.setItem("auto_thx", this.auto_thx);
-        },
-        autoReply: function () {
-            POST(`${this.baseAPI}/comment`, null, {
-                attachmentList: [],
-                content: "抱走，谢谢楼主，么么哒#嘴",
-                is_template: 1,
-            })
-                .then((responseJSON) => {
-                    if (responseJSON && ~~responseJSON.code > 0) {
-                        this.$notify({
-                            title: "评论失败",
-                            message: responseJSON.msg || "",
-                            type: "error",
-                            duration: 3000,
-                            position: "bottom-right",
-                        });
-                        return;
-                    }
-                    this.$notify({
-                        title: "",
-                        message: "评论成功!",
-                        type: "success",
-                        duration: 3000,
-                        position: "bottom-right",
-                    });
-                })
-                .catch(() => {});
+        // onAuthThxChange() {
+        //     localStorage.setItem("auto_thx", this.auto_thx);
+        // },
+        // autoReply: function () {
+        //     POST(`${this.baseAPI}/comment`, null, {
+        //         attachmentList: [],
+        //         content: "抱走，谢谢楼主，么么哒#嘴",
+        //         is_template: 1,
+        //     })
+        //         .then((responseJSON) => {
+        //             if (responseJSON && ~~responseJSON.code > 0) {
+        //                 this.$notify({
+        //                     title: "评论失败",
+        //                     message: responseJSON.msg || "",
+        //                     type: "error",
+        //                     duration: 3000,
+        //                     position: "bottom-right",
+        //                 });
+        //                 return;
+        //             }
+        //             this.$notify({
+        //                 title: "",
+        //                 message: "评论成功!",
+        //                 type: "success",
+        //                 duration: 3000,
+        //                 position: "bottom-right",
+        //             });
+        //         })
+        //         .catch(() => {});
+        // },
+        // 自动点赞
+        autoLike: function () {
+            postStat("macro", this.id, "likes");
         },
     },
     created: function () {
@@ -219,7 +225,7 @@ export default {
         this.code = this.parse(this.ctx);
         this.callTranslator();
 
-        this.auto_thx = ~~localStorage.getItem("auto_thx") || 0;
+        // this.auto_thx = ~~localStorage.getItem("auto_thx") || 0;
     },
     components: {},
 };
