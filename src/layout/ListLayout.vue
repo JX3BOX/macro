@@ -50,10 +50,13 @@ export default {
 </script>
 
 <style lang="less">
-//.m-macro-right-side {
+.m-macro-right-side {
     //&.c-sidebar-right.is-close {
         //transform: translateX(0) !important;
     //}
-//}
+    .c-sidebar-right-inner {
+        background: #fff;
+    }
+}
 @import "~@/assets/css/list.less";
 </style>
