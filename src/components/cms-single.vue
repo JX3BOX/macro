@@ -36,6 +36,8 @@
         <div class="m-single-append">
             <slot name="single-append"></slot>
 
+            <PostGuide :post="post" />
+
             <!-- 打赏 -->
             <Thx
                 class="m-single-thx"
@@ -85,6 +87,8 @@ import RightAffix from "@jx3box/jx3box-common-ui/src/single/right-affix.vue";
 import Article from "@jx3box/jx3box-editor/src/Article.vue";
 import ArticleMarkdown from "@jx3box/jx3box-editor/src/ArticleMarkdown.vue";
 import Comment from "@jx3box/jx3box-comment-ui/src/Comment.vue";
+import PostGuide from "@jx3box/jx3box-common-ui/src/single/PostGuide.vue";
+
 import { __visibleMap } from "@jx3box/jx3box-common/data/jx3box.json";
 import { getAppType } from "@jx3box/jx3box-common/js/utils";
 import User from "@jx3box/jx3box-common/js/user";
@@ -99,6 +103,7 @@ export default {
         ArticleMarkdown,
         Comment,
         RightAffix,
+        PostGuide,
     },
     props: ["post", "stat"],
     data: function () {
