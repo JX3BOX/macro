@@ -25,7 +25,7 @@
             </li>
         </ul>
         <ul class="u-list" v-else>
-            <li v-for="(item, j) in data" :key="j">
+            <li v-for="(item, j) in data" :key="j" :title="`${item.author}#${item.v}`">
                 <a
                     class="u-link"
                     :href="getMacroLink(item.pid, item.v)"
