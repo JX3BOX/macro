@@ -17,7 +17,7 @@ function getPosts(params) {
 
 // global search
 function globalSearch(params) {
-    return axios.get(`/api/search`, {
+    return axios.get(`${gs_url}/api/search`, {
         params: params,
     });
 }
