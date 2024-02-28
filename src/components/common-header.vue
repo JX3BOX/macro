@@ -48,6 +48,8 @@ export default {
                 cn: "简体中文",
                 tr: "繁體中文",
             },
+
+            rows: 1
         }
     },
     computed: {

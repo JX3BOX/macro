@@ -1,4 +1,6 @@
 import { $cms } from "@jx3box/jx3box-common/js/https";
+import axios from "axios";
+const gs_url = "https://gs.jx3box.com";
 
 // 公共
 function getPosts(params) {
@@ -10,6 +12,13 @@ function getPosts(params) {
     }
     return $cms().get("/api/cms/posts", {
         params: query,
+    });
+}
+
+// global search
+function globalSearch(params) {
+    return axios.get(`/api/search`, {
+        params: params,
     });
 }
 
@@ -35,10 +44,9 @@ function getFavPosts(params) {
         query = Object.assign(query, params);
     }
     return $cms().get(`/api/cms/posts/user/my/fav`, {
-        params : query,
+        params: query,
     });
 }
-
 
 function getPost(id) {
     return $cms().get(`/api/cms/post/${id}`);
@@ -69,4 +77,14 @@ function getFriendsPosts(params) {
     });
 }
 
-export { getPosts, getPost, getMyPostCount, getMyPost, getCustomPosts, getPzList, getFriendsPosts ,getFavPosts};
+export {
+    getPosts,
+    getPost,
+    getMyPostCount,
+    getMyPost,
+    getCustomPosts,
+    getPzList,
+    getFriendsPosts,
+    getFavPosts,
+    globalSearch,
+};
