@@ -102,8 +102,6 @@ export default {
                 cn: "简体中文",
                 tr: "繁體中文",
             },
-
-            globalSearch: []
         };
     },
     computed: {
@@ -118,7 +116,7 @@ export default {
                 order: this.order,
                 mark: this.mark,
                 client: this.client,
-                // search: this.search,
+                search: this.search,
                 lang: this.lang,
                 zlp: this.zlp,
             };
@@ -160,30 +158,15 @@ export default {
                 _query.sticky = 1;
             }
 
-            if (this.globalSearch.length) {
-                _query.list = this.globalSearch.join(',')
-            }
-
             return _query;
         },
         onSearch: function (search) {
             this.search = search;
-
-            if (search) {
-                this.loadGlobalSearch()
-            } else {
-                this.globalSearch = []
-                this.loadData()
-            }
         },
         // 加载数据
         loadData: function (appendMode = false) {
             let query = this.buildQuery(appendMode);
             // console.log("[cms-list]", "<loading data>", query);
-
-            // if (this.search) {
-            //     query.page = 1
-            // }
 
             this.loading = true;
             return getPosts(query)
@@ -201,10 +184,8 @@ export default {
                         },
                     });
 
-                    // if (!this.search) {
-                    //     this.total = res.data?.data?.total;
-                    //     this.pages = res.data?.data?.pages;
-                    // }
+                    this.total = res.data?.data?.total;
+                    this.pages = res.data?.data?.pages;
                 })
                 .finally(() => {
                     this.loading = false;
@@ -234,11 +215,7 @@ export default {
         },
         // 追加加载
         appendPage: function () {
-            if (this.search) {
-                this.loadGlobalSearch(true)
-            } else {
-                this.loadData(true);
-            }
+            this.loadData(true);
         },
         // 打开抽屉
         loadMacro([author, m, id]) {
@@ -252,21 +229,6 @@ export default {
             const prefix = this.client == "std" ? "www" : "origin";
             return `${prefix}:/${appKey}/` + val;
         },
-        loadGlobalSearch(appendMode = false) {
-            const params = {
-                filter_category: "宏库",
-                pageIndex: this.page,
-                pageSize: this.per,
-                q: this.search,
-            }
-            globalSearch(params).then(res => {
-                this.globalSearch = res.data.data?.hits?.map(item => item.id) || []
-
-                // this.total = res.data.data?.page?.total;
-
-                this.loadData(appendMode)
-            })
-        }
     },
     watch: {
         // 加载路由参数
