@@ -189,9 +189,9 @@
                         <p class="u-tips">按下Tab键即可自动联想补全</p>
                         <codemirror v-model="code" :options="cmOptions" @input="onCmCodeChange" ref="cmEditor" />
                         <div class="u-count">
-                            <b :class="{ warning: code.length > 128 }">{{ code.length }}</b>
-                            / 128
-                            <em>（还可写 {{ 128 - code.length }} 字）</em>
+                            <b :class="{ warning: code.length > maxCodeLength }">{{ code.length }}</b>
+                            / {{maxCodeLength}}
+                            <em>（还可写 {{ maxCodeLength - code.length }} 字）</em>
                         </div>
                     </div>
                 </el-col>
@@ -331,6 +331,12 @@ export default {
     computed: {
         codemirror() {
             return this.$refs.cmEditor.codemirror;
+        },
+        client() {
+            return this.$store.state.client;
+        },
+        maxCodeLength() {
+            return this.client == 'std' ? 128 : 255;
         },
     },
     methods: {
