@@ -81,6 +81,7 @@
                                         <template v-for="(item, i) in row">
                                             <div
                                                 v-if="item"
+                                                :key="i"
                                                 class="m-talent2-content-item"
                                                 :class="[
                                                     {
@@ -92,7 +93,6 @@
                                                         ? 'm-talent2-content-item-disabled'
                                                         : '',
                                                 ]"
-                                                :key="i"
                                                 @mouseover="item && $set(item, 'on', true)"
                                                 @mouseleave="item && $set(item, 'on', false)"
                                             >
@@ -122,7 +122,7 @@
                                                     <span
                                                         v-if="
                                                             item.pretab &&
-                                                            !isLeftParentAdd(index, i) &&
+                                                            item.pretab > isLeftParentAdd(index, i) &&
                                                             canLeftItemOperate(index, i)
                                                         "
                                                         :class="
@@ -210,7 +210,7 @@
                                                     >
                                                 </span>
                                             </div>
-                                            <div v-else class="m-talent2-content-item-empty" :key="i"></div>
+                                            <div v-else :key="'empty-' + i" class="m-talent2-content-item-empty"></div>
                                         </template>
                                     </div>
                                 </div>
@@ -354,7 +354,7 @@
                                                     >
                                                 </span>
                                             </div>
-                                            <div v-else class="m-talent2-content-item-empty" :key="i"></div>
+                                            <div v-else class="m-talent2-content-item-empty" :key="'empty-' + i"></div>
                                         </template>
                                     </div>
                                 </div>
@@ -422,12 +422,11 @@
 </template>
 
 <script>
-import xfmap from "@jx3box/jx3box-data/data/xf/xf.json";
-import { __ossMirror, __imgPath, __ossRoot, __iconPath } from "@jx3box/jx3box-common/data/jx3box.json";
-import { xfConfigs } from "@jx3box/jx3box-talent2/src/talent2.json";
+import { __ossMirror, __imgPath, __ossRoot, __iconPath, __node } from "@jx3box/jx3box-common/data/jx3box.json";
+// 所有心法的配置
 import { defaultXf, defaultConfigs } from "@jx3box/jx3box-talent2/src/default.json";
+
 import User from "@jx3box/jx3box-common/js/user";
-import cloneDeep from "lodash/cloneDeep";
 import { addTalent, putTalent } from "@/service/talent.js";
 import { iconLink } from "@jx3box/jx3box-common/js/utils";
 import { copy } from "@/utils/clipboard";
@@ -445,7 +444,6 @@ export default {
             begin: "left",
             l_name: "山川",
             r_name: "日月",
-
             version: "",
             versions: [], // 版本列表
             talents: {}, // 镇派数据
@@ -462,7 +460,7 @@ export default {
                 right: [],
             },
             condition: [], // 激活条件
-            mutex: [], // 互斥关系
+            // mutex: [], // 互斥关系
 
             isLogin: User.isLogin(),
             isAdmin: false,
@@ -474,6 +472,8 @@ export default {
 
             // 初始化请求
             isInit: true,
+
+            talentOriginData: {},
         };
     },
     computed: {
@@ -532,7 +532,7 @@ export default {
             return this.total - this.totalCount;
         },
         mount: function () {
-            return xfmap[this.xf]?.id;
+            return this.xfMaps[this.xf]?.id;
         },
         params: function () {
             const { mount, version, code, pzcode, xf } = this;
@@ -548,44 +548,102 @@ export default {
             };
         },
         xfMaps: function () {
-            const xfMaps = cloneDeep(xfmap);
-            // delete xfMaps["山居剑意"];
+            let xfMaps = {};
+            xfMaps["通用"] = {
+                name: "通用",
+                id: 0,
+                force: 0,
+                school: 0,
+                client: ["all", "std", "origin"],
+            };
+            if (this.talentOriginData && this.talentOriginData.mount && this.talentOriginData.mount.length) {
+                const mount = this.talentOriginData.mount;
+                mount.forEach((item) => {
+                    if (item.talent_tabs.length && item.first) {
+                        xfMaps[item.mount_name] = {
+                            name: item.mount_name,
+                            id: item.mount_id,
+                            force: item.force_id,
+                            school: item.school_id,
+                            client: ["all", "std", "origin"],
+                        };
+                    }
+                });
+            }
             return xfMaps;
+        },
+        xfConfigs: function () {
+            let xfConfigs = {};
+            xfConfigs["通用"] = {
+                begin: "left",
+                content: [0, 0],
+                talent: ["山川", "日月"],
+                condition: [0, 5, 10, 15, 20, 25, 25],
+            };
+            if (this.talentOriginData && this.talentOriginData.mount && this.talentOriginData.mount.length) {
+                this.talentOriginData.mount.forEach((item) => {
+                    if (item.talent_tabs.length || item.first) {
+                        const content = item.talent_tabs.map((item) => this.getMountId(item));
+                        xfConfigs[item.mount_name] = {
+                            begin: item.talent_tabs[0] === item.first ? "left" : "right",
+                            content: content,
+                            talent: item.talent_tabs,
+                            condition: [0, 5, 10, 15, 20, 25, 25],
+                        };
+                    }
+                });
+            } else {
+                return null;
+            }
+            return xfConfigs;
         },
         isEditing: function () {
             return !!this.currentSchema;
         },
-        mutexObj: function ({ mutex }) {
-            const result = {};
-
-            // 遍历输入的二维数组
-            for (const subArr of mutex) {
-                for (const num of subArr) {
-                    // 如果数字还不存在于结果对象中，就初始化为空数组
-                    if (!result[num]) {
-                        result[num] = [];
-                    }
-
-                    // 将当前数字所在的子数组中的其他数字添加到结果对象的对应数组中
-                    const otherNums = subArr.filter((item) => item !== num);
-                    result[num] = result[num].concat(otherNums);
-                }
+        // 互斥关系对象
+        mutexObj: function () {
+            const mutexObj = {};
+            if (this.talentOriginData && this.talentOriginData.mutex) {
+                Object.values(this.talentOriginData.mutex).forEach((item) => {
+                    Object.entries(item).forEach(([key, value]) => {
+                        mutexObj[key] = value;
+                    });
+                });
             }
-
-            return result;
+            return mutexObj;
         },
     },
     methods: {
         updateDrawer: function (val) {
             this.drawer = val;
         },
+        getPreTab(talentId) {
+            const condition = this.talentOriginData.condition;
+            for (const key in condition) {
+                const d = condition[key];
+                if (d[talentId] && Object.values(d[talentId].PreviousTab).length) {
+                    return Object.values(d[talentId].PreviousTab)[0];
+                }
+            }
+            return "";
+        },
+        getMountId(xf) {
+            const d = this.talentOriginData.mount.find((item) => item.first === xf);
+            if (d) {
+                return d.mount_id;
+            } else {
+                return d;
+            }
+        },
         getIcon(key) {
             return __imgPath + "image/box/" + key + ".svg";
         },
-        reload: function (schema) {
+        reload: function () {
             this.currentSchema = "";
-            // this.l_data = ["0000", "0000", "0000", "0000", "0000", "0000"];
-            // this.r_data = ["0000", "0000", "0000", "0000", "0000", "0000"];
+            const ldata = this.l_data.map((item) => "0".repeat(item.length));
+            const rdata = this.r_data.map((item) => "0".repeat(item.length));
+            this.l_data = ldata;
+            this.r_data = rdata;
         },
         reset: function () {},
         // 生成code
@@ -642,6 +700,7 @@ export default {
         },
         parseSchema: function () {
             try {
+                const xfConfigs = this.xfConfigs;
                 const _code = JSON.parse(this.code);
                 this.version = _code.version;
                 this.xf = _code.xf;
@@ -717,6 +776,9 @@ export default {
          * 判断left该项父项是否加点
          */
         isLeftParentAdd: function (rowIndex, colIndex) {
+            if (!this.talentContent.left[rowIndex - 1][colIndex]) {
+                return this.isLeftParentAdd(rowIndex - 1, colIndex);
+            }
             return Number(this.l_data?.[rowIndex - 1]?.[colIndex]);
         },
         /**
@@ -728,8 +790,9 @@ export default {
         leftTalentAdd: function (item, rowIndex, colIndex) {
             if (!this.canOperate(rowIndex, "left")) return;
             if (this.isMutex(item, rowIndex, colIndex, "left")) return;
+
             // 当父项有层数，才可以进行增加层数操作
-            if (item?.pretab && !this.isLeftParentAdd(rowIndex, colIndex)) {
+            if (item?.pretab && item?.pretab > this.isLeftParentAdd(rowIndex, colIndex)) {
                 this.$message.warning({
                     message: "要激活该天赋需要先激活对应的上层天赋",
                 });
@@ -865,6 +928,9 @@ export default {
          * 判断right该项父项是否加点
          */
         isRightParentAdd: function (rowIndex, colIndex) {
+            if (!this.talentContent.right[rowIndex - 1][colIndex]) {
+                return this.isRightParentAdd(rowIndex - 1, colIndex);
+            }
             return Number(this.r_data[rowIndex - 1][colIndex]);
         },
         /**
@@ -933,6 +999,7 @@ export default {
 
                 this.r_data.splice(rowIndex, 1, row.join(""));
             } else {
+                console.log(item);
                 this.$message({
                     type: "warning",
                     message: "该天赋已达最高层数",
@@ -1003,16 +1070,59 @@ export default {
         // ---------------------
         // 获取版本列表
         getVersions: function () {
-            fetch(__ossRoot + "data/talent2/index.json")
+            fetch(__node + "talent-origin/list")
                 .then((res) => res.json())
                 .then((response) => {
-                    this.versions = response;
+                    this.versions = response.data.list.map((item) => {
+                        return {
+                            version: item.talent_version,
+                            name: item.version,
+                        };
+                    });
                     this.version = this.versions[0]?.version;
                 });
-            // this.version = "v20230912"
         },
+        getTanletOriginData: function () {
+            this.talents = { ...defaultXf };
+            fetch(__node + "talent-origin/" + this.version)
+                .then((res) => res.json())
+                .then((response) => {
+                    const data = response.data;
+                    const mount = response.data.mount.reduce((acc, current) => {
+                        if (current.first !== null) {
+                            const existing = acc.find((item) => item.first === current.first);
+                            if (!existing) {
+                                if (
+                                    current.talent_tabs &&
+                                    current.talent_tabs.length &&
+                                    current.talent_tabs[0] === current.talent_tabs[1]
+                                ) {
+                                    acc.push({
+                                        ...current,
+                                        mount_name: current.first,
+                                        talent_tabs: [current.first],
+                                    });
+                                } else {
+                                    acc.push(current);
+                                }
+                            }
+                        }
+                        return acc;
+                    }, []);
+                    data.mount = mount;
+                    this.talentOriginData = data;
+                    this.talents = { ...response.data.detail, ...defaultXf };
+                    if (this.isInit) {
+                        this.xf = "通用";
+                        this.isInit = false;
+                    }
+                    this.total = 66;
+                });
+        },
+
         getTalents: function () {
-            fetch(__ossRoot + "data/talent2/" + this.version + ".json")
+            fetch(__ossRoot + "data/talent2/v20240305.json")
+                // fetch(__ossRoot + "data/talent2/v20240305.json")
                 .then((res) => res.json())
                 .then((response) => {
                     this.talents = { ...response, ...defaultXf };
@@ -1135,13 +1245,16 @@ export default {
     watch: {
         version: function (val) {
             if (val) {
-                this.getTalents();
+                // this.getTalents();
+                this.getTanletOriginData();
             }
         },
+        // 选择心法触发这里👇
         xf: {
             immediate: true,
-            handler(val, oVal) {
-                if (val) {
+            handler(val) {
+                if (val && this.xfConfigs) {
+                    const xfConfigs = this.xfConfigs;
                     this.xfContent = xfConfigs[val]?.content;
                     this.begin = xfConfigs[val]?.begin;
 
@@ -1151,13 +1264,13 @@ export default {
                             if (l) {
                                 this.$set(l, "on", false);
                                 this.$set(l, "count", 0);
+                                l["pretab"] = this.getPreTab(l.id);
                             }
                             return l;
                         });
                         return _left;
                     });
                     this.l_name = xfConfigs[val]?.talent[0];
-
                     const col_len = Math.max(...this.talentContent.left.map((l) => l.length));
                     const row_len = this.talentContent.left.length;
 
@@ -1172,11 +1285,13 @@ export default {
                             if (r) {
                                 this.$set(r, "on", false);
                                 this.$set(r, "count", 0);
+                                r["pretab"] = this.getPreTab(r.id);
                             }
                             return r;
                         });
                         return _right;
                     });
+
                     this.r_name = xfConfigs[val]?.talent[1];
 
                     this.r_data = Array(row_len)
@@ -1189,14 +1304,16 @@ export default {
                         this.total = 66;
                     } else {
                         this.total = defaultConfigs.total;
+                        // this.total = 99;
                     }
 
                     // 激活条件
                     this.condition = xfConfigs[val]?.condition || [0, 5, 10, 15, 20, 25];
-                    this.mutex = xfConfigs[val]?.mutex || [];
+                    // this.mutex = xfConfigs[val]?.mutex || [];
 
                     // 初始化code
                     this.renderCode();
+                    // console.log(this.talentContent);
                 }
             },
         },
