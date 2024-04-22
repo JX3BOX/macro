@@ -999,7 +999,6 @@ export default {
 
                 this.r_data.splice(rowIndex, 1, row.join(""));
             } else {
-                console.log(item);
                 this.$message({
                     type: "warning",
                     message: "该天赋已达最高层数",
@@ -1083,7 +1082,7 @@ export default {
                 });
         },
         getTanletOriginData: function () {
-            this.talents = { ...defaultXf };
+            // this.talents = { ...defaultXf };
             fetch(__node + "talent-origin/" + this.version)
                 .then((res) => res.json())
                 .then((response) => {
@@ -1205,6 +1204,13 @@ export default {
             });
         },
         use: function (item) {
+            if (item.version.indexOf("v") >= 0) {
+                this.$message({
+                    type: "error",
+                    message: "您保存的预设当前版本不支持，请删除重新保存预设。",
+                });
+                return;
+            }
             const parseCode = item.code;
             this.currentSchema = item;
 
