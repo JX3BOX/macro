@@ -203,6 +203,29 @@
         font-weight: normal;
         .lh(2);
         font-weight: 400;
+
+        .u-push {
+            .pa;
+            .rt(0);
+            .flex;
+            align-items: center;
+            gap: 2px;
+        }
+        .u-push__time {
+            .fz(12px);
+            color: #999;
+            border:1px solid #eee;
+            background-color:@bg-light;
+            margin-right: 5px;
+            .r(3px);
+            padding: 0 5px;
+
+            &.is-recent {
+                color: #48C10F;
+                border-color: #48C10F;
+                background-color: #f8fff5;
+            }
+        }
     }
 
     // 角标
@@ -222,6 +245,7 @@
         .db;
         padding-left: 20px;
         .pr;
+        min-height: 64px;
     }
 
     // 内容·描述类
@@ -383,6 +407,12 @@
     .m-archive-list {
         .u-desc {
             .none;
+        }
+
+        .u-post {
+            .u-push {
+                .none;
+            }
         }
     }
 }

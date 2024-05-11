@@ -58,6 +58,8 @@
                 </a>
             </div>
         </el-drawer>
+
+        <design-task v-model="showDesignTask" :post="currentPost"></design-task>
     </div>
 </template>
 <script>
@@ -70,6 +72,10 @@ import recTable from "@/components/list/rec_table.vue";
 import CommonHeader from "@/components/common-header.vue";
 
 import { reportNow } from "@jx3box/jx3box-common/js/reporter";
+import {getDesignLog} from "@/service/design";
+import DesignTask from "@jx3box/jx3box-common-ui/src/bread/DesignTask.vue";
+import bus from "@/utils/bus";
+import User from "@jx3box/jx3box-common/js/user";
 export default {
     name: "Index",
     props: [],
@@ -102,6 +108,9 @@ export default {
                 cn: "简体中文",
                 tr: "繁體中文",
             },
+
+            showDesignTask: false,
+            currentPost: {},
         };
     },
     computed: {
@@ -170,7 +179,7 @@ export default {
 
             this.loading = true;
             return getPosts(query)
-                .then((res) => {
+                .then(async (res) => {
                     if (appendMode) {
                         this.data = this.data.concat(res.data?.data?.list);
                     } else {
@@ -186,6 +195,17 @@ export default {
 
                     this.total = res.data?.data?.total;
                     this.pages = res.data?.data?.pages;
+
+                    if (User.hasPermission('push_banner') && !this.isPhone) {
+                        const ids = this.data.map(item => item.ID);
+                        const logs = await getDesignLog({ source_type: 'macro', ids: ids.join(',') }).then(res => res.data.data);
+
+                        this.data = this.data.map(item => {
+                            const log = logs.find(log => log.source_id == item.ID) || null;
+                            this.$set(item, 'log', log);
+                            return item;
+                        });
+                    }
                 })
                 .finally(() => {
                     this.loading = false;
@@ -268,12 +288,18 @@ export default {
         },
     },
 
-    mounted: function () {},
+    mounted: function () {
+        bus.on("design-task", (post) => {
+            this.currentPost = post;
+            this.showDesignTask = true;
+        });
+    },
     components: {
         listItem,
         recTable,
         macro,
         CommonHeader,
+        DesignTask,
     },
 };
 </script>

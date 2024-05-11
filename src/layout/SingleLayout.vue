@@ -4,7 +4,7 @@
         <Breadcrumb name="云端宏" slug="macro" root="/macro" :publishEnable="true" :adminEnable="true" :feedbackEnable="true" :crumbEnable="true">
             <template #op-prepend>
                 <!-- <AdminDirectMessage v-if="post && post.ID" :user-id="user_id" :sourceId="String(post.ID)" :sourceType="post.post_type"></AdminDirectMessage> -->
-                <AdminDrop v-if="isEditor" :post="post" :user-id="user_id" />
+                <AdminDrop v-if="isTeammate" :post="post" :user-id="user_id" />
             </template>
             <template #title>
                 <span>{{ title }}</span>
@@ -47,8 +47,8 @@ export default {
         title() {
             return this.post.post_title || document.title;
         },
-        isEditor() {
-            return User.isEditor()
+        isTeammate() {
+            return User.isTeammate();
         },
     },
     components: {
