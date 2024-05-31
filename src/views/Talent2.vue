@@ -588,7 +588,6 @@ export default {
                             begin: item.talent_tabs[0] === item.first ? "left" : "right",
                             content: content,
                             talent: item.talent_tabs,
-                            condition: [0, 5, 10, 15, 20, 25, 25],
                         };
                     }
                 });
@@ -623,6 +622,26 @@ export default {
                 const d = condition[key];
                 if (d[talentId] && Object.values(d[talentId].PreviousTab).length) {
                     return Object.values(d[talentId].PreviousTab)[0];
+                }
+            }
+            return "";
+        },
+        getnAllPoint(talentId) {
+            const condition = this.talentOriginData.condition;
+            for (const key in condition) {
+                const d = condition[key];
+                if (d[talentId]) {
+                    return d[talentId].nAllPoint;
+                }
+            }
+            return "";
+        },
+        getNeedLevel(talentId) {
+            const condition = this.talentOriginData.condition;
+            for (const key in condition) {
+                const d = condition[key];
+                if (d[talentId]) {
+                    return d[talentId].nNeedLevel;
                 }
             }
             return "";
@@ -1270,7 +1289,8 @@ export default {
                             if (l) {
                                 this.$set(l, "on", false);
                                 this.$set(l, "count", 0);
-                                l["pretab"] = this.getPreTab(l.id);
+                                this.$set(l, "pretab", this.getPreTab(l.id));
+                                this.$set(l, "nAllPoint", this.getnAllPoint(l.id));
                             }
                             return l;
                         });
@@ -1291,7 +1311,8 @@ export default {
                             if (r) {
                                 this.$set(r, "on", false);
                                 this.$set(r, "count", 0);
-                                r["pretab"] = this.getPreTab(r.id);
+                                this.$set(r, "pretab", this.getPreTab(r.id));
+                                this.$set(r, "nAllPoint", this.getnAllPoint(r.id));
                             }
                             return r;
                         });
@@ -1312,9 +1333,27 @@ export default {
                         this.total = defaultConfigs.total;
                         // this.total = 99;
                     }
+                    // 激活条件 拿每行的第一个功法的激活条件 组成 这样的格式 [0, 5, 10, 15, 20, 25]
+                    if (xfConfigs[val]?.condition) {
+                        this.condition = xfConfigs[val]?.condition;
+                    } else {
+                        if (this.talentContent[this.begin] && this.talentContent[this.begin].length) {
+                            const condition = this.talentContent[this.begin].map((items, index) => {
+                                items = items.filter((item) => item !== null);
+                                if (items[0]) {
+                                    return items[0].nAllPoint;
+                                } else {
+                                    // 当前行无功法默认 * 5
+                                    return index * 5;
+                                }
+                            });
+                            this.condition = condition;
+                            console.log(this.condition);
+                        } else {
+                            this.condition = [0, 5, 10, 15, 20, 25];
+                        }
+                    }
 
-                    // 激活条件
-                    this.condition = xfConfigs[val]?.condition || [0, 5, 10, 15, 20, 25];
                     // this.mutex = xfConfigs[val]?.mutex || [];
 
                     // 初始化code
