@@ -4,6 +4,7 @@
             @filterImperceptibly="filterImperceptibly"
             @filterMeta="filterMeta"
             @search="onSearch"
+            @wujie="onWujieChange"
         ></common-header>
 
         <!-- 推荐 -->
@@ -97,6 +98,7 @@ export default {
             search: "", //搜索字串
             lang: "", //语言
             zlp: "", //资料片
+            is_wujie: 0, //无界过滤
 
             drawer: false,
             drawer_title: "",
@@ -128,6 +130,7 @@ export default {
                 search: this.search,
                 lang: this.lang,
                 zlp: this.zlp,
+                is_wujie: this.is_wujie,
             };
         },
         // 分页相关参数
@@ -227,6 +230,11 @@ export default {
         // 条件过滤（不附加路由）
         filterImperceptibly: function (o) {
             this[o["type"]] = o["val"];
+        },
+        // 无界过滤
+        onWujieChange: function (val) {
+            this.is_wujie = val;
+            this.replaceRoute({ is_wujie: val, page: 1 });
         },
         // 翻页加载
         changePage: function (i) {

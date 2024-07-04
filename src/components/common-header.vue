@@ -19,6 +19,8 @@
                 <menuBy @filter="filterMeta" :data="langs" type="lang" placeholder="语言"></menuBy>
                 <!-- 资料片过滤 -->
                 <zlpBy @filter="filterMeta" type="zlp" :client="client"></zlpBy>
+                <!-- 无界筛选 -->
+                <el-checkbox v-model="is_wujie" class="u-wujie-filter" :true-label="1" :false-label="0" @change="onWujieChange">只看无界</el-checkbox>
             </div>
             <div class="m-filter--right">
                 <!-- 排序过滤 -->
@@ -49,7 +51,9 @@ export default {
                 tr: "繁體中文",
             },
 
-            rows: 1
+            rows: 1,
+
+            is_wujie: 0,
         }
     },
     computed: {
@@ -68,6 +72,9 @@ export default {
         onSearch() {
             this.$emit('search', this.search)
         },
+        onWujieChange() {
+            this.$emit('wujie', this.is_wujie)
+        }
     }
 }
 </script>
