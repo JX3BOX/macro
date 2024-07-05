@@ -25,9 +25,24 @@
                     </span>
                     <!-- 宏 -->
                     <el-divider content-position="left" v-if="item.macro">宏</el-divider>
+                    <el-divider content-position="left" v-if="item.sq && item.sq.length">武学序列</el-divider>
                     <div class="u-usage" v-if="item.desc">{{ item.desc }}</div>
                     <div class="u-macro macro-box" :class="{ withUsage: item.desc }" v-if="item.macro">
                         <macro :ctx="item.macro" :lang="lang" :name="author_info.display_name + '#' + item.name" :id="id" :can-comment="canComment" />
+                    </div>
+                    <div class="u-macro macro-box" :class="{ withUsage: item.desc }" v-if="item.sq && item.sq.length">
+                        <ul class="m-skills-list">
+                                <li
+                                    v-for="(skill, index) in item.sq"
+                                    :key="skill.SkillID + '' + index"
+                                    class="m-skill"
+                                >
+                                    <div class="u-skill" v-if="skill && skill.IconID">
+                                        <img class="u-skill-icon" :src="iconLink(skill.IconID)" :alt="skill.IconID" />
+                                        <span class="u-name" :title="skill.Name">{{ skill.Name }}</span>
+                                    </div>
+                                </li>
+                            </ul>
                     </div>
                     <!-- 奇穴 镇派 -->
                     <template v-if="item.talent">
@@ -99,6 +114,7 @@ import { getStat, postStat } from "@jx3box/jx3box-common/js/stat";
 import xfmap from "@jx3box/jx3box-data/data/xf/xf.json";
 import { appKey } from "../../setting.json";
 import { __iconPath, __imgPath } from "@jx3box/jx3box-common/data/jx3box.json";
+import { iconLink } from "@jx3box/jx3box-common/js/utils";
 
 export default {
     name: "single",
@@ -178,6 +194,7 @@ export default {
         iconURL: function (val) {
             return __iconPath + "icon/" + val + ".png";
         },
+        iconLink
     },
     mounted: function () {
         if (this.id) {

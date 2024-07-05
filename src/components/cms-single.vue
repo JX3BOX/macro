@@ -1,7 +1,7 @@
 <template>
     <div class="m-single-box">
         <!-- 头部 -->
-        <PostHeader :post="post" :stat="stat">
+        <PostHeader :post="post" :stat="stat" :title-extra="true">
             <slot name="single-header"></slot>
         </PostHeader>
 
