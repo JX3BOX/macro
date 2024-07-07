@@ -16,6 +16,7 @@
             </template>
             <!-- 资料片 -->
             <span class="u-label u-zlp" v-if="item.zlp">{{ item.zlp }}</span>
+            <span class="u-label u-zlp u-wujie" v-if="item.is_wujie">无界</span>
             <!-- 繁体标识 -->
             <span class="u-label u-lang" v-if="item.lang == 'tr'">繁體</span>
             <!-- 标题文字 -->

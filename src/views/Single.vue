@@ -24,26 +24,32 @@
                         <b>{{ item.name }}</b>
                     </span>
                     <!-- 宏 -->
-                    <el-divider content-position="left" v-if="item.macro">宏</el-divider>
-                    <el-divider content-position="left" v-if="item.sq && item.sq.length">武学序列</el-divider>
-                    <div class="u-usage" v-if="item.desc">{{ item.desc }}</div>
-                    <div class="u-macro macro-box" :class="{ withUsage: item.desc }" v-if="item.macro">
-                        <macro :ctx="item.macro" :lang="lang" :name="author_info.display_name + '#' + item.name" :id="id" :can-comment="canComment" />
-                    </div>
-                    <div class="u-macro macro-box" :class="{ withUsage: item.desc }" v-if="item.sq && item.sq.length">
-                        <ul class="m-skills-list">
-                                <li
-                                    v-for="(skill, index) in item.sq"
-                                    :key="skill.SkillID + '' + index"
-                                    class="m-skill"
-                                >
+                    <template v-if="!post.is_wujie">
+                        <el-divider content-position="left" v-if="item.macro">宏</el-divider>
+                        <div class="u-usage" v-if="item.desc">{{ item.desc }}</div>
+                        <div class="u-macro macro-box" :class="{ withUsage: item.desc }" v-if="item.macro">
+                            <macro
+                                :ctx="item.macro"
+                                :lang="lang"
+                                :name="author_info.display_name + '#' + item.name"
+                                :id="id"
+                                :can-comment="canComment"
+                            />
+                        </div>
+                    </template>
+                    <template v-else>
+                        <el-divider content-position="left" v-if="item.sq && item.sq.length">武学序列</el-divider>
+                        <div class="u-macro macro-box" :class="{ withUsage: item.desc }" v-if="item.sq && item.sq.length">
+                            <ul class="m-skills-list">
+                                <li v-for="(skill, index) in item.sq" :key="skill.SkillID + '' + index" class="m-skill">
                                     <div class="u-skill" v-if="skill && skill.IconID">
                                         <img class="u-skill-icon" :src="iconLink(skill.IconID)" :alt="skill.IconID" />
                                         <span class="u-name" :title="skill.Name">{{ skill.Name }}</span>
                                     </div>
                                 </li>
                             </ul>
-                    </div>
+                        </div>
+                    </template>
                     <!-- 奇穴 镇派 -->
                     <template v-if="item.talent">
                         <el-divider content-position="left">{{ client === "origin" ? "镇派" : "奇穴" }}</el-divider>
@@ -165,8 +171,8 @@ export default {
             return this.post?.author_info;
         },
         canComment() {
-            return !this.post?.comment // 0开启 1关闭
-        }
+            return !this.post?.comment; // 0开启 1关闭
+        },
     },
     methods: {
         copy,
@@ -194,7 +200,7 @@ export default {
         iconURL: function (val) {
             return __iconPath + "icon/" + val + ".png";
         },
-        iconLink
+        iconLink,
     },
     mounted: function () {
         if (this.id) {
