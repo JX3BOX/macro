@@ -20,6 +20,8 @@
                 <el-tab-pane v-for="(item, i) in data" :key="i" :name="i + ''">
                     <!-- tab -->
                     <span class="u-label" slot="label">
+                        <!-- 标记 -->
+                        <LottieMark :mark="item.mark" v-if="item.mark"/>
                         <img class="u-icon" :src="iconURL(item.icon)" />
                         <b>{{ item.name }}</b>
                     </span>
@@ -113,6 +115,7 @@ import pz from "@/components/single/pz.vue";
 import macro from "@/components/macro.vue";
 import talent from "@jx3box/jx3box-talent";
 import { copy } from "@/utils/clipboard";
+import LottieMark from "@/components/lottie_mark.vue";
 
 // 本地数据
 import { getPost } from "@/service/post.js";
@@ -124,6 +127,13 @@ import { iconLink } from "@jx3box/jx3box-common/js/utils";
 
 export default {
     name: "single",
+    components: {
+        singlebox,
+        macro,
+        RenderTalent,
+        pz,
+        LottieMark,
+    },
     data: function () {
         return {
             loading: false,
@@ -257,12 +267,6 @@ export default {
             });
             postStat(appKey, this.id);
         }
-    },
-    components: {
-        singlebox,
-        macro,
-        RenderTalent,
-        pz,
     },
 };
 </script>
