@@ -41,6 +41,7 @@
                     </template>
                     <template v-else>
                         <el-divider content-position="left" v-if="item.sq && item.sq.length">武学序列</el-divider>
+                        <div class="u-usage" v-if="item.desc">{{ item.desc }}</div>
                         <div class="u-macro macro-box" :class="{ withUsage: item.desc }" v-if="item.sq && item.sq.length">
                             <ul class="m-skills-list">
                                 <li v-for="(skill, index) in item.sq" :key="skill.SkillID + '' + index" class="m-skill">
