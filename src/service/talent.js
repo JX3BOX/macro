@@ -2,8 +2,8 @@ import axios from "axios";
 import { __dataPath } from "@jx3box/jx3box-common/data/jx3box.json";
 import { $cms } from "@jx3box/jx3box-common/js/https";
 
-function getTalentVersions() {
-    return axios.get(__dataPath + "talent/index.json");
+function getTalentVersions(std = "std") {
+    return axios.get(__dataPath + `talent/${std}/index.json`);
 }
 
 function getTalents(param) {

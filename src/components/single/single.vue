@@ -179,6 +179,7 @@ export default {
 									try {
 										schema = JSON.parse(schema);
 										schema.container = container;
+                                        schema.client = schema.client || 'std';
 
 										let ins = new talent(schema);
 										ins.then((t) => {

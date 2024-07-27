@@ -237,11 +237,13 @@ export default {
                             // 正式服
                             this.data.forEach((item, i) => {
                                 let container = `#talent-box-${i}`;
+                                console.log(item)
                                 let schema = item.talent;
                                 if (schema) {
                                     try {
                                         schema = JSON.parse(schema);
                                         schema.container = container;
+                                        schema.client = schema.client || 'std';
 
                                         let ins = new talent(schema);
                                         ins.then((t) => {

@@ -4,6 +4,10 @@
             <div class="m-talent-header">
                 <h1 class="m-talent-title">奇穴模拟器</h1>
                 <div class="m-talent-panel">
+                    <el-radio-group v-model="finalClient">
+                        <el-radio-button label="std">旗舰</el-radio-button>
+                        <el-radio-button label="wujie">无界</el-radio-button>
+                    </el-radio-group>
                     <div class="m-talent-version">
                         <span class="u-label">选择版本</span>
                         <el-select
@@ -93,7 +97,7 @@ import JX3_QIXUE from "@jx3box/jx3box-talent";
 import $ from "jquery";
 import schemas from "@/assets/data/schemas.json";
 import cloneDeep from "lodash/cloneDeep";
-import { getTalentVersions, getTalents, addTalent, putTalent, removeTalent } from "@/service/talent.js";
+import { getTalentVersions, addTalent, putTalent } from "@/service/talent.js";
 import User from "@jx3box/jx3box-common/js/user";
 import talentDrawer from "@/components/talent/talent_drawer.vue";
 import { copy } from "@/utils/clipboard";
@@ -120,6 +124,7 @@ export default {
             drawer: false,
 
             currentSchema: "",
+            finalClient: "std",
         };
     },
     computed: {
@@ -132,7 +137,7 @@ export default {
         params: function () {
             const { mount, version, code, pzcode, xf } = this;
             return {
-                client: 'std',
+                client: "std",
                 type: "talent",
                 mount,
                 version,
@@ -144,6 +149,7 @@ export default {
         xfMaps: function () {
             const xfMaps = cloneDeep(xfmap);
             delete xfMaps["山居剑意"];
+            delete xfMaps["通用"];
             return xfMaps;
         },
         isEditing: function () {
@@ -180,6 +186,7 @@ export default {
                     xf: this.xf,
                     sq: this.sq,
                     editable: true,
+                    client: this.finalClient,
                 });
             });
         },
@@ -272,13 +279,14 @@ export default {
             this.parseSchema();
         },
         init: function () {
-            getTalentVersions().then((res) => {
+            getTalentVersions(this.finalClient).then((res) => {
                 this.versions = res.data;
                 this.version = this.versions && this.versions.length && this.versions[0]["version"];
 
                 this.driver = new JX3_QIXUE({
                     version: this.version,
                     editable: true,
+                    client: this.finalClient,
                 });
                 const vm = this;
                 $(document).on("JX3_QIXUE_Change", function (e, ins) {
@@ -286,7 +294,7 @@ export default {
                     __data.version = ins.version;
                     __data.xf = ins.xf;
                     __data.sq = ins.sq.join(",");
-                    vm.code = JSON.stringify(__data);
+                    vm.code = JSON.stringify(ins.code);
 
                     vm.pzcode = JSON.stringify(ins.overview);
                 });
@@ -303,6 +311,18 @@ export default {
     watch: {
         page: function () {
             this.isLogin && this.loadList();
+        },
+        finalClient: function (val) {
+            this.pzcode = "";
+            this.code = "";
+            this.xf = "其它";
+            if (val == "std") {
+                this.sq = "1,1,1,1,1,1,1,1,1,1,1,1";
+            }
+            if (val == "wujie") {
+                this.sq = "1,1,1,1";
+            }
+            this.init();
         },
     },
     components: {
