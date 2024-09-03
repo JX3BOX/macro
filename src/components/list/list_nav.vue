@@ -10,7 +10,7 @@
             <li class="u-item" v-for="(item, i) in xfmaps" :key="i" v-show="item.client.includes(client)">
                 <router-link class="u-link" :to="{ query: { subtype: item.name } }" :class="{ on: isActive(item) }">
                     <i class="u-pic">
-                        <img :src="showMountIcon(item.id)" :alt="item.name" />
+                        <img :src="showMountIcon(item.id)" :alt="item.name" onerror="this.src='https://img.jx3box.com/image/xf/0.png'"/>
                     </i>
                     <span class="u-txt">{{ item.name }}</span>
                 </router-link>
