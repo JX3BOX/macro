@@ -18,7 +18,7 @@
                             caller: 'macro_suggest',
                         }"
                     >
-                        <img :src="iconLink(item.icon)" v-if="item.icon" />
+                        <img :src="iconLink(item.icon)" v-if="item.icon" onerror="this.src='https://img.jx3box.com/image/xf/0.png'"/>
                         {{ item.label }}
                     </a>
                 </div>

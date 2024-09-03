@@ -2,7 +2,7 @@
     <li class="u-item">
         <!-- 标题 -->
         <h2 class="u-post" :class="{ isSticky: isPublic && item.sticky }">
-            <img class="u-icon" :src="xficon(item.post_subtype)" :alt="item.post_subtype" :title="item.post_subtype" />
+            <img class="u-icon" :src="xficon(item.post_subtype)" :alt="item.post_subtype" :title="item.post_subtype" onerror="this.src='https://img.jx3box.com/image/xf/0.png'"/>
 
             <!-- <Mark class="u-feed" :label="item.author"/> -->
             <template v-if="isMine">
