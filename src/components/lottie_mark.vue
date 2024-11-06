@@ -5,6 +5,7 @@
 
 <script>
 import lottie from "lottie-web";
+import { cloneDeep } from "lodash";
 const animations = require.context("../assets/lottie", false, /\.json$/);
 
 export default {
@@ -27,12 +28,14 @@ export default {
     },
     methods: {
         loadAnimation() {
+            const data = cloneDeep(animations(`./${this.mark}.json`));
+            const ref = this.$refs.lottieContainer;
             lottie.loadAnimation({
-                container: this.$refs.lottieContainer,
+                container: ref,
                 renderer: "svg",
                 loop: true,
                 autoplay: true,
-                animationData: animations(`./${this.mark}.json`),
+                animationData: data,
             });
         },
     },
