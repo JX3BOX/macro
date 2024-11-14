@@ -150,6 +150,7 @@ export default {
         buildQuery: function (appendMode) {
             if (appendMode) {
                 this.page += 1;
+                this.replaceRoute({ page: this.page }, false);
             }
             let _query = {
                 per: this.per,
@@ -215,11 +216,11 @@ export default {
                 });
         },
         // 路由绑定
-        replaceRoute: function (extend) {
+        replaceRoute: function (extend, toTop = true) {
             return this.$router
                 .push({ name: this.$route.name, query: Object.assign({}, this.$route.query, extend) })
                 .then(() => {
-                    window.scrollTo(0, 0);
+                    toTop && window.scrollTo(0, 0);
                 })
                 .catch((err) => {});
         },
@@ -294,6 +295,10 @@ export default {
                 this.loadData();
             },
         },
+        is_wujie() {
+            this.page = 1;
+            this.replaceRoute({ page: 1 })
+        }
     },
 
     mounted: function () {
