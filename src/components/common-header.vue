@@ -20,7 +20,7 @@
                 <!-- 资料片过滤 -->
                 <zlpBy @filter="filterMeta" type="zlp" :client="client"></zlpBy>
                 <!-- 无界筛选 -->
-                <el-checkbox v-model="is_wujie" class="u-wujie-filter" :true-label="1" :false-label="0" @change="onWujieChange">只看无界</el-checkbox>
+                <versionBy :value="is_wujie" @filter="onWujieChange"></versionBy>
             </div>
             <div class="m-filter--right">
                 <!-- 排序过滤 -->
@@ -33,8 +33,12 @@
 <script>
 import { appKey } from "@/../setting.json";
 import { publishLink } from "@jx3box/jx3box-common/js/utils";
+import versionBy from "@jx3box/jx3box-common-ui/src/filters/versionBy.vue";
 export default {
     name: 'CommonHeader',
+    components: {
+        versionBy
+    },
     props: {
         canFilter: {
             type: Boolean,
@@ -72,7 +76,8 @@ export default {
         onSearch() {
             this.$emit('search', this.search)
         },
-        onWujieChange() {
+        onWujieChange(o) {
+            this.is_wujie = o['val']
             this.$emit('wujie', this.is_wujie)
         }
     }
