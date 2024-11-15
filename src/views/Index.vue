@@ -98,7 +98,7 @@ export default {
             search: "", //搜索字串
             lang: "", //语言
             zlp: "", //资料片
-            is_wujie: 0, //无界过滤
+            is_wujie: "", //无界过滤
 
             drawer: false,
             drawer_title: "",

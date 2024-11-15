@@ -20,7 +20,7 @@
                 <!-- 资料片过滤 -->
                 <zlpBy @filter="filterMeta" type="zlp" :client="client"></zlpBy>
                 <!-- 无界筛选 -->
-                <versionBy :value="is_wujie" @filter="onWujieChange"></versionBy>
+                <versionBy v-if="client == 'std'" :value="is_wujie" @filter="onWujieChange"></versionBy>
             </div>
             <div class="m-filter--right">
                 <!-- 排序过滤 -->
@@ -57,7 +57,7 @@ export default {
 
             rows: 1,
 
-            is_wujie: 0,
+            is_wujie: '',
         }
     },
     computed: {
