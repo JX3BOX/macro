@@ -43,12 +43,15 @@ export default {
         canFilter: {
             type: Boolean,
             default: true
+        },
+        client: {
+            type: String,
+            default: "std"
         }
     },
     data() {
         return {
             search: "",
-            client: this.$store.state.client, //版本选择
 
             langs: {
                 cn: "简体中文",

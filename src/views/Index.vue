@@ -5,6 +5,7 @@
             @filterMeta="filterMeta"
             @search="onSearch"
             @wujie="onWujieChange"
+            :client="client"
         ></common-header>
 
         <!-- 推荐 -->
@@ -298,6 +299,9 @@ export default {
         is_wujie() {
             this.page = 1;
             this.replaceRoute({ page: 1 })
+        },
+        client(val) {
+            this.is_wujie = "";
         }
     },
 
