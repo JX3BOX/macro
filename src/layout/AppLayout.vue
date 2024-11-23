@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import { __imgPath } from "@jx3box/jx3box-common/data/jx3box.json";
+import { __imgPath, __cdn } from "@jx3box/jx3box-common/data/jx3box.json";
 import app from "../assets/data/app.json";
 export default {
     name: "AppLayout",
@@ -42,7 +42,7 @@ export default {
         },
         logo() {
             const key = this.icon || this.slug;
-            return __imgPath + "image/box/" + key + ".svg";
+            return __cdn + "logo/logo-light/" + key + ".svg";
         },
         title() {
             return app[this.slug]?.title || ''
