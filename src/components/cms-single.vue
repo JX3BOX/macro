@@ -305,4 +305,10 @@ export default {
 .m-single-thx{
     .mt(40px);
 }
+
+@media screen and (max-width:@phone){
+    .m-single-thx{
+        zoom: 0.8;
+    }
+}
 </style>
