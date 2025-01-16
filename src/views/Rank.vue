@@ -83,7 +83,8 @@
                             target="_blank"
                             v-reporter="{
                                 data: {
-                                    href: `${prefix}:` +  getMacroLink(scope.row.pid, scope.row.downloadStr.split('#')[1]),
+                                    href:
+                                        `${prefix}:` + getMacroLink(scope.row.pid, scope.row.downloadStr.split('#')[1]),
                                 },
                                 caller: 'macro_rank',
                             }"
@@ -117,6 +118,7 @@ import xfmap from "@jx3box/jx3box-data/data/xf/xf.json";
 import { __imgPath } from "@jx3box/jx3box-common/data/jx3box.json";
 import { getLink } from "@jx3box/jx3box-common/js/utils";
 import { getMacroLink } from "@/utils/misc.js";
+import { startsWith } from "lodash";
 export default {
     name: "Rank",
     props: [],
@@ -137,9 +139,9 @@ export default {
         client: function () {
             return this.$store.state.client;
         },
-        prefix: function (){
-            return this.client == 'std' ? 'www' : 'origin'
-        }
+        prefix: function () {
+            return this.client == "std" ? "www" : "origin";
+        },
     },
     methods: {
         getMacroLink,
@@ -198,8 +200,8 @@ export default {
             return "";
         },
         xficon: function (id) {
-            const xf = xfmap[id];
-            return __imgPath + "image/xf/" + xf.id + ".png";
+            const _id = startsWith(id, "1") ? id : xfmap[id].id; 
+            return __imgPath + "image/xf/" + _id + ".png";
         },
     },
     watch: {
