@@ -120,7 +120,7 @@ import LottieMark from "@/components/lottie_mark.vue";
 
 // 本地数据
 import { getPost } from "@/service/post.js";
-import { getStat, postStat, postHistory } from "@jx3box/jx3box-common/js/stat";
+import { getStat, postStat, postHistory, postReadHistory } from "@jx3box/jx3box-common/js/stat";
 import xfmap from "@jx3box/jx3box-data/data/xf/xf.json";
 import { appKey } from "../../setting.json";
 import { __iconPath, __imgPath } from "@jx3box/jx3box-common/data/jx3box.json";
@@ -225,12 +225,17 @@ export default {
                     this.$store.state.user_id = this.post?.post_author;
                     document.title = this.post?.post_title;
 
-                    User.isLogin() && postHistory({
-                        source_type: appKey,
-                        source_id: ~~this.id,
-                        link: location.href,
-                        title: this.post?.post_title,
-                    });
+                    if (User.isLogin()) {
+                        postHistory({
+                            source_type: appKey,
+                            source_id: ~~this.id,
+                            link: location.href,
+                            title: this.post?.post_title,
+                        });
+
+                        this.post.visible > 1 && postReadHistory({ id: this.id, category: "posts", subcategory: "default", visible_type: this.post.visible });
+                    }
+
                 })
                 .then(() => {
                     if (this.data && this.data.length) {
