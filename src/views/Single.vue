@@ -21,7 +21,7 @@
                     <!-- tab -->
                     <span class="u-label" slot="label">
                         <!-- 标记 -->
-                        <LottieMark :mark="item.mark" v-if="item.mark"/>
+                        <LottieMark :mark="item.mark" v-if="item.mark" />
                         <img class="u-icon" :src="iconURL(item.icon)" />
                         <b>{{ item.name }}</b>
                     </span>
@@ -42,7 +42,11 @@
                     <template v-else>
                         <el-divider content-position="left" v-if="item.sq && item.sq.length">武学序列</el-divider>
                         <div class="u-usage" v-if="item.desc">{{ item.desc }}</div>
-                        <div class="u-macro macro-box" :class="{ withUsage: item.desc }" v-if="item.sq && item.sq.length">
+                        <div
+                            class="u-macro macro-box"
+                            :class="{ withUsage: item.desc }"
+                            v-if="item.sq && item.sq.length"
+                        >
                             <ul class="m-skills-list">
                                 <li v-for="(skill, index) in item.sq" :key="skill.SkillID + '' + index" class="m-skill">
                                     <div class="u-skill" v-if="skill && skill.IconID">
@@ -231,11 +235,20 @@ export default {
                             source_id: ~~this.id,
                             link: location.href,
                             title: this.post?.post_title,
+                            author_id: this.post.post_author,
+                            banner: this.post.post_banner,
                         });
 
-                        this.post.visible > 1 && postReadHistory({ id: this.id, category: "posts", subcategory: "default", visible_type: this.post.visible });
+                        this.post.visible > 1 &&
+                            postReadHistory({
+                                id: this.id,
+                                category: "posts",
+                                subcategory: "default",
+                                visible_type: this.post.visible,
+                                author_id: this.post.post_author,
+                                banner: this.post.post_banner,
+                            });
                     }
-
                 })
                 .then(() => {
                     if (this.data && this.data.length) {
@@ -250,13 +263,13 @@ export default {
                             // 正式服
                             this.data.forEach((item, i) => {
                                 let container = `#talent-box-${i}`;
-                                console.log(item)
+                                console.log(item);
                                 let schema = item.talent;
                                 if (schema) {
                                     try {
                                         schema = JSON.parse(schema);
                                         schema.container = container;
-                                        schema.client = schema.client || 'std';
+                                        schema.client = schema.client || "std";
 
                                         let ins = new talent(schema);
                                         ins.then((t) => {
